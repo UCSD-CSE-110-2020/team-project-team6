@@ -1,4 +1,4 @@
-package com.example.team_project_team6.ui.notifications;
+package com.example.team_project_team6.ui.routes;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,14 +14,14 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.team_project_team6.R;
 
-public class NotificationsFragment extends Fragment {
+public class RoutesFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private RoutesViewModel notificationsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
+                ViewModelProviders.of(this).get(RoutesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_routes, container, false);
         final TextView textView = root.findViewById(R.id.text_routes);
         notificationsViewModel.getText().observe(this, new Observer<String>() {

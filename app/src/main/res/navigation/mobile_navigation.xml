@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_routes"
-        android:name="com.example.team_project_team6.ui.notifications.NotificationsFragment"
+        android:name="com.example.team_project_team6.ui.routes.RoutesFragment"
         android:label="@string/title_routes"
         tools:layout="@layout/fragment_routes" />
 </navigation>
