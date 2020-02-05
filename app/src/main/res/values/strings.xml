@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">team-project-team6</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_walk">Walk</string>
+    <string name="title_routes">Routes</string>
 </resources>
