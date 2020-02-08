@@ -1,38 +1,53 @@
 language: android
 dist: trusty
+
 before_install:
-- openssl aes-256-cbc -K $encrypted_98d89242ff10_key -iv $encrypted_98d89242ff10_iv
-  -in gcloud-service-key.json.enc -out gcloud-service-key.json -d
+ - openssl aes-256-cbc -K $encrypted_98d89242ff10_key -iv $encrypted_98d89242ff10_iv -in gcloud-service-key.json.enc -out gcloud-service-key.json -d
+
 before_cache:
-- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+ # Do not cache a few Gradle files/directories (see https://docs.travis-ci.com/user/languages/java/#Caching)
+ - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+ - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
-  directories:
-  - "$HOME/android-sdk-dl"
-  - "$HOME/android-sdk"
-  - "$HOME/.gradle/caches/"
-  - "$HOME/.gradle/wrapper/"
-  - "$HOME/.android/build-cache"
+ directories:
+   # Android SDK
+   - $HOME/android-sdk-dl
+   - $HOME/android-sdk
+
+   # Gradle dependencies
+   - $HOME/.gradle/caches/
+   - $HOME/.gradle/wrapper/
+
+   # Android build cache (see http://tools.android.com/tech-docs/build-cache)
+   - $HOME/.android/build-cache
+
 android:
-  components:
-  - build-tools-28.0.3
-  - build-tools-29.0.3
-  - android-28
-  - android-29
-  - extra-google-google_play_services
-  - extra-google-m2repository
-  - extra-android-m2repository
+ components:
+   # Uncomment the lines below if you want to
+   # use the latest revision of Android SDK Tools
+   # - tools
+   # - platform-tools
+
+   # The BuildTools version used by your project
+   - build-tools-28.0.3
+   - build-tools-29.0.3
+
+   # The SDK version used to compile your project
+   - android-28
+   - android-29
+
+   # Additional components
+   - extra-google-google_play_services
+   - extra-google-m2repository
+   - extra-android-m2repository
+
 jobs:
-  include:
-  - name: unit_test
-    script: "./gradlew lint test"
-  - name: android_test
-    if: "(type = push AND branch IN (master, dev)) OR (type = pull_request)"
-    before_install:
-    - openssl aes-256-cbc -K $encrypted_c204a8432fde_key -iv $encrypted_c204a8432fde_iv
-      -in gcloud-service-key.json.enc -out gcloud-service-key.json -d
-    - chmod +x ./run_tests_on_firebase_test_lab.sh
-    script: "./run_tests_on_firebase_test_lab.sh"
-env:
-  global:
-    secure: DJqpJlwfmo/WsSM5hmw2wgSD9IjSjwaowapbp/Zclv30cDHs/lQhjw+PuZRPpNR/LDe1Jps4fAlfXR57I7I1DDmoCoYoqyPBvJKOypsvx8E4a8Wl++EAveX571n6f++mRvQ76eyEsehvCGk2+WzmgH6R9rFbHirkEbGC6oDVufB0vriTiXlTlErS/TPSV4mea04hKynrgdtCnQosPOlJ2pXciTgTLtgKz7tcKESdbdqIHMcCpRtV80OhtCOrLmiKX7JhP5dWevRLQLhO+BkCA/74adaHU/mdaBSrkCmOkGMBh2sDDFP7wVYyqGUNl15/YlixDAk0zRwGdzsRC3IH8OAFkmNmLM8npqQf69kpDbZLT0pFy7gW8h2b7Ovh4R08FLqefAlcP/q1AZ5RBkuCbr9LqfXRRFaz3FEUTNi8VH8KUrQrcoryU6Q8MIai2tMhrDHnPpMPp+BsFN0Lgi7SPNGdLKbb9ib1cEsAje7kpc5D6MpEaCuBkm20mpIzlp+wu5koLXALrMFLoQBy/ysGvlTHVd1Z/C9/97TgM0coqRFcgqthyH4sCyQrfKpwpSUP9GU1jDpeF2CdmItZ5yG32iy8+CjYejwC5rKgbIVH7a/Ug7F8q2WOoMM1o8LGrPzsJTAE3pgpuYvE95IXBuamTde29g7Rgd2WCTzyTVQMChY=
+ include:
+   - name: unit_test
+     script: ./gradlew lint test
+   - name: android_test
+     if: (type = push AND branch IN (master, dev)) OR (type = pull_request)
+     before_install:
+       - openssl aes-256-cbc -K $encrypted_c204a8432fde_key -iv $encrypted_c204a8432fde_iv -in gcloud-service-key.json.enc -out gcloud-service-key.json -d
+       - chmod +x ./run_tests_on_firebase_test_lab.sh
+     script: ./run_tests_on_firebase_test_lab.sh
