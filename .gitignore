@@ -1,3 +1,6 @@
+# Google Cloud service key
+gcloud-service-key.json
+
 # Built application files
 *.apk
 *.aar
