@@ -1,8 +1,8 @@
-package edu.ucsd.cse110.fitnessapp.fitness;
+package com.example.team_project_team6.fitness;
 
-import androidx.annotation.NonNull;
 import android.util.Log;
 
+import com.example.team_project_team6.StepCountActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.fitness.Fitness;
@@ -13,7 +13,7 @@ import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import edu.ucsd.cse110.fitnessapp.StepCountActivity;
+import androidx.annotation.NonNull;
 
 public class GoogleFitAdapter implements FitnessService {
     private final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = System.identityHashCode(this) & 0xFFFF;

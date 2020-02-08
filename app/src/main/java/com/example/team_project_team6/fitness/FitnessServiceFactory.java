@@ -1,11 +1,11 @@
-package edu.ucsd.cse110.fitnessapp.fitness;
+package com.example.team_project_team6.fitness;
 
 import android.util.Log;
 
+import com.example.team_project_team6.ui.walk.WalkFragment;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import edu.ucsd.cse110.fitnessapp.StepCountActivity;
 
 public class FitnessServiceFactory {
 
@@ -17,12 +17,12 @@ public class FitnessServiceFactory {
         blueprints.put(key, bluePrint);
     }
 
-    public static FitnessService create(String key, StepCountActivity stepCountActivity) {
+    public static FitnessService create(String key, WalkFragment walk) {
         Log.i(TAG, String.format("creating FitnessService with key %s", key));
-        return blueprints.get(key).create(stepCountActivity);
+        return blueprints.get(key).create(walk);
     }
 
     public interface BluePrint {
-        FitnessService create(StepCountActivity stepCountActivity);
+        FitnessService create(WalkFragment walk);
     }
 }
