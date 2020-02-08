@@ -5,4 +5,10 @@
     <string name="title_walk">Walk</string>
     <string name="title_routes">Routes</string>
     <string name="undefined">undefined</string>
+    <string name="clock_empty">00:00</string>
+    <string name="steps_empty">0 steps</string>
+    <string name="distance_empty">0 mi</string>
+    <string name="start_walk">Start Walking</string>
+    <string name="end_walk">Stop</string>
+    <string name="new_walk_default_route">New Walk</string>
 </resources>
