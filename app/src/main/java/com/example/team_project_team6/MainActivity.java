@@ -1,6 +1,7 @@
 package com.example.team_project_team6;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -18,8 +19,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // run permission activity first
-        launcPermissonActivity();
+        // launch height/permission activity if user height hasn't been saved (first-time user)
+        SharedPreferences spfs = this.getSharedPreferences("user_data", MODE_PRIVATE);
+        if (!spfs.contains("user_height")) {
+            launchPermissionActivity();
+        }
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
-    public void launcPermissonActivity(){
+    public void launchPermissionActivity(){
         Intent intent = new Intent(this, PermissonActivity.class);
         startActivity(intent);
     }

@@ -6,14 +6,21 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.team_project_team6.fitness.FitnessService;
+import com.example.team_project_team6.fitness.FitnessServiceFactory;
+
 import java.util.Random;
 
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<Integer> mDailySteps;
-    private Random rng;
+    private FitnessService fitnessService;
+
+    public static final String FITNESS_SERVICE_KEY = "FITNESS_SERVICE_KEY";
+    private static final String TAG = "HomeViewModel";
 
     public HomeViewModel() {
+
         AsyncTaskRunner runner = new AsyncTaskRunner();
         runner.execute(1000); // update once a second
 
@@ -26,11 +33,11 @@ public class HomeViewModel extends ViewModel {
     }
 
     private class AsyncTaskRunner extends AsyncTask<Integer, Integer, Integer> {
-        private Random rng;
 
         @Override
         protected void onPreExecute() {
-            rng = new Random(5);
+            String fitnessServiceKey = getIntent().getStringExtra(FITNESS_SERVICE_KEY);
+            fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
         }
 
         @Override
@@ -38,8 +45,8 @@ public class HomeViewModel extends ViewModel {
             try {
                 while (true) {
                     Thread.sleep(params[0]);
-
-                    mDailySteps.postValue(rng.nextInt(100));
+                    fitnessService.updateStepCount();
+                    mDailySteps.postValue(fitnessService.updateStepCount());
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
