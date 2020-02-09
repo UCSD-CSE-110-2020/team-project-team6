@@ -8,7 +8,9 @@ public class Walk {
     double dist;
     int step;
 
-    Walk () {}
+    Walk () {
+        startTime = Calendar.getInstance();
+    }
 
     Walk (Calendar startTime) {
         this.setStartTime(startTime);
