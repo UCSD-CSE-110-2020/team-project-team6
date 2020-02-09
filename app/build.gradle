@@ -27,8 +27,12 @@ android {
             }
         }
     }
+    signingConfigs {
+        debug {
+            storeFile file("./external/debug.keystore")
+        }
+    }
 }
-
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
