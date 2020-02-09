@@ -1,5 +1,6 @@
 # Google Cloud service key
 gcloud-service-key.json
+debug.keystore
 
 # Built application files
 *.apk
