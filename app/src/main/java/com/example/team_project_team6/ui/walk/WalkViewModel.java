@@ -9,8 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 public class WalkViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
-    private long millisecondTime, startTime, timeBuff, updateTime = 0L ;
+    private long millisecondTime, startTime, timeBuff, updateTime;
     private int seconds, minutes, milliSeconds ;
 
     private Handler handler;
@@ -18,9 +17,6 @@ public class WalkViewModel extends ViewModel {
     private MutableLiveData<String> stopWatch;
 
     public WalkViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is walk fragment");
-
 
         millisecondTime = 0L ;
         startTime = 0L ;
@@ -33,10 +29,6 @@ public class WalkViewModel extends ViewModel {
         startTime = SystemClock.uptimeMillis();
         stopWatch = new MutableLiveData<>();
         stopWatch.setValue("00:00:00");
-    }
-
-    public LiveData<String> getText() {
-        return mText;
     }
 
     public void runStopWatch (){

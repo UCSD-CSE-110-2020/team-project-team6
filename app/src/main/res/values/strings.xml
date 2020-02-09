@@ -5,4 +5,23 @@
     <string name="title_walk">Walk</string>
     <string name="title_routes">Routes</string>
     <string name="undefined">undefined</string>
+    <string name="tx_new_walk">New Walk</string>
+    <string name="tx_curr_steps">STEPS:</string>
+    <string name="tx_cur_dist">DISTANCE:</string>
+    <string name="tx_cur_time">TIME:</string>
+    <string name="step_empty">0</string>
+    <string name="dist_empty">0</string>
+    <string name="time_empty">00:00:00</string>
+    <string name="bt_start">START</string>
+    <string name="bt_stop">STOP</string>
+    <string name="bt_continue">Continue</string>
+    <string name="bt_back">Back</string>
+    <string name="permisson_tilte">Walk Walk Revolution</string>
+    <string name="permisson_intro">Coach you to a healthier and more active life</string>
+    <string name="permisson_policy">By continuing, you agree to the Terms of Service</string>
+    <string name="profile">My Profile</string>
+    <string name="profile_detail">To ensure the accuracy, Please input your accurate information.</string>
+    <string name="tx_height">Height</string>
+    <string name="tx_feet">Feet</string>
+    <string name="tx_in">In</string>
 </resources>

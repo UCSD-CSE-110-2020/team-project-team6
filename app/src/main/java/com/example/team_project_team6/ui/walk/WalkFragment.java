@@ -29,12 +29,6 @@ public class WalkFragment extends Fragment {
                 ViewModelProviders.of(this).get(WalkViewModel.class);
         View root = inflater.inflate(R.layout.fragment_walk, container, false);
         final TextView textView = root.findViewById(R.id.text_walk);
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
 
         final TextView lbStopWatch = root.findViewById(R.id.lbTime);
         final Button btStart = root.findViewById(R.id.btStart);
@@ -46,18 +40,18 @@ public class WalkFragment extends Fragment {
                     dashboardViewModel.runStopWatch();
                     //switch to stop button when it's true
                     switchButton = true;
-                    btStart.setText("STOP");
+                    btStart.setText(R.string.bt_stop);
                 }else {
                     switchButton = false;
-                    btStart.setText("START");
+                    btStart.setText(R.string.bt_start);
                     dashboardViewModel.stopWatch();
-                    dashboardViewModel.resetWatch();
+                    //dashboardViewModel.resetWatch();
                 }
             }
         });
 
 
-        dashboardViewModel.getStopWatch().observe(this, new Observer<String>() {
+        dashboardViewModel.getStopWatch().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 lbStopWatch.setText(s);
