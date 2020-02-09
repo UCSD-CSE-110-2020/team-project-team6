@@ -40,4 +40,5 @@ public class StepCountActivity extends AppCompatActivity {
     public void setStepCount(long stepCount) {
 
     }
+
 }
