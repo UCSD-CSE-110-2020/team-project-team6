@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -17,6 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -34,12 +38,16 @@ public class MainActivity extends AppCompatActivity {
     private FitnessService fitnessService;
 
     private HomeViewModel homeViewModel;
-    private WalkViewModel dashboardViewModel;
+    private WalkViewModel walkViewModel;
+
+    private StopWatch sw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sw = new StopWatch();
 
         // launch height/permission activity if user height hasn't been saved (first-time user)
         SharedPreferences spfs = this.getSharedPreferences("user_data", MODE_PRIVATE);
@@ -71,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         fitnessService.setup();
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-//        dashboardViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
+        walkViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
 
         AsyncTaskRunner runner = new AsyncTaskRunner();
         runner.execute(1000); // update once a second
@@ -123,4 +131,16 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+
+
+    public void runStopWatch (){
+        sw.runStopWatch(walkViewModel);
+    }
+
+    public void stopWatch(){
+        sw.stopWatch();
+    }
+
+
+
 }
