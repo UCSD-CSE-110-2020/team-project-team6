@@ -14,15 +14,11 @@ import java.util.Random;
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<Integer> mDailySteps;
-    private FitnessService fitnessService;
-
-    public static final String FITNESS_SERVICE_KEY = "FITNESS_SERVICE_KEY";
-    private static final String TAG = "HomeViewModel";
 
     public HomeViewModel() {
 
-        AsyncTaskRunner runner = new AsyncTaskRunner();
-        runner.execute(1000); // update once a second
+//        AsyncTaskRunner runner = new AsyncTaskRunner();
+//        runner.execute(1000); // update once a second
 
         mDailySteps = new MutableLiveData<>();
     }
@@ -32,27 +28,27 @@ public class HomeViewModel extends ViewModel {
         return mDailySteps;
     }
 
-    private class AsyncTaskRunner extends AsyncTask<Integer, Integer, Integer> {
-
-        @Override
-        protected void onPreExecute() {
-            String fitnessServiceKey = getIntent().getStringExtra(FITNESS_SERVICE_KEY);
-            fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
-        }
-
-        @Override
-        protected Integer doInBackground(Integer... params) {
-            try {
-                while (true) {
-                    Thread.sleep(params[0]);
-                    fitnessService.updateStepCount();
-                    mDailySteps.postValue(fitnessService.updateStepCount());
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
+    public void updateDailySteps(int stepCount) {
+        mDailySteps.postValue(stepCount);
     }
+
+//    private class AsyncTaskRunner extends AsyncTask<Integer, Integer, Integer> {
+//
+//        @Override
+//        protected void onPreExecute() {}
+//
+//        @Override
+//        protected Integer doInBackground(Integer... params) {
+//            try {
+//                while (true) {
+//                    Thread.sleep(params[0]);
+//                    mDailySteps.postValue(1);
+//                }
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//            return null;
+//        }
+//    }
 }

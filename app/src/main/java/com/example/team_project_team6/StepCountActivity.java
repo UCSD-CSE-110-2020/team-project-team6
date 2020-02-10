@@ -48,9 +48,10 @@ public class StepCountActivity extends AppCompatActivity {
                     REQUEST_OAUTH_REQUEST_CODE,
                     GoogleSignIn.getLastSignedInAccount(this),
                     fitnessOptions);
-        } else {
-            fitnessService.updateStepCount();
         }
+
+        fitnessService.setup();
+
 
     }
 
@@ -67,9 +68,5 @@ public class StepCountActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "ERROR, google fit result code: " + resultCode);
         }
-    }
-
-    public void setStepCount(long stepCount) {
-        textSteps.setText(String.valueOf(stepCount));
     }
 }

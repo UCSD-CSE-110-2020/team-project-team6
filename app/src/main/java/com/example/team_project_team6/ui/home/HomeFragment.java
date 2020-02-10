@@ -31,7 +31,8 @@ public class HomeFragment extends Fragment {
         final TextView dailySteps = root.findViewById(R.id.textDailySteps);
         final TextView dailyDist = root.findViewById(R.id.textDailyDist);
         SharedPreferences spfs = this.getActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        final int height_in_inches = spfs.getInt("user_height", -1);
+        final int heightInInches = spfs.getInt("user_height", -1);
+        final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
 
         homeViewModel.getDailySteps().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
@@ -41,10 +42,9 @@ public class HomeFragment extends Fragment {
                     num = 0;
                 }
 
-                final double stride_dist_in_ft = (0.413 * (double) height_in_inches) / 12.0;
-                double dist = stride_dist_in_ft * num / 5280.0;
+                double dist = strideDistInFt * num / 5280.0;
 
-                dailySteps.setText(String.format(Locale.ENGLISH, "%s steps", num.toString()));
+                dailySteps.setText(String.format(Locale.ENGLISH, "%d steps", num));
                 dailyDist.setText(String.format(Locale.ENGLISH, "%.2f mi", dist));
             }
         });

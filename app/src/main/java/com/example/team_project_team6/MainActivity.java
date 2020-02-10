@@ -40,4 +40,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PermissonActivity.class);
         startActivity(intent);
     }
+
+    public void setStepCount(long stepCount) {
+        updateDailySteps(stepCount);
+//        updateWalkSteps(stepCount);
+    }
 }
