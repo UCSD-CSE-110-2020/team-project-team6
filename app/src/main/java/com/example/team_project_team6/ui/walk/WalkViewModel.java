@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.Locale;
+
 public class WalkViewModel extends ViewModel {
 
     private long millisecondTime, startTime, timeBuff, updateTime;
@@ -15,6 +17,7 @@ public class WalkViewModel extends ViewModel {
     private Handler handler;
 
     private MutableLiveData<String> stopWatch;
+    private MutableLiveData<Long> mWalkSteps;
 
     public WalkViewModel() {
 
@@ -66,9 +69,7 @@ public class WalkViewModel extends ViewModel {
 
             milliSeconds = (int) (updateTime % 100);
 
-            stopWatch.setValue("" + String.format("%02d", minutes) + ":"
-                    + String.format("%02d", seconds) + ":"
-                    + String.format("%02d", milliSeconds));
+            stopWatch.setValue(String.format(Locale.ENGLISH, "%02d:%02d:%02d", minutes, seconds, milliSeconds));
 
             handler.postDelayed(this, 0);
 
@@ -78,5 +79,13 @@ public class WalkViewModel extends ViewModel {
 
     public LiveData<String> getStopWatch(){
         return stopWatch;
+    }
+
+    public LiveData<Long> getWalkSteps() {
+        return mWalkSteps;
+    }
+
+    public void updateWalkSteps(long stepCount) {
+        mWalkSteps.postValue(stepCount);
     }
 }
