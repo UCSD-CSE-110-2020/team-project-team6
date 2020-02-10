@@ -1,5 +1,6 @@
 # Google Cloud service key
 gcloud-service-key.json
+.DS_store
 
 # Built application files
 *.apk
@@ -17,6 +18,8 @@ gcloud-service-key.json
 bin/
 gen/
 out/
+.idea/
+
 #  Uncomment the following line in case you need and you don't have the release build type files in your app
 # release/
 
