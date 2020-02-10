@@ -3,9 +3,6 @@ package com.example.team_project_team6.fitness;
 import android.util.Log;
 
 import com.example.team_project_team6.MainActivity;
-import com.example.team_project_team6.StepCountActivity;
-import com.example.team_project_team6.ui.home.HomeViewModel;
-import com.example.team_project_team6.ui.walk.WalkFragment;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -17,7 +17,7 @@ public class WalkViewModel extends ViewModel {
     private Handler handler;
 
     private MutableLiveData<String> stopWatch;
-    private MutableLiveData<Integer> mWalkSteps;
+    private MutableLiveData<Long> mWalkSteps;
 
     public WalkViewModel() {
 
@@ -81,11 +81,11 @@ public class WalkViewModel extends ViewModel {
         return stopWatch;
     }
 
-    public LiveData<Integer> getWalkSteps() {
+    public LiveData<Long> getWalkSteps() {
         return mWalkSteps;
     }
 
-    public void updateWalkSteps(int stepCount) {
+    public void updateWalkSteps(long stepCount) {
         mWalkSteps.postValue(stepCount);
     }
 }

@@ -2,8 +2,7 @@ package com.example.team_project_team6.fitness;
 
 import android.util.Log;
 
-import com.example.team_project_team6.StepCountActivity;
-import com.example.team_project_team6.ui.walk.WalkViewModel;
+import com.example.team_project_team6.MainActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.fitness.Fitness;
@@ -21,9 +20,9 @@ public class GoogleFitAdapter implements FitnessService {
     private final String TAG = "GoogleFitAdapter";
     private GoogleSignInAccount account;
 
-    private StepCountActivity activity;
+    private MainActivity activity;
 
-    public GoogleFitAdapter(StepCountActivity activity) {
+    public GoogleFitAdapter(MainActivity activity) {
         this.activity = activity;
     }
 

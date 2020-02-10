@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<Integer> mDailySteps;
+    private MutableLiveData<Long> mDailySteps;
 
     public HomeViewModel() {
 
@@ -24,31 +24,11 @@ public class HomeViewModel extends ViewModel {
     }
 
     // to update this use an async thread and call mDailySteps.postValue
-    LiveData<Integer> getDailySteps() {
+    LiveData<Long> getDailySteps() {
         return mDailySteps;
     }
 
-    public void updateDailySteps(int stepCount) {
+    public void updateDailySteps(long stepCount) {
         mDailySteps.postValue(stepCount);
     }
-
-//    private class AsyncTaskRunner extends AsyncTask<Integer, Integer, Integer> {
-//
-//        @Override
-//        protected void onPreExecute() {}
-//
-//        @Override
-//        protected Integer doInBackground(Integer... params) {
-//            try {
-//                while (true) {
-//                    Thread.sleep(params[0]);
-//                    mDailySteps.postValue(1);
-//                }
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//
-//            return null;
-//        }
-//    }
 }
