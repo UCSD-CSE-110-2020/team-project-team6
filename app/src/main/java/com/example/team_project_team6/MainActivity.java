@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//       If authentication was required during google fit setup, this will be called after the user authenticates
+        // If authentication was required during google fit setup, this will be called after the user authenticates
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == fitnessService.getRequestCode()) {
                 fitnessService.updateStepCount();
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setStepCount(long stepCount) {
         homeViewModel.updateDailySteps(stepCount);
-//        updateWalkSteps(stepCount);
+        //walkViewModel.updateWalkSteps(stepCount);
     }
 
     public void setFitnessServiceKey(String fitnessServiceKey) {
