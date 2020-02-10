@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setFitnessServiceKey(getIntent().getStringExtra(FITNESS_SERVICE_KEY));
-        //setFitnessServiceKey(MOCK_FITNESS_KEY);
+        //setFitnessServiceKey(getIntent().getStringExtra(FITNESS_SERVICE_KEY));
+        setFitnessServiceKey(GOOGLE_FITNESS_KEY);
         fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
         fitnessService.setup();
 
