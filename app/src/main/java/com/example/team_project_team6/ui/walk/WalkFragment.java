@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 
 import java.util.Locale;
@@ -22,7 +24,6 @@ import java.util.Locale;
 public class WalkFragment extends Fragment {
 
     private WalkViewModel dashboardViewModel;
-    private boolean switchButton = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -34,19 +35,30 @@ public class WalkFragment extends Fragment {
         final TextView lbStopWatch = root.findViewById(R.id.lbTime);
         final Button btStart = root.findViewById(R.id.btStart);
 
+        final MainActivity mainActivity = (MainActivity) getActivity();
+
+        if(dashboardViewModel.is_currently_walking().getValue()) {
+            btStart.setText(R.string.bt_stop);
+        }else {
+            btStart.setText(R.string.bt_start);
+        }
+
         btStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!switchButton) {
-                    dashboardViewModel.runStopWatch();
-                    //switch to stop button when it's true
-                    switchButton = true;
+                if(!dashboardViewModel.is_currently_walking().getValue()) {
+                    System.out.println("is there herrrrrrrrrrrre");
+                    mainActivity.runStopWatch();
+                    dashboardViewModel.start_walking();
                     btStart.setText(R.string.bt_stop);
                 }else {
-                    switchButton = false;
+                    dashboardViewModel.end_walking();
                     btStart.setText(R.string.bt_start);
-                    dashboardViewModel.stopWatch();
-                    //dashboardViewModel.resetWatch();
+                    mainActivity.stopWatch();
+
+                    //show data when the walk has done!
+                    Toast.makeText(getActivity(), "time: " + lbStopWatch.getText().toString(), Toast.LENGTH_LONG).show();
+
                 }
             }
         });
@@ -57,7 +69,7 @@ public class WalkFragment extends Fragment {
         final int heightInInches = spfs.getInt("user_height", -1);
         final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
 
-        dashboardViewModel.getWalkSteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
+         dashboardViewModel.getWalkSteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
             public void onChanged(@Nullable Long num) {
 

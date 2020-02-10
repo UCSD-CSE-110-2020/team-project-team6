@@ -11,71 +11,32 @@ import java.util.Locale;
 
 public class WalkViewModel extends ViewModel {
 
-    private long millisecondTime, startTime, timeBuff, updateTime;
-    private int seconds, minutes, milliSeconds ;
-
-    private Handler handler;
-
     private MutableLiveData<String> stopWatch;
     private MutableLiveData<Long> mWalkSteps;
+    private MutableLiveData<Boolean> mCurrentlyWalking;
 
     public WalkViewModel() {
-
-        millisecondTime = 0L ;
-        startTime = 0L ;
-        timeBuff = 0L ;
-        updateTime = 0L ;
-        seconds = 0 ;
-        minutes = 0 ;
-        milliSeconds = 0 ;
-        handler = new Handler();
-        startTime = SystemClock.uptimeMillis();
+        mCurrentlyWalking = new MutableLiveData<>(false);
+        mWalkSteps = new MutableLiveData<>();
         stopWatch = new MutableLiveData<>();
         stopWatch.setValue("00:00:00");
     }
 
-    public void runStopWatch (){
-        handler.postDelayed(runnable, 0);
+    void start_walking() {
+        mCurrentlyWalking.postValue(true);
     }
 
-    public void stopWatch(){
-        handler.removeCallbacks(runnable);
+    void end_walking() {
+        mCurrentlyWalking.postValue(false);
     }
 
-    public void resetWatch(){
-        millisecondTime = 0L ;
-        startTime = 0L ;
-        timeBuff = 0L ;
-        updateTime = 0L ;
-        seconds = 0 ;
-        minutes = 0 ;
-        milliSeconds = 0 ;
-        stopWatch.setValue("00:00:00");
+    LiveData<Boolean> is_currently_walking() {
+        return mCurrentlyWalking;
     }
 
-    public Runnable runnable = new Runnable() {
-
-        public void run() {
-
-            millisecondTime = SystemClock.uptimeMillis() - startTime;
-
-            updateTime = timeBuff + millisecondTime;
-
-            seconds = (int) (updateTime / 1000);
-
-            minutes = seconds / 60;
-
-            seconds = seconds % 60;
-
-            milliSeconds = (int) (updateTime % 100);
-
-            stopWatch.setValue(String.format(Locale.ENGLISH, "%02d:%02d:%02d", minutes, seconds, milliSeconds));
-
-            handler.postDelayed(this, 0);
-
-        }
-
-    };
+    public void updateStopWatch(String s){
+        stopWatch.postValue(s);
+    }
 
     public LiveData<String> getStopWatch(){
         return stopWatch;
@@ -88,4 +49,5 @@ public class WalkViewModel extends ViewModel {
     public void updateWalkSteps(long stepCount) {
         mWalkSteps.postValue(stepCount);
     }
+
 }
