@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.team_project_team6.fitness.FitnessService;
 import com.example.team_project_team6.fitness.FitnessServiceFactory;
 import com.example.team_project_team6.fitness.GoogleFitAdapter;
+import com.example.team_project_team6.fitness.TestAdapter;
 import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -33,14 +34,16 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String FITNESS_SERVICE_KEY = "FITNESS_SERVICE_KEY";
     private static final String TAG = "MainActivity";
-    private String fitnessServiceKey = "GOOGLE_FIT";
+    private static final String GOOGLE_FITNESS_KEY = "GOOGLE_FIT";
+    private static final String MOCK_FITNESS_KEY = "TEST_FIT";
+    private String fitnessServiceKey = GOOGLE_FITNESS_KEY;
 
     private FitnessService fitnessService;
 
     private HomeViewModel homeViewModel;
     private WalkViewModel walkViewModel;
-
     private StopWatch sw;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +68,23 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        String fitnessServiceKey = getIntent().getStringExtra(FITNESS_SERVICE_KEY);
-
-        FitnessServiceFactory.put(fitnessServiceKey, new FitnessServiceFactory.BluePrint() {
+        FitnessServiceFactory.put(GOOGLE_FITNESS_KEY, new FitnessServiceFactory.BluePrint() {
             @Override
             public FitnessService create(MainActivity mainActivity) {
                 return new GoogleFitAdapter(mainActivity);
             }
         });
 
-        fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
+        FitnessServiceFactory.put(MOCK_FITNESS_KEY, new FitnessServiceFactory.BluePrint() {
+            @Override
+            public FitnessService create(MainActivity mainActivity) {
+                return new TestAdapter(mainActivity);
+            }
+        });
 
+        //setFitnessServiceKey(getIntent().getStringExtra(FITNESS_SERVICE_KEY));
+        setFitnessServiceKey(MOCK_FITNESS_KEY);
+        fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
         fitnessService.setup();
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -90,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//       If authentication was required during google fit setup, this will be called after the user authenticates
+        // If authentication was required during google fit setup, this will be called after the user authenticates
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == fitnessService.getRequestCode()) {
                 fitnessService.updateStepCount();
@@ -108,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setStepCount(long stepCount) {
         homeViewModel.updateDailySteps(stepCount);
-//        updateWalkSteps(stepCount);
+        //walkViewModel.updateWalkSteps(stepCount);
     }
 
     public void setFitnessServiceKey(String fitnessServiceKey) {
