@@ -8,11 +8,14 @@ public class Walk {
     double dist;
     int step;
 
-    Walk () {
+    public Walk () {
         startTime = Calendar.getInstance();
+        duration = Calendar.getInstance();
+        dist = 0;
+        step = 0;
     }
 
-    Walk (Calendar startTime) {
+    public Walk (Calendar startTime) {
         this.setStartTime(startTime);
     }
 

@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
         runner.execute(1000); // update once a second
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

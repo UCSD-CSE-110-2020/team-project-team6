@@ -8,13 +8,24 @@ public class Route {
     Calendar lastStartDate;
     String notes;
     Features features;
+    String name;
 
-    public Route(Walk walk, String startPoint, Calendar lastStartDate, String notes, Features features) {
+    // If never walked, set lastStartDate to null
+    public Route(Walk walk, String startPoint, Calendar lastStartDate, String notes, Features features, String name) {
         this.walk = walk;
         this.startPoint = startPoint;
         this.lastStartDate = lastStartDate;
         this.notes = notes;
         this.features = features;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Walk getWalk() {
