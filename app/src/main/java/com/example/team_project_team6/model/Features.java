@@ -8,7 +8,23 @@ public class Features {
     int type;
     int surface;
 
-    public Features() {}
+    public Features() {
+        level = 0;
+        directionType = 0;
+        terrain = 0;
+        isFavorite = false;
+        type = 0;
+        surface = 0;
+    }
+
+    public Features(int level, int directionType, int terrain, boolean isFavorite, int type, int surface) {
+        this.level = level;
+        this.directionType = directionType;
+        this.terrain = terrain;
+        this.isFavorite = isFavorite;
+        this.type = type;
+        this.surface = surface;
+    }
 
     public int getLevel() {
         return level;
