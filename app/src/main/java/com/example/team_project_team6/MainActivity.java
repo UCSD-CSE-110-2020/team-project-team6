@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private HomeViewModel homeViewModel;
     private WalkViewModel walkViewModel;
     private StopWatch sw;
+    private Long walkStartingStep;
+    private boolean isWalking;
 
 
     @Override
@@ -117,7 +119,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void setStepCount(long stepCount) {
         homeViewModel.updateDailySteps(stepCount);
-        //walkViewModel.updateWalkSteps(stepCount);
+
+        if (isWalking) {
+            if (walkStartingStep == null) {
+                walkStartingStep = stepCount;
+            }
+            walkViewModel.updateWalkSteps(stepCount - walkStartingStep);
+        } else {
+            walkStartingStep = null;
+        }
     }
 
     public void setFitnessServiceKey(String fitnessServiceKey) {
@@ -144,10 +154,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void runStopWatch (){
         sw.runStopWatch(walkViewModel);
+        isWalking = true;
     }
 
     public void stopWatch(){
         sw.stopWatch();
+        isWalking = false;
     }
 
 

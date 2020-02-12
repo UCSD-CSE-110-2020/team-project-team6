@@ -74,12 +74,12 @@ public class WalkFragment extends Fragment {
             public void onChanged(@Nullable Long num) {
 
                 if (num == null) {
-                    num = 0l;
+                    num = 0L;
                 }
 
                 double dist = strideDistInFt * num / 5280.0;
 
-                walkSteps.setText(String.format(Locale.ENGLISH, "%d steps", num));
+                walkSteps.setText(String.format(Locale.ENGLISH, "%d", num));
                 walkDist.setText(String.format(Locale.ENGLISH, "%.2f mi", dist));
             }
         });
