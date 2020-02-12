@@ -34,6 +34,8 @@ public class WalkFragment extends Fragment {
         final TextView textView = root.findViewById(R.id.text_walk);
         final TextView lbStopWatch = root.findViewById(R.id.lbTime);
         final Button btStart = root.findViewById(R.id.btStart);
+        final TextView walkSteps = root.findViewById(R.id.lbStep);
+        final TextView walkDist = root.findViewById(R.id.lbDistance);
 
         final MainActivity mainActivity = (MainActivity) getActivity();
 
@@ -63,8 +65,6 @@ public class WalkFragment extends Fragment {
             }
         });
 
-        final TextView walkSteps = root.findViewById(R.id.lbStep);
-        final TextView walkDist = root.findViewById(R.id.lbDistance);
         SharedPreferences spfs = this.requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
         final int heightInInches = spfs.getInt("user_height", -1);
         final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
