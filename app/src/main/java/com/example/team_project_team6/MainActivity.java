@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private WalkViewModel walkViewModel;
     private StopWatch sw;
     private AppBarConfiguration appBarConfiguration;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

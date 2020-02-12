@@ -6,13 +6,150 @@
     android:layout_height="match_parent"
     tools:context=".ui.route_details.RouteDetailsFragment">
 
-    <TextView
-        android:id="@+id/details_steps"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_vertical_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:textSize="36sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/details_steps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:fontFamily="casual"
+                android:text="@string/step_empty"
+                android:textSize="36sp" />
+
+            <TextView
+                android:id="@+id/details_dist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:fontFamily="casual"
+                android:text="@string/dist_empty"
+                android:textSize="36sp" />
+
+            <TextView
+                android:id="@+id/details_last_completed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:fontFamily="casual"
+                android:text="@string/never_completed"
+                android:textSize="36sp" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/details_features_flex"
+                app:flexWrap="wrap"
+                app:alignItems="stretch"
+                app:alignContent="stretch">
+
+                <TextView
+                    android:id="@+id/detail_features_difficulty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/icon_border"
+                    android:fontFamily="casual"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:text="@string/details_features_easy"
+                    android:textSize="36sp" />
+
+                <TextView
+                    android:id="@+id/detail_features_eveness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/icon_border"
+                    android:fontFamily="casual"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:text="@string/details_features_even"
+                    android:textSize="36sp" />
+
+                <TextView
+                    android:id="@+id/detail_features_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/icon_border"
+                    android:fontFamily="casual"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:text="@string/details_features_even"
+                    android:textSize="36sp" />
+
+                <TextView
+                    android:id="@+id/detail_features_street"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/icon_border"
+                    android:fontFamily="casual"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:text="@string/details_features_street"
+                    android:textSize="36sp" />
+
+                <TextView
+                    android:id="@+id/detail_features_hilly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/icon_border"
+                    android:fontFamily="casual"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:text="@string/details_features_hilly"
+                    android:textSize="36sp" />
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <TextView
+                android:id="@+id/details_notes_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:fontFamily="casual"
+                android:text="@string/details_notes_title"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@+id/details_notes"
+                style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="256dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:ems="10"
+                android:fontFamily="casual"
+                android:gravity="start|top"
+                android:hint="@string/details_notes_hint"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:textSize="24sp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
