@@ -29,6 +29,8 @@ import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.ui.walk.WalkFragment;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
@@ -46,7 +48,7 @@ public class RouteDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mViewModel = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_route_details, container, false);
+        final View root = inflater.inflate(R.layout.fragment_route_details, container, false);
 
         mActivity = (AppCompatActivity) requireActivity();
         route = mViewModel.getRoute();
@@ -150,9 +152,11 @@ public class RouteDetailsFragment extends Fragment {
         notes.setText(route.getNotes());
         notes.setEnabled(false); // make it non editable
 
+        final MainActivity mainActivity = (MainActivity) getActivity();
+
         // navigate to walk screen and start a walk
         final NavController controller = NavHostFragment.findNavController(this);
-        final Button btnDetailsStartWalk = root.findViewById(R.id.details_btn_start_walk);
+        final FloatingActionButton btnDetailsStartWalk = root.findViewById(R.id.details_btn_start_walk);
         btnDetailsStartWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,6 +164,9 @@ public class RouteDetailsFragment extends Fragment {
                 if (controller.getCurrentDestination().getId() == R.id.routeDetailsFragment) {
                     controller.navigate(R.id.action_routeDetailsFragment_to_navigation_walk);
                     // TODO: click start walk from walk screen
+
+                    // changes only stopwatch, not button name: mainActivity.runStopWatch();
+
                 }
 
             }
