@@ -24,4 +24,21 @@
     <string name="tx_height">Height</string>
     <string name="tx_feet">Feet</string>
     <string name="tx_in">In</string>
+    <string name="never_completed">Never Completed</string>
+    <string name="add_new_route">Add</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="lb_route_name">Route Name</string>
+    <string name="lb_starting_point">Starting Point</string>
+    <string name="lb_route_fea">Route Features</string>
+    <string name="lb_route_note">Notes</string>
+    <string name="lb_route_easy">Easy</string>
+    <string name="lb_route_med">Medium</string>
+    <string name="lb_route_hard">Hard</string>
+    <string name="lb_route_hilly">Hilly</string>
+    <string name="lb_route_flat">Flat</string>
+    <string name="lb_route_street">Street</string>
+    <string name="lb_route_trail">Trail</string>
+    <string name="lb_route_even">Even</string>
+    <string name="lb_route_uneven">Uneven</string>
+    <string name="bt_done">DONE</string>
 </resources>
