@@ -19,8 +19,13 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.SaveDataActivity;
+import com.example.team_project_team6.model.Walk;
+import com.google.gson.Gson;
 
+import java.util.Calendar;
 import java.util.Locale;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class WalkFragment extends Fragment {
 
@@ -38,7 +43,8 @@ public class WalkFragment extends Fragment {
         final TextView walkSteps = root.findViewById(R.id.lbStep);
         final TextView walkDist = root.findViewById(R.id.lbDistance);
 
-        final SaveDataActivity saveDataActivity = (SaveDataActivity) getActivity();
+        final Walk walk = new Walk();
+
         final MainActivity mainActivity = (MainActivity) getActivity();
 
         if(dashboardViewModel.is_currently_walking().getValue()) {
@@ -54,7 +60,7 @@ public class WalkFragment extends Fragment {
                     System.out.println("is there herrrrrrrrrrrre");
                     mainActivity.runStopWatch();
                     dashboardViewModel.start_walking();
-                    saveDataActivity.startNewWalk();
+                    walk.setStartTime(Calendar.getInstance());
                     btStart.setText(R.string.bt_stop);
 
                 }else {
@@ -64,8 +70,20 @@ public class WalkFragment extends Fragment {
 
                     String duration = lbStopWatch.getText().toString();
                     long stepCount = Long.parseLong(walkSteps.getText().toString());
-                    double distance = Double.parseDouble(walkDist.getText().toString());
-                    saveDataActivity.stopWalk(duration, stepCount, distance);
+
+                    String[] distData = walkDist.getText().toString().split("\\s+");
+                    double distance = Double.parseDouble(distData[0]);
+                    walk.setDuration(duration);
+                    walk.setStep(stepCount);
+                    walk.setDist(distance);
+
+                    Gson gson = new Gson();
+                    String json = gson.toJson(walk);
+
+                    SharedPreferences spfs = view.getContext().getSharedPreferences("user_data", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = spfs.edit();
+                    editor.putString("walk", json);
+                    editor.apply();
 
                     //show data when the walk has done!
                     Toast.makeText(getActivity(), "time: " + lbStopWatch.getText().toString(), Toast.LENGTH_LONG).show();
@@ -74,7 +92,7 @@ public class WalkFragment extends Fragment {
             }
         });
 
-        SharedPreferences spfs = this.requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+        SharedPreferences spfs = this.requireActivity().getSharedPreferences("user_data", MODE_PRIVATE);
         final int heightInInches = spfs.getInt("user_height", -1);
         final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
 
@@ -88,7 +106,7 @@ public class WalkFragment extends Fragment {
 
                 double dist = strideDistInFt * num / 5280.0;
 
-                walkSteps.setText(String.format(Locale.ENGLISH, "%d steps", num));
+                walkSteps.setText(String.format(Locale.ENGLISH, "%d", num));
                 walkDist.setText(String.format(Locale.ENGLISH, "%.2f mi", dist));
             }
         });

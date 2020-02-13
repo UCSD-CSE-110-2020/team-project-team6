@@ -11,6 +11,7 @@
     <string name="tx_cur_time">TIME:</string>
     <string name="step_empty">0 steps</string>
     <string name="dist_empty">0 mi</string>
+    <string name="walk_step_empty">0</string>
     <string name="time_empty">00:00:00</string>
     <string name="bt_start">START</string>
     <string name="bt_stop">STOP</string>
