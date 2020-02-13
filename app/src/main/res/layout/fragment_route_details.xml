@@ -68,24 +68,24 @@
                 android:textSize="36sp" />
 
             <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/details_features_flex"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/details_features_flex"
-                app:flexWrap="wrap"
+                app:alignContent="stretch"
                 app:alignItems="stretch"
-                app:alignContent="stretch">
+                app:flexWrap="wrap">
 
                 <TextView
                     android:id="@+id/detail_features_difficulty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:background="@drawable/icon_border"
                     android:fontFamily="casual"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:text="@string/details_features_easy"
                     android:textSize="36sp" />
 
@@ -93,12 +93,12 @@
                     android:id="@+id/detail_features_eveness"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:background="@drawable/icon_border"
                     android:fontFamily="casual"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:text="@string/details_features_even"
                     android:textSize="36sp" />
 
@@ -106,12 +106,12 @@
                     android:id="@+id/detail_features_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:background="@drawable/icon_border"
                     android:fontFamily="casual"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:text="@string/details_features_even"
                     android:textSize="36sp" />
 
@@ -119,13 +119,13 @@
                     android:id="@+id/detail_features_street"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:background="@drawable/icon_border"
                     android:fontFamily="casual"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:text="@string/details_features_street"
                     android:textSize="36sp" />
 
@@ -133,12 +133,12 @@
                     android:id="@+id/detail_features_hilly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:background="@drawable/icon_border"
                     android:fontFamily="casual"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:text="@string/details_features_hilly"
                     android:textSize="36sp" />
             </com.google.android.flexbox.FlexboxLayout>
@@ -169,6 +169,16 @@
                 android:importantForAutofill="no"
                 android:inputType="textMultiLine"
                 android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/details_btn_start_walk"
+                android:layout_marginStart="148dp"
+                android:layout_marginBottom="108dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/details_notes" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
 

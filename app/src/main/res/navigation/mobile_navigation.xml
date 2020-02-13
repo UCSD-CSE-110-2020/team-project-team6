@@ -33,5 +33,12 @@
         android:id="@+id/routeDetailsFragment"
         android:name="com.example.team_project_team6.ui.route_details.RouteDetailsFragment"
         android:label="fragment_route_details"
-        tools:layout="@layout/fragment_route_details" />
+        tools:layout="@layout/fragment_route_details" >
+        <action
+            android:id="@+id/action_routeDetailsFragment_to_navigation_walk"
+            app:destination="@id/navigation_walk"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
+    </fragment>
 </navigation>

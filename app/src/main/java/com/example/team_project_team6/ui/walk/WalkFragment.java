@@ -93,4 +93,5 @@ public class WalkFragment extends Fragment {
 
         return root;
     }
+
 }
