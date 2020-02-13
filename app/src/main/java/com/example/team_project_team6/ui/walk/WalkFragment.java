@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.SaveDataActivity;
 
 import java.util.Locale;
 
@@ -37,6 +38,7 @@ public class WalkFragment extends Fragment {
         final TextView walkSteps = root.findViewById(R.id.lbStep);
         final TextView walkDist = root.findViewById(R.id.lbDistance);
 
+        final SaveDataActivity saveDataActivity = (SaveDataActivity) getActivity();
         final MainActivity mainActivity = (MainActivity) getActivity();
 
         if(dashboardViewModel.is_currently_walking().getValue()) {
@@ -52,11 +54,18 @@ public class WalkFragment extends Fragment {
                     System.out.println("is there herrrrrrrrrrrre");
                     mainActivity.runStopWatch();
                     dashboardViewModel.start_walking();
+                    saveDataActivity.startNewWalk();
                     btStart.setText(R.string.bt_stop);
+
                 }else {
                     dashboardViewModel.end_walking();
                     btStart.setText(R.string.bt_start);
                     mainActivity.stopWatch();
+
+                    String duration = lbStopWatch.getText().toString();
+                    long stepCount = Long.parseLong(walkSteps.getText().toString());
+                    double distance = Double.parseDouble(walkDist.getText().toString());
+                    saveDataActivity.stopWalk(duration, stepCount, distance);
 
                     //show data when the walk has done!
                     Toast.makeText(getActivity(), "time: " + lbStopWatch.getText().toString(), Toast.LENGTH_LONG).show();
