@@ -9,8 +9,9 @@
     <string name="tx_curr_steps">STEPS:</string>
     <string name="tx_cur_dist">DISTANCE:</string>
     <string name="tx_cur_time">TIME:</string>
-    <string name="step_empty">0</string>
-    <string name="dist_empty">0</string>
+    <string name="step_empty">0 steps</string>
+    <string name="dist_empty">0 mi</string>
+    <string name="walk_step_empty">0</string>
     <string name="time_empty">00:00:00</string>
     <string name="bt_start">START</string>
     <string name="bt_stop">STOP</string>
@@ -24,4 +25,21 @@
     <string name="tx_height">Height</string>
     <string name="tx_feet">Feet</string>
     <string name="tx_in">In</string>
+    <string name="never_completed">Never Completed</string>
+    <string name="title_fragment_route_details">Route Details</string>
+    <string name="details_notes_hint">Enter your route notes here…</string>
+    <string name="details_notes_title">Notes</string>
+    <string name="details_features_easy">Easy</string>
+    <string name="details_features_medium">Medium</string>
+    <string name="details_features_hard">Hard</string>
+    <string name="details_features_hilly">Hilly</string>
+    <string name="details_features_flat">Flat</string>
+    <string name="details_features_street">Street</string>
+    <string name="details_features_trail">Trail</string>
+    <string name="details_features_even">Even</string>
+    <string name="details_features_uneven">Uneven</string>
+    <string name="not_favorite">Not Favorite</string>
+    <string name="favorite">Favorite</string>
+    <string name="details_features_loop">Loop</string>
+    <string name="details_features_outandback">Out and Back</string>
 </resources>
