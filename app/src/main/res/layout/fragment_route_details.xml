@@ -38,6 +38,16 @@
                 android:textSize="36sp" />
 
             <TextView
+                android:id="@+id/details_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:fontFamily="casual"
+                android:text="@string/time_empty"
+                android:textSize="36sp" />
+
+            <TextView
                 android:id="@+id/details_last_completed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,6 +55,16 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:fontFamily="casual"
                 android:text="@string/never_completed"
+                android:textSize="36sp" />
+
+            <TextView
+                android:id="@+id/details_last_starting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:fontFamily="casual"
+                android:text="@string/bt_start"
                 android:textSize="36sp" />
 
             <com.google.android.flexbox.FlexboxLayout

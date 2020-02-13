@@ -3,14 +3,14 @@ package com.example.team_project_team6.model;
 import java.util.Calendar;
 
 public class Walk {
-    Calendar duration;
+    String duration;
     Calendar startTime;
     double dist;
     int step;
 
     public Walk () {
         startTime = Calendar.getInstance();
-        duration = Calendar.getInstance();
+        duration = "";
         dist = 0;
         step = 0;
     }
@@ -19,11 +19,11 @@ public class Walk {
         this.setStartTime(startTime);
     }
 
-    public Calendar getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(Calendar duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 

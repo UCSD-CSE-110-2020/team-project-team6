@@ -55,6 +55,13 @@ public class RouteDetailsFragment extends Fragment {
         ((TextView)root.findViewById(R.id.details_steps)).setText(step_text);
         ((TextView)root.findViewById(R.id.details_dist)).setText(dist_text);
 
+        // duration
+        ((TextView) root.findViewById(R.id.details_duration)).setText(route.getWalk().getDuration());
+
+        // starting location
+        String starting = String.format(Locale.ENGLISH, "Starting Location: %s", route.getStartPoint());
+        ((TextView) root.findViewById(R.id.details_last_starting)).setText(starting);
+
         final FlexboxLayout flexbox = root.findViewById(R.id.details_features_flex);
 
         // difficulty
@@ -129,7 +136,7 @@ public class RouteDetailsFragment extends Fragment {
         final TextView last_start = root.findViewById(R.id.details_last_completed);
         if (route.getLastStartDate() != null) {
             Date dateLastWalked = route.getLastStartDate().getTime();
-            SimpleDateFormat format = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
+            SimpleDateFormat format = new SimpleDateFormat("h:mm a. MMM d, yyyy", Locale.ENGLISH);
             last_start.setText(format.format(dateLastWalked));
         }
 
