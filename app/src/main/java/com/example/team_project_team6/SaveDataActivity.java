@@ -34,4 +34,7 @@ public class SaveDataActivity extends AppCompatActivity {
 //        SharedPreferences.Editor editor = spfs.edit();
     }
 
+    public Walk getWalk() {
+        return walk;
+    }
 }
