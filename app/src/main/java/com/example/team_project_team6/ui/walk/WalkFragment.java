@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.SaveDataActivity;
+import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
 import com.google.gson.Gson;
 
@@ -46,6 +47,8 @@ public class WalkFragment extends Fragment {
         final Walk walk = new Walk();
 
         final MainActivity mainActivity = (MainActivity) getActivity();
+
+        final SaveData saveData = new SaveData(mainActivity);
 
         if(dashboardViewModel.is_currently_walking().getValue()) {
             btStart.setText(R.string.bt_stop);
@@ -77,13 +80,7 @@ public class WalkFragment extends Fragment {
                     walk.setStep(stepCount);
                     walk.setDist(distance);
 
-                    Gson gson = new Gson();
-                    String json = gson.toJson(walk);
-
-                    SharedPreferences spfs = view.getContext().getSharedPreferences("user_data", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = spfs.edit();
-                    editor.putString("walk", json);
-                    editor.apply();
+                    saveData.saveWalk(walk);
 
                     //show data when the walk has done!
                     Toast.makeText(getActivity(), "time: " + lbStopWatch.getText().toString(), Toast.LENGTH_LONG).show();
