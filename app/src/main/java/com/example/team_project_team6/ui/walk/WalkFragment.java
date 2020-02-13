@@ -89,8 +89,8 @@ public class WalkFragment extends Fragment {
             }
         });
 
-        SharedPreferences spfs = this.requireActivity().getSharedPreferences("user_data", MODE_PRIVATE);
-        final int heightInInches = spfs.getInt("user_height", -1);
+
+        final int heightInInches = saveData.getHeight();
         final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
 
          dashboardViewModel.getWalkSteps().observe(getViewLifecycleOwner(), new Observer<Long>() {

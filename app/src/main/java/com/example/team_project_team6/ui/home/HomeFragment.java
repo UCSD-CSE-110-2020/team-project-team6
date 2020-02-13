@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.model.SaveData;
 
 import java.util.Locale;
 
@@ -28,6 +29,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mActivity = requireActivity();
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        final SaveData saveData = new SaveData(mainActivity);
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -37,8 +40,8 @@ public class HomeFragment extends Fragment {
         homeViewModel.getDailySteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
             public void onChanged(@Nullable Long num) {
-                SharedPreferences spfs = mActivity.getSharedPreferences("user_data", Context.MODE_PRIVATE);
-                final int heightInInches = spfs.getInt("user_height", -1);
+
+                final int heightInInches = saveData.getHeight();
                 final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
 
                 if (num == null) {

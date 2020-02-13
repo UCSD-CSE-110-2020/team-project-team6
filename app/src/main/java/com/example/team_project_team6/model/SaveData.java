@@ -15,6 +15,13 @@ public class SaveData {
     public SaveData(MainActivity mainActivity){
         this.mainActivity = mainActivity;
     }
+
+    public int getHeight(){
+        SharedPreferences spfs = mainActivity.getSharedPreferences("user_data", MODE_PRIVATE);
+        return spfs.getInt("user_height", -1);
+    }
+
+
     public void saveWalk(Walk walk){
 
         Gson gson = new Gson();
