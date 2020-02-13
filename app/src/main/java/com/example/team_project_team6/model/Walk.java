@@ -10,6 +10,9 @@ public class Walk {
 
     public Walk () {
         startTime = Calendar.getInstance();
+        duration = "";
+        dist = 0;
+        step = 0;
     }
 
     public Walk (Calendar startTime) {
