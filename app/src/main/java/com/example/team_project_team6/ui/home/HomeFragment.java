@@ -3,6 +3,7 @@ package com.example.team_project_team6.ui.home;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class HomeFragment extends Fragment {
 
                 final int heightInInches = saveData.getHeight();
                 final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
+                Log.i("height", String.format(Locale.ENGLISH, "height: %d, distance: %f", heightInInches, strideDistInFt));
 
                 if (num == null) {
                     num = 0L;
