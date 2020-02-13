@@ -45,13 +45,11 @@ dependencies {
     implementation 'com.google.android.gms:play-services-fitness:18.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-<<<<<<< HEAD
     testImplementation 'junit:junit:4.12'
-=======
     implementation 'com.google.android:flexbox:2.0.1'
     testImplementation 'junit:junit:4.13'
     testImplementation 'org.robolectric:robolectric:4.3.1'
->>>>>>> d53b31bb34131ff2016b115006a8c420c5817103
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.google.android.gms:play-services-fitness:18.0.0'

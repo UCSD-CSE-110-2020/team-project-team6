@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<<<<<<< HEAD
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/btNewRoute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -21,20 +21,18 @@
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@drawable/plus" />
 
-=======
->>>>>>> d53b31bb34131ff2016b115006a8c420c5817103
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_routes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-<<<<<<< HEAD
+
         android:scrollbars="vertical" >
 
     </androidx.recyclerview.widget.RecyclerView>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-=======
-        android:scrollbars="vertical" />
-</androidx.constraintlayout.widget.ConstraintLayout>
->>>>>>> d53b31bb34131ff2016b115006a8c420c5817103
+
+

@@ -3,20 +3,14 @@ package com.example.team_project_team6.ui.routes;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.NavHost;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,11 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.model.Walk;
-import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
+import com.example.team_project_team6.ui.new_route.NewRouteFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class RoutesFragment extends Fragment {
 
@@ -42,6 +35,22 @@ public class RoutesFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         routesViewModel = ViewModelProviders.of(requireActivity()).get(RoutesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_routes, container, false);
+
+        final FloatingActionButton btNewRoute = root.findViewById(R.id.btNewRoute);
+
+        btNewRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NewRouteFragment ftNewRoute = new NewRouteFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                ft.setCustomAnimations(android.R.animator.fade_in,
+//                        android.R.animator.fade_out);
+                ft.addToBackStack(null);
+                ft.replace(R.id.nav_host_fragment, ftNewRoute);
+
+                ft.commit();
+            }
+        });
 
         recyclerView = root.findViewById(R.id.recycler_view_routes);
         recyclerView.setHasFixedSize(true);
@@ -74,20 +83,12 @@ public class RoutesFragment extends Fragment {
             }
         });
 
-        // Navcontroller provides some cool animations and task stack management for us
-        final NavController controller = NavHostFragment.findNavController(this);
         adapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
                 Route route = routesViewModel.getRouteAt(position);
                 if (route != null) {
                     Log.d("Routes", "Clicked on route: " + route.getName());
-                    if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
-                        RouteDetailsViewModel route_details_view_model = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
-                        route_details_view_model.setRoute(route);
-
-                        controller.navigate(R.id.action_navigation_routes_to_routeDetailsFragment);
-                    }
                 }
             }
         });
