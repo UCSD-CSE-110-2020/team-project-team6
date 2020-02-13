@@ -63,6 +63,8 @@ public class WalkFragment extends Fragment {
             }
         });
 
+        // TODO RESET STEP COUNT AFTER STOP PRESSED
+
         final TextView walkSteps = root.findViewById(R.id.lbStep);
         final TextView walkDist = root.findViewById(R.id.lbDistance);
         SharedPreferences spfs = this.requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
