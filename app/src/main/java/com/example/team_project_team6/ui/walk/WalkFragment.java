@@ -1,7 +1,5 @@
 package com.example.team_project_team6.ui.walk;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +16,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
-import com.example.team_project_team6.SaveDataActivity;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
-import com.google.gson.Gson;
 
 import java.util.Calendar;
 import java.util.Locale;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class WalkFragment extends Fragment {
 
