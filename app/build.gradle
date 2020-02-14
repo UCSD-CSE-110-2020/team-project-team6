@@ -53,13 +53,12 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "androidx.navigation:navigation-testing:2.3.0-alpha01"
     testImplementation 'org.robolectric:robolectric:4.3.1'
-<<<<<<< HEAD
     testImplementation 'androidx.test.ext:truth:1.2.0'
     testImplementation 'androidx.test:rules:1.2.0'
     testImplementation 'androidx.test.ext:junit:1.1.1'
-=======
-
->>>>>>> dc1005e98c02ae1f0b9382b1b73572d402520d1d
+    testImplementation 'androidx.test.ext:truth:1.2.0'
+    testImplementation 'androidx.test:rules:1.2.0'
+    testImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test:core:1.2.0'
