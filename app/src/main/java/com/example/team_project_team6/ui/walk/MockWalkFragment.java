@@ -178,11 +178,17 @@ public class MockWalkFragment extends Fragment {
         return sb.toString();
     }
 
+    /**
+     * returns step distance in miles based off of height and step count
+     */
     public double getStepDistanceInMiles(int heightInInches, Long stepCount) {
         double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
         return (strideDistInFt * (double) stepCount) / 5280.0;
     }
 
+    /**
+     * returns step count in Long form using step count String
+     */
     public Long parseStepCountStringToLong(String stepCountString) {
         Log.d("parseStepCountStringToLong", "Cast step count from String to Long");
         Long stepCountLong = 0l;
@@ -205,10 +211,12 @@ public class MockWalkFragment extends Fragment {
         inflator.inflate(R.menu.action_bar_mock_walk, menu);
         super.onCreateOptionsMenu(menu, inflator);
 
+        // find action for navigating to the mock walk screen from action bar
         MenuItem mockWalkAction = menu.findItem(R.id.menu_mock_walk_action);
         mockWalkAction.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                // navigate to mock walk screen on click
                 NavController controller = NavHostFragment.findNavController(requireParentFragment());
                 if(controller.getCurrentDestination().getId() == R.id.mockWalkFragment) {
                     controller.navigate(R.id.action_mockWalkFragment_to_navigation_walk);
