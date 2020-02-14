@@ -25,6 +25,7 @@ public class NewRouteFragment extends Fragment {
     private RadioButton radHilly;
     private RadioButton radStreet;
     private RadioButton radEven;
+    private RadioButton radLoop;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -45,6 +46,7 @@ public class NewRouteFragment extends Fragment {
         final RadioGroup rgHilly = root.findViewById(R.id.radioGroup2);
         final RadioGroup rgStreet = root.findViewById(R.id.radioGroup3);
         final RadioGroup rgEven = root.findViewById(R.id.radioGroup4);
+        final RadioGroup rgLoop = root.findViewById(R.id.radioGroup5);
 
         final Button btDone = root.findViewById(R.id.btDone);
 
@@ -86,6 +88,14 @@ public class NewRouteFragment extends Fragment {
             }
         });
 
+        rgLoop.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // checkedID if the RadioButton is selected
+                radLoop = root.findViewById(checkedId);
+
+            }
+        });
 
         btDone.setOnClickListener(new View.OnClickListener() {
             @Override
