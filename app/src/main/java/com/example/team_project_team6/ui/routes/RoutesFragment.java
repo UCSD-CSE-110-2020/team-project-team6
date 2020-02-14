@@ -7,17 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -28,12 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
-import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.example.team_project_team6.ui.new_route.NewRouteFragment;
-import com.example.team_project_team6.ui.routes.RouteViewAdapter;
-import com.example.team_project_team6.ui.routes.RoutesViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -63,6 +53,7 @@ public class RoutesFragment extends Fragment {
         btNewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mainActivity.setCreateRouteFromWalk(false);
                 NewRouteFragment ftNewRoute = new NewRouteFragment();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 //                ft.setCustomAnimations(android.R.animator.fade_in,

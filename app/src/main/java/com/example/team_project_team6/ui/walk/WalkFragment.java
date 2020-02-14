@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
 
@@ -80,8 +81,6 @@ public class WalkFragment extends Fragment {
                     walk.setStep(stepCount);
                     walk.setDist(distance);
 
-                    saveData.saveWalk(walk); // save walk into SharedPreferences
-
                     // reset values
                     walkSteps.setText(R.string.walk_step_empty);
                     walkDist.setText(R.string.dist_empty);
@@ -90,8 +89,14 @@ public class WalkFragment extends Fragment {
                     Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
 
                     if(mainActivity.getIsWalkFromRouteDetails()) {
-                        // TODO GO TO ROUTES
+                        Route route = mainActivity.getCurrentRoute();
+                        route.setWalk(walk);
+                        saveData.saveRoute(route);
+                        // TODO GO BACK TO ROUTES MAIN TAB
+
                     } else {
+                        saveData.saveWalk(walk); // save walk into SharedPreferences
+                        mainActivity.setCreateRouteFromWalk(true);
                         // TODO GO TO CREATE A ROUTE FORM
                     }
                 }

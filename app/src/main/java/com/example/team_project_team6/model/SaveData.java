@@ -14,34 +14,64 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SaveData {
     private Context mainActivity;
+    private Gson gson;
+    private SharedPreferences spfsUser;
+    private SharedPreferences spfsRoute;
 
     public SaveData(Context mainActivity){
         this.mainActivity = mainActivity;
+        gson = new Gson();
+        spfsUser = mainActivity.getSharedPreferences("user_data", MODE_PRIVATE);
+        spfsRoute = mainActivity.getSharedPreferences("route_data", MODE_PRIVATE);
     }
 
-    /**
-     * retrieve the user's height from SharedPreferences
-     * @return the user's height
-     */
+
     public int getHeight() {
-        SharedPreferences spfs = mainActivity.getSharedPreferences("user_data", MODE_PRIVATE);
-        return spfs.getInt("user_height", -1);
-    }
+        int height = spfsUser.getInt("user_height", -1);
+        Log.i("Retrieving User Height from SaveData", "Height: " + height);
 
+        return height;
+    }
 
     public String saveWalk(Walk walk) {
         // convert walk into a json object
-        Gson gson = new Gson();
         String json = gson.toJson(walk);
 
         // save the walk information into SharedPreferences to be retrieved when the Route is saved/updated
-        SharedPreferences spfs = mainActivity.getSharedPreferences("user_data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = spfs.edit();
+        SharedPreferences.Editor editor = spfsRoute.edit();
         editor.putString("walk", json);
         editor.apply();
 
         Log.i("Saving Walk in SaveData", json);
 
         return json;
+    }
+
+    public Walk getWalk() {
+        String walkJson = spfsUser.getString("walk", "");
+        Log.i("Retrieving Walk from SaveData", walkJson);
+
+        return gson.fromJson(walkJson, Walk.class);
+    }
+
+    public String saveRoute(Route route) {
+        // convert walk into a json object
+        String json = gson.toJson(route);
+
+        // save the walk information into SharedPreferences to be retrieved when the Route is saved/updated
+        SharedPreferences.Editor editor = spfsUser.edit();
+        editor.putString(route.getName(), json);
+        editor.apply();
+
+        Log.i("Saving Route " + route.getName() + " in SaveData", json);
+
+        return json;
+    }
+
+    public Route getRoute(String name) {
+        String routeJson = spfsRoute.getString(name, "");
+        Log.i("Retrieving Route from SaveData", routeJson);
+
+        return gson.fromJson(routeJson, Route.class);
     }
 }

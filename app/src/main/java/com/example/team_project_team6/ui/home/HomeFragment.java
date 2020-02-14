@@ -41,17 +41,13 @@ public class HomeFragment extends Fragment {
         // save references to the steps and distance TextViews
         final TextView dailySteps = root.findViewById(R.id.textDailySteps);
         final TextView dailyDist = root.findViewById(R.id.textDailyDist);
-<<<<<<< HEAD
 
         // get the height from SharedPreferences and calculate stride distance
         final int heightInInches = saveData.getHeight();
         final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
-=======
-        final MainActivity mainActivity = (MainActivity) getActivity();
 
         // check if previous screen is RouteDetailsFragment to prevent creation of another walk object
         mainActivity.setIsWalkFromRouteDetails(false);
->>>>>>> 52b6675eee7d905b1cc6ffd969df1d8cc57d00b2
 
         homeViewModel.getDailySteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override

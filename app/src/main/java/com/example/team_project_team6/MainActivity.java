@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
 
     private boolean isWalkFromRouteDetails = false;
+    private boolean createRouteFromWalk = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,13 +178,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setIsWalkFromRouteDetails(boolean isWalkFromRouteDetails) {
-        Log.i("setIsWalkFromRouteDetails from MainActivity", "user started walk from route? " + currentRoute.toString());
+        Log.i("setIsWalkFromRouteDetails from MainActivity", "user started walk from route? " + isWalkFromRouteDetails);
         this.isWalkFromRouteDetails = isWalkFromRouteDetails;
     }
 
     public boolean getIsWalkFromRouteDetails() {
-        Log.i("getIsWalkFromRouteDetails from MainActivity", "return if user started walk from route: " + currentRoute.toString());
+        Log.i("getIsWalkFromRouteDetails from MainActivity", "return whether user started walk from route: " + isWalkFromRouteDetails);
         return this.isWalkFromRouteDetails;
+    }
+
+    public boolean isCreateRouteFromWalk() {
+        Log.i("isCreateRouteFromWalk from MainActivity", "return whether route is created from routes tab: " + createRouteFromWalk);
+        return createRouteFromWalk;
+    }
+
+    public void setCreateRouteFromWalk(boolean createRouteFromWalk) {
+        Log.i("setCreateRouteFromWalk from MainActivity", "user created route from routes? " + createRouteFromWalk);
+        this.createRouteFromWalk = createRouteFromWalk;
     }
 
     @Override

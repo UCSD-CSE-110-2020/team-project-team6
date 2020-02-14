@@ -66,15 +66,12 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     implementation 'com.google.android.gms:play-services-fitness:18.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
-<<<<<<< HEAD
     implementation 'com.google.code.gson:gson:2.8.5'
     testImplementation 'androidx.test.ext:junit:1.1.1'
     testImplementation 'androidx.test.ext:truth:1.2.0'
     testImplementation 'androidx.test:rules:1.2.0'
-    testCompile "org.mockito:mockito-core:1.+"
-=======
+    testImplementation "org.mockito:mockito-core:1.+"
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.google.android.material:material:1.1.0-alpha06'
->>>>>>> 52b6675eee7d905b1cc6ffd969df1d8cc57d00b2
     debugImplementation 'androidx.fragment:fragment-testing:1.2.1'
 }

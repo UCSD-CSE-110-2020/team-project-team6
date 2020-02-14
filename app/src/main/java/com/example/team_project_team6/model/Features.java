@@ -5,12 +5,12 @@ import android.util.Log;
 import java.util.Locale;
 
 public class Features {
-    private int level;
-    private int directionType;
-    private int terrain;
+    private int level; // easy, medium, or difficult
+    private int directionType; // loop or out-and-back
+    private int terrain; // hilly or flat
     private boolean isFavorite;
-    private int type;
-    private int surface;
+    private int type; // street or trail
+    private int surface; // even or uneven
 
     public Features() {
         level = 0;

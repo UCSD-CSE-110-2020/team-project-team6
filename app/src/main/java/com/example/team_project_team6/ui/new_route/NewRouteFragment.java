@@ -16,7 +16,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.model.Features;
+import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.SaveData;
+import com.example.team_project_team6.model.Walk;
 
 public class NewRouteFragment extends Fragment {
 
@@ -32,7 +37,8 @@ public class NewRouteFragment extends Fragment {
         mNewRouteModel = new ViewModelProvider(requireActivity()).get(NewRouteViewModel.class);
         final View root =  inflater.inflate(R.layout.new_route_fragment, container, false);
 
-
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        final SaveData saveData = new SaveData(mainActivity);
 
         //hide bottom navigation bar
         getActivity().findViewById(R.id.nav_view).setVisibility(View.GONE);
@@ -90,8 +96,39 @@ public class NewRouteFragment extends Fragment {
         btDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //save data here
 
+                // save all of the features recorded by the user
+                Features features = new Features();
+                features.setLevel(rgDiff.getCheckedRadioButtonId());
+//                features.setDirectionType(); // TODO add radio button for this
+                features.setTerrain(rgHilly.getCheckedRadioButtonId());
+                features.setFavorite(false);
+                features.setType(rgStreet.getCheckedRadioButtonId());
+                features.setSurface(rgEven.getCheckedRadioButtonId());
+
+                Route route = new Route();
+
+                // if a new route is being created after redirection from the walk fragment, retrieve
+                // the walk's data to save inside the route
+                if (mainActivity.isCreateRouteFromWalk()) {
+                    Walk walk = saveData.getWalk();
+                    route.setWalk(walk);
+                    route.setLastStartDate(walk.getStartTime());
+
+                // otherwise, create a new walk object and save that inside route along with an unset
+                // last start date
+                } else {
+                    route.setWalk(new Walk());
+                    route.setLastStartDate(null);
+                }
+
+                // update remaining parameters of route object
+                route.setName(txtRouteNme.getText().toString());
+                route.setStartPoint(txtStartingPoint.getText().toString());
+                route.setNotes(txtNotes.getText().toString());
+                route.setFeatures(features);
+
+                saveData.saveRoute(route); // save route to SharedPreferences
 
                 //showing up bottom navigation bar
                 getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);

@@ -2,6 +2,8 @@ package com.example.team_project_team6.model;
 
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -12,6 +14,16 @@ public class Route {
     private String notes;
     private Features features;
     private String name;
+
+
+    public Route() {
+        this.walk = null;
+        this.startPoint = "";
+        this.lastStartDate = null;
+        this.notes = "";
+        this.features = null;
+        this.name = "";
+    }
 
     // If never walked, set lastStartDate to null
     public Route(Walk walk, String startPoint, Calendar lastStartDate, String notes, Features features, String name) {
@@ -58,7 +70,7 @@ public class Route {
         return lastStartDate;
     }
 
-    public void setLastStartDate(Calendar lastStartDate) {
+    public void setLastStartDate(@Nullable Calendar lastStartDate) {
         Log.i("setLastStartDate from Route", "value: " + lastStartDate.toString());
         this.lastStartDate = lastStartDate;
     }
