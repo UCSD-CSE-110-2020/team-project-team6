@@ -10,27 +10,43 @@
     <string name="tx_cur_dist">DISTANCE:</string>
     <string name="tx_cur_time">TIME:</string>
     <string name="step_empty">0</string>
-    <string name="dist_empty">0</string>
+    <string name="walk_step_empty">0</string>
+    <string name="dist_empty">0.00 mi</string>
     <string name="time_empty">00:00:00</string>
     <string name="bt_start">START</string>
     <string name="bt_stop">STOP</string>
     <string name="bt_continue">Continue</string>
     <string name="bt_back">Back</string>
-    <string name="permisson_tilte">Walk Walk Revolution</string>
-    <string name="permisson_intro">Coach you to a healthier and more active life</string>
-    <string name="permisson_policy">By continuing, you agree to the Terms of Service</string>
+    <string name="permission_title">Walk Walk Revolution</string>
+    <string name="permission_intro">Coach you to a healthier and more active life</string>
+    <string name="permission_policy">By continuing, you agree to the Terms of Service</string>
     <string name="profile">My Profile</string>
     <string name="profile_detail">To ensure the accuracy, Please input your accurate information.</string>
     <string name="tx_height">Height</string>
     <string name="tx_feet">Feet</string>
     <string name="tx_in">In</string>
+
     <string name="mock_bt_start">START</string>
     <string name="mock_text_new_walk">New Mock Walk</string>
     <string name="mock_text_steps_title">Steps</string>
     <string name="mock_text_dist_title">Distance</string>
     <string name="mock_bt_add_steps">+ 500 Steps</string>
 
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="never_completed">Never Completed</string>
+    <string name="title_fragment_route_details">Route Details</string>
+    <string name="details_notes_hint">Enter your route notes here…</string>
+    <string name="details_notes_title">Notes</string>
+    <string name="details_features_easy">Easy</string>
+    <string name="details_features_medium">Medium</string>
+    <string name="details_features_hard">Hard</string>
+    <string name="details_features_hilly">Hilly</string>
+    <string name="details_features_flat">Flat</string>
+    <string name="details_features_street">Street</string>
+    <string name="details_features_trail">Trail</string>
+    <string name="details_features_even">Even</string>
+    <string name="details_features_uneven">Uneven</string>
+    <string name="not_favorite">Not Favorite</string>
+    <string name="favorite">Favorite</string>
+    <string name="details_features_loop">Loop</string>
+    <string name="details_features_outandback">Out and Back</string>
 </resources>

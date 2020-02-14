@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PermissonActivity">
+    tools:context=".PermissionActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="116dp"
         android:layout_marginTop="64dp"
-        android:text="@string/permisson_tilte"
+        android:text="@string/permission_title"
         android:textColor="#2196F3"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -36,7 +36,7 @@
         android:layout_height="82dp"
         android:layout_marginStart="28dp"
         android:layout_marginTop="36dp"
-        android:text="@string/permisson_policy"
+        android:text="@string/permission_policy"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +48,7 @@
         android:layout_height="51dp"
         android:layout_marginStart="72dp"
         android:layout_marginTop="76dp"
-        android:text="@string/permisson_intro"
+        android:text="@string/permission_intro"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
