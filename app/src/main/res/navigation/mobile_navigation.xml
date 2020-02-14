@@ -19,7 +19,33 @@
         android:id="@+id/navigation_walk"
         android:name="com.example.team_project_team6.ui.walk.WalkFragment"
         android:label="@string/title_walk"
-        tools:layout="@layout/fragment_walk" />
+        tools:layout="@layout/fragment_walk" >
+        <action
+            android:id="@+id/action_navigation_walk_to_newRouteFragment"
+            app:destination="@id/newRouteFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
+        <action
+            android:id="@+id/action_navigation_walk_to_navigation_routes"
+            app:destination="@id/navigation_routes"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newRouteFragment"
+        android:name="com.example.team_project_team6.ui.new_route.NewRouteFragment"
+        android:label="New Route"
+        tools:layout="@layout/new_route_fragment" >
+        <action
+            android:id="@+id/action_newRouteFragment_to_navigation_routes"
+            app:destination="@id/navigation_routes"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_routes"
@@ -32,7 +58,14 @@
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"
             app:launchSingleTop="false" />
+        <action
+            android:id="@+id/action_navigation_routes_to_newRouteFragment"
+            app:destination="@id/newRouteFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
     </fragment>
+
     <fragment
         android:id="@+id/routeDetailsFragment"
         android:name="com.example.team_project_team6.ui.route_details.RouteDetailsFragment"

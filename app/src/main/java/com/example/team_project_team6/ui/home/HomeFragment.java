@@ -1,7 +1,5 @@
 package com.example.team_project_team6.ui.home;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 
 import java.util.Locale;
@@ -28,14 +27,22 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mActivity = requireActivity();
 
+        mActivity = requireActivity();
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // save reference to MainActivity and create object to handle SharedPreferences calls
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        final SaveData saveData = new SaveData(mainActivity);
+
+        // save references to the steps and distance TextViews
         final TextView dailySteps = root.findViewById(R.id.textDailySteps);
         final TextView dailyDist = root.findViewById(R.id.textDailyDist);
-        final MainActivity mainActivity = (MainActivity) getActivity();
+
+        // get the height from SharedPreferences and calculate stride distance
+        final int heightInInches = saveData.getHeight();
+        final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
 
         // check if previous screen is RouteDetailsFragment to prevent creation of another walk object
         RouteDetailsViewModel detailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
@@ -44,9 +51,6 @@ public class HomeFragment extends Fragment {
         homeViewModel.getDailySteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
             public void onChanged(@Nullable Long num) {
-                SharedPreferences spfs = mActivity.getSharedPreferences("user_data", Context.MODE_PRIVATE);
-                final int heightInInches = spfs.getInt("user_height", -1);
-                final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
 
                 if (num == null) {
                     num = 0L;

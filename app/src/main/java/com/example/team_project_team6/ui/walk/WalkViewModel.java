@@ -1,53 +1,101 @@
 package com.example.team_project_team6.ui.walk;
 
-import android.os.Handler;
-import android.os.SystemClock;
+import android.app.Application;
+import android.content.Context;
 
+import com.example.team_project_team6.model.StopWatch;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.util.Locale;
-
-public class WalkViewModel extends ViewModel {
+public class WalkViewModel extends AndroidViewModel {
 
     private MutableLiveData<String> stopWatch;
     private MutableLiveData<Long> mWalkSteps;
     private MutableLiveData<Boolean> mCurrentlyWalking;
+    private StopWatch sw;
+    private boolean isWalking;
+    private Context context;
 
-    public WalkViewModel() {
+    public WalkViewModel(Application application) {
+        super(application);
         mCurrentlyWalking = new MutableLiveData<>(false);
         mWalkSteps = new MutableLiveData<>();
         stopWatch = new MutableLiveData<>();
         stopWatch.setValue("00:00:00");
+        this.context = application;
+        sw = new StopWatch();
     }
 
-    void start_walking() {
+    /**
+     * informs observers that walk is underway by updating to the stream
+     */
+    void startWalking() {
         mCurrentlyWalking.postValue(true);
     }
 
-    void end_walking() {
+    /**
+     * informs observers that walk is not underway by updating to the stream
+     */
+    void endWalking() {
         mCurrentlyWalking.postValue(false);
     }
 
-    LiveData<Boolean> is_currently_walking() {
+    /**
+     * returns walking status stream to subscribe to
+     * @return livedata object for walking status
+     */
+    LiveData<Boolean> isCurrentlyWalking() {
         return mCurrentlyWalking;
     }
 
+    /**
+     * posts latest stopwatch value
+     * @param s the updated stopwatch time
+     */
     public void updateStopWatch(String s){
         stopWatch.postValue(s);
     }
 
+    /**
+     * returns stopwatch stream to subscribe to
+     * @return livedata object for stopwatch time
+     */
     public LiveData<String> getStopWatch(){
         return stopWatch;
     }
 
+    /**
+     * returns walk steps stream to subscribe to
+     * @return livedata object for latest number of steps on walk
+     */
     public LiveData<Long> getWalkSteps() {
         return mWalkSteps;
     }
 
+    /**
+     * posts latest step count value
+     * @param stepCount latest number of steps user has walked
+     */
     public void updateWalkSteps(long stepCount) {
         mWalkSteps.postValue(stepCount);
     }
 
+    /**
+     * start the walk stopwatch and set walk mode for step-tracking to on
+     */
+    public void runStopWatch () {
+        sw.runStopWatch(this);
+        isWalking = true;
+    }
+
+    /**
+     * stop the stopwatch and set walk mode for step tracking to off
+     */
+    public void stopWatch() {
+        sw.stopWatch();
+        isWalking = false;
+    }
 }
