@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //setFitnessServiceKey(getIntent().getStringExtra(FITNESS_SERVICE_KEY));
-        setFitnessServiceKey(MOCK_FITNESS_KEY);
+        setFitnessServiceKey(FITNESS_SERVICE_KEY);
         fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
         fitnessService.setup();
 
