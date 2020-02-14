@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
@@ -16,15 +17,22 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 >>>>>>> dc1005e...  route label
+=======
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+>>>>>>> dc1005e98c02ae1f0b9382b1b73572d402520d1d
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 =======
 >>>>>>> dc1005e...  route label
+=======
+>>>>>>> dc1005e98c02ae1f0b9382b1b73572d402520d1d
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,11 +41,16 @@ import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 =======
 import com.example.team_project_team6.ui.new_route.NewRouteFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 >>>>>>> dc1005e...  route label
+=======
+import com.example.team_project_team6.ui.new_route.NewRouteFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+>>>>>>> dc1005e98c02ae1f0b9382b1b73572d402520d1d
 
 import java.util.ArrayList;
 
@@ -98,9 +111,12 @@ public class RoutesFragment extends Fragment {
         });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         // Navcontroller provides some cool animations and task stack management for us
         mAdapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {
 =======
+=======
+>>>>>>> dc1005e98c02ae1f0b9382b1b73572d402520d1d
         adapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {
 >>>>>>> dc1005e...  route label
             @Override
