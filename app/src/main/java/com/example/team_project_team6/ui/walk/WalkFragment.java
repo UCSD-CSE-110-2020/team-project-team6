@@ -47,7 +47,7 @@ public class WalkFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!dashboardViewModel.is_currently_walking().getValue()) {
-                    System.out.println("is there herrrrrrrrrrrre");
+
                     mainActivity.runStopWatch();
                     dashboardViewModel.start_walking();
                     btStart.setText(R.string.bt_stop);

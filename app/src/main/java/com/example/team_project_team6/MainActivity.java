@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sw = new StopWatch();
+
 
         // launch height/permission activity if user height hasn't been saved (first-time user)
         SharedPreferences spfs = this.getSharedPreferences("user_data", MODE_PRIVATE);
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         walkViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
 
+        sw = new StopWatch(walkViewModel);
         AsyncTaskRunner runner = new AsyncTaskRunner();
         runner.execute(1000); // update once a second
     }
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void runStopWatch (){
-        sw.runStopWatch(walkViewModel);
+        sw.runStopWatch();
     }
 
     public void stopWatch(){

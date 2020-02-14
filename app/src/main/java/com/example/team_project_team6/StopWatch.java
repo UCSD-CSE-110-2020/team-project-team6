@@ -10,27 +10,31 @@ import java.util.Locale;
 public class StopWatch {
     private long millisecondTime, startTime;
     private int seconds, minutes, hours ;
+    private final int TIME_CIRCLE = 60;
+    private final int MILLI_TO_SEC = 1000;
     private Handler handler;
-
     private WalkViewModel walkViewModel;
 
-    public StopWatch(){
+    public StopWatch(WalkViewModel walkViewModel){
         millisecondTime = 0L ;
         startTime = 0L ;
         seconds = 0 ;
         minutes = 0 ;
+        this.walkViewModel = walkViewModel;
         handler = new Handler();
     }
-    public void runStopWatch (WalkViewModel walkViewModel){
+
+
+    public void runStopWatch (){
         resetWatch();
-        this.walkViewModel = walkViewModel;
         startTime = SystemClock.uptimeMillis();
         handler.postDelayed(runnable, 0);
     }
     public void stopWatch(){
         handler.removeCallbacks(runnable);
     }
-    public void resetWatch(){
+
+    private void resetWatch(){
         millisecondTime = 0L ;
         startTime = 0L ;
         seconds = 0 ;
@@ -42,21 +46,22 @@ public class StopWatch {
 
             millisecondTime = SystemClock.uptimeMillis() - startTime;
 
+            seconds = (int) (millisecondTime / MILLI_TO_SEC);
 
-            seconds = (int) (millisecondTime / 1000);
+            minutes = seconds / TIME_CIRCLE;
 
-            minutes = seconds / 60;
+            hours = minutes / TIME_CIRCLE;
 
-            hours = minutes / 60;
+            minutes = minutes % TIME_CIRCLE;
 
-            seconds = seconds % 60;
+            seconds = seconds % TIME_CIRCLE;
 
             walkViewModel.updateStopWatch(String.format(Locale.ENGLISH, "%02d:%02d:%02d", hours, minutes, seconds));
-            //stopWatch.setValue(String.format(Locale.ENGLISH, "%02d:%02d:%02d", hours, minutes, seconds));
 
             handler.postDelayed(this, 0);
 
         }
 
     };
+
 }
