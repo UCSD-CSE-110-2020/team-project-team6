@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private StopWatch sw;
     private AppBarConfiguration appBarConfiguration;
 
+    private boolean isWalkFromRouteDetails = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,6 +146,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void setIsWalkFromRouteDetails(boolean isWalkFromRouteDetails) {
+        this.isWalkFromRouteDetails = isWalkFromRouteDetails;
+    }
+
+    public boolean getIsWalkFromRouteDetails() {
+        return this.isWalkFromRouteDetails;
+    }
 
     public void runStopWatch (){
         sw.runStopWatch(walkViewModel);

@@ -39,22 +39,21 @@ public class WalkFragment extends Fragment {
 
         if(dashboardViewModel.is_currently_walking().getValue()) {
             btStart.setText(R.string.bt_stop);
-        }else {
+        } else {
             btStart.setText(R.string.bt_start);
+        }
+
+        if(mainActivity.getIsWalkFromRouteDetails()) {
+            runStartSequence(mainActivity, btStart);
         }
 
         btStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!dashboardViewModel.is_currently_walking().getValue()) {
-                    System.out.println("is there herrrrrrrrrrrre");
-                    mainActivity.runStopWatch();
-                    dashboardViewModel.start_walking();
-                    btStart.setText(R.string.bt_stop);
-                }else {
-                    dashboardViewModel.end_walking();
-                    btStart.setText(R.string.bt_start);
-                    mainActivity.stopWatch();
+                    runStartSequence(mainActivity, btStart);
+                } else {
+                    runStopSequence(mainActivity, btStart);
 
                     //show data when the walk has done!
                     Toast.makeText(getActivity(), "time: " + lbStopWatch.getText().toString(), Toast.LENGTH_LONG).show();
@@ -94,4 +93,15 @@ public class WalkFragment extends Fragment {
         return root;
     }
 
+    public void runStartSequence(MainActivity mainActivity, Button btStart) {
+        mainActivity.runStopWatch();
+        dashboardViewModel.start_walking();
+        btStart.setText(R.string.bt_stop);
+    }
+
+    public void runStopSequence(MainActivity mainActivity, Button btStart) {
+        mainActivity.stopWatch();
+        dashboardViewModel.end_walking();
+        btStart.setText(R.string.bt_start);
+    }
 }
