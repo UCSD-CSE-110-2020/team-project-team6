@@ -16,22 +16,27 @@ public class SaveData {
         this.mainActivity = mainActivity;
     }
 
-    public int getHeight(){
+    /**
+     * retrieve the user's height from SharedPreferences
+     * @return the user's height
+     */
+    public int getHeight() {
         SharedPreferences spfs = mainActivity.getSharedPreferences("user_data", MODE_PRIVATE);
         return spfs.getInt("user_height", -1);
     }
 
 
-    public void saveWalk(Walk walk){
-
+    public void saveWalk(Walk walk) {
+        // convert walk into a json object
         Gson gson = new Gson();
         String json = gson.toJson(walk);
 
+        // save the walk information into SharedPreferences to be retrieved when the Route is saved/updated
         SharedPreferences spfs = mainActivity.getSharedPreferences("user_data", MODE_PRIVATE);
         SharedPreferences.Editor editor = spfs.edit();
         editor.putString("walk", json);
         editor.apply();
 
-        Log.i("saving walk", json);
+        Log.i("Saving Walk in SaveData", json);
     }
 }
