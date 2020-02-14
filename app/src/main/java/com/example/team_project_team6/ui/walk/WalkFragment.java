@@ -1,5 +1,6 @@
 package com.example.team_project_team6.ui.walk;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
+import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -28,12 +30,17 @@ import java.util.Locale;
 public class WalkFragment extends Fragment {
 
     private WalkViewModel walkViewModel;
+    private RouteDetailsViewModel routeDetailsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         walkViewModel = new ViewModelProvider(requireActivity()).get(WalkViewModel.class);
         View root = inflater.inflate(R.layout.fragment_walk, container, false);
+
+        if (routeDetailsViewModel == null) {
+            routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        }
 
         // create objects for necessary parts on the walk fragment page
         final TextView lbStopWatch = root.findViewById(R.id.lbTime);
@@ -44,8 +51,8 @@ public class WalkFragment extends Fragment {
         final Walk walk = new Walk(); // create walk object to store walk info
 
         // save reference to MainActivity and create object to handle SharedPreferences calls
-        final MainActivity mainActivity = (MainActivity) getActivity();
-        final SaveData saveData = new SaveData(mainActivity);
+
+        final SaveData saveData = new SaveData(getActivity());
 
         // update text on walk screen button depending on whether or not user is on a walk
         if(walkViewModel.isCurrentlyWalking().getValue()) {
@@ -54,8 +61,9 @@ public class WalkFragment extends Fragment {
             btStart.setText(R.string.bt_start);
         }
 
-        if(mainActivity.getIsWalkFromRouteDetails()) {
-            runStartSequence(mainActivity, btStart);
+        RouteDetailsViewModel routeViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        if (routeViewModel.getIsWalkFromRouteDetails()) {
+            runStartSequence(btStart);
         }
 
         btStart.setOnClickListener(new View.OnClickListener() {
@@ -65,12 +73,12 @@ public class WalkFragment extends Fragment {
                 // set mode to walking, and get the time of the start of the walk
                 if(!walkViewModel.isCurrentlyWalking().getValue()) {
                     System.out.println("is there herrrrrrrrrrrre");
-                    runStartSequence(mainActivity, btStart);
+                    runStartSequence(btStart);
                     walk.setStartTime(Calendar.getInstance());
 
                 } else {
                     // if user presses button while walk is in progress, end the walk and stop the stopwatch
-                    runStopSequence(mainActivity, btStart);
+                    runStopSequence(btStart);
 
                     // get the duration, step count, and distance
                     String duration = lbStopWatch.getText().toString();
@@ -91,8 +99,8 @@ public class WalkFragment extends Fragment {
                     Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
 
                     NavController controller = NavHostFragment.findNavController(requireParentFragment());
-                    if(mainActivity.getIsWalkFromRouteDetails()) {
-                        Route route = mainActivity.getCurrentRoute();
+                    if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
+                        Route route = routeDetailsViewModel.getRoute();
                         route.setWalk(walk);
                         saveData.saveRoute(route);
                         // go to Routes screen
@@ -101,7 +109,7 @@ public class WalkFragment extends Fragment {
                         }
                     } else {
                         saveData.saveWalk(walk); // save walk into SharedPreferences
-                        mainActivity.setCreateRouteFromWalk(true);
+                        routeDetailsViewModel.setIsWalkFromRouteDetails(true);
                         // go to newRouteFragment to save Walk in a Route object
                         if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
                             controller.navigate(R.id.action_navigation_walk_to_newRouteFragment);
@@ -142,14 +150,14 @@ public class WalkFragment extends Fragment {
         return root;
     }
 
-    public void runStartSequence(MainActivity mainActivity, Button btStart) {
-        mainActivity.runStopWatch();
+    public void runStartSequence(Button btStart) {
+        walkViewModel.runStopWatch();
         walkViewModel.startWalking();
         btStart.setText(R.string.bt_stop);
     }
 
-    public void runStopSequence(MainActivity mainActivity, Button btStart) {
-        mainActivity.stopWatch();
+    public void runStopSequence(Button btStart) {
+        walkViewModel.stopWatch();
         walkViewModel.endWalking();
         btStart.setText(R.string.bt_start);
     }

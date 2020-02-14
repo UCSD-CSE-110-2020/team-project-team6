@@ -1,5 +1,6 @@
 package com.example.team_project_team6.ui.routes;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,12 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,10 +37,12 @@ import java.util.Set;
 public class RoutesFragment extends Fragment {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public RoutesViewModel routesViewModel = null;
+    public RouteDetailsViewModel routeDetailsViewModel = null;
 
     private RecyclerView recyclerView;
     private RouteViewAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -47,26 +50,18 @@ public class RoutesFragment extends Fragment {
             routesViewModel = new ViewModelProvider(requireActivity()).get(RoutesViewModel.class);
         }
 
+        if (routeDetailsViewModel == null) {
+            routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        }
+
         View root = inflater.inflate(R.layout.fragment_routes, container, false);
 
-        final MainActivity mainActivity = (MainActivity) getActivity();
         // check if previous screen is RouteDetailsFragment to prevent creation of another walk object
-        mainActivity.setIsWalkFromRouteDetails(false);
+        RouteDetailsViewModel routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        routeDetailsViewModel.setIsWalkFromRouteDetails(false);
 
-        // populate list of routes tiles
-        final SaveData saveData = new SaveData(mainActivity);
-        MutableLiveData<ArrayList<Route>> mRoutes = new MutableLiveData<ArrayList<Route>>();
-        Set<String> routeNameSet = saveData.getRouteNames();
-        List<String> routeNameList = new ArrayList<>(routeNameSet);
-        Collections.sort(routeNameList);
 
-        ArrayList<Route> routeList = new ArrayList<>();
-        for(String routeName : routeNameList) {
-            Route route = saveData.getRoute(routeName);
-            routeList.add(route);
-        }
-        mRoutes.postValue(routeList);
-        routesViewModel.setRouteData(mRoutes);
+
         final FloatingActionButton btNewRoute = root.findViewById(R.id.btNewRoute);
 
         // navigate to newRouteFragment when '+' button is pressed
@@ -74,7 +69,7 @@ public class RoutesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("Routes", "Clicked on '+' button");
-                mainActivity.setCreateRouteFromWalk(false);
+                routeDetailsViewModel.setIsWalkFromRouteDetails(false);
                 NavController controller = NavHostFragment.findNavController(requireParentFragment());
                 if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
                     controller.navigate(R.id.action_navigation_routes_to_newRouteFragment);
@@ -86,12 +81,27 @@ public class RoutesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new RouteViewAdapter(routeList);
 
-        recyclerView.setAdapter(mAdapter);
+        mAdapter = new RouteViewAdapter();
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(mAdapter);
 
         bind_views();
+
+        // Toggle favorite when favorite icon is pressed
+        mAdapter.setOnFavoriteClickListener(new RouteViewAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Route route = routesViewModel.getRouteAt(position);
+                if (route != null) {
+                    Features feature = route.getFeatures();
+                    feature.setFavorite(!feature.isFavorite());
+                    route.setFeatures(feature);
+
+                    routesViewModel.updateRouteAt(position, route);
+                }
+            }
+        });
 
         // Navcontroller provides some cool animations and task stack management for us
         mAdapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {

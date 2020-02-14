@@ -40,14 +40,18 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
             favoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    favoriteClickListener.onItemClick(getAdapterPosition(), v);
+                    if (favoriteClickListener != null) {
+                        favoriteClickListener.onItemClick(getAdapterPosition(), v);
+                    }
                 }
             });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemClickListener.onItemClick(getAdapterPosition(), v);
+                    if (itemClickListener != null) {
+                        itemClickListener.onItemClick(getAdapterPosition(), v);
+                    }
                 }
             });
         }

@@ -32,10 +32,14 @@ import com.example.team_project_team6.ui.routes.RoutesViewModel;
 public class NewRouteFragment extends Fragment {
 
     private NewRouteViewModel mNewRouteModel;
+    private RouteDetailsViewModel routeDetailsViewModel = null;
+
     private RadioButton radDiff;
     private RadioButton radHilly;
     private RadioButton radStreet;
     private RadioButton radEven;
+
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -60,6 +64,9 @@ public class NewRouteFragment extends Fragment {
 
         final Button btDone = root.findViewById(R.id.btDone);
 
+        if (routeDetailsViewModel == null) {
+            routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        }
 
         rgDiff.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
@@ -113,9 +120,11 @@ public class NewRouteFragment extends Fragment {
 
                 Route route = new Route();
 
+
+
                 // if a new route is being created after redirection from the walk fragment, retrieve
                 // the walk's data to save inside the route
-                if (mainActivity.isCreateRouteFromWalk()) {
+                if (routeDetailsViewModel.getIsWalkFromRouteDetails()) {
                     Walk walk = saveData.getWalk();
                     route.setWalk(walk);
                     route.setLastStartDate(walk.getStartTime());

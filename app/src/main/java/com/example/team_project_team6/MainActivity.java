@@ -39,11 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private WalkViewModel walkViewModel;
     private StopWatch sw;
     private Long walkStartingStep;
-    private Route currentRoute;
     private boolean isWalking;
 
     private AppBarConfiguration appBarConfiguration;
-
     private boolean isWalkFromRouteDetails = false;
     private boolean createRouteFromWalk = false;
 
@@ -51,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        sw = new StopWatch();
 
         // launch height/permission activity if user height hasn't been saved (first-time user)
         SharedPreferences spfs = this.getSharedPreferences("user_data", MODE_PRIVATE);
@@ -165,44 +161,6 @@ public class MainActivity extends AppCompatActivity {
     public void stopWatch() {
         sw.stopWatch();
         isWalking = false;
-    }
-
-    public Route getCurrentRoute() {
-        if (currentRoute != null) {
-            Log.i("getCurrentRoute from MainActivity", "return current route: " + currentRoute.toString());
-        } else {
-            Log.i("getCurrentRoute from MainActivity", "return current route: null");
-        }
-        return currentRoute;
-    }
-
-    public void setCurrentRoute(Route currentRoute) {
-        if (currentRoute != null) {
-            Log.i("setCurrentRoute from MainActivity", "setting current route: " + currentRoute.toString());
-        } else {
-            Log.i("setCurrentRoute from MainActivity", "setting current route: null");
-        }
-        this.currentRoute = currentRoute;
-    }
-
-    public void setIsWalkFromRouteDetails(boolean isWalkFromRouteDetails) {
-        Log.i("setIsWalkFromRouteDetails from MainActivity", "user started walk from route? " + isWalkFromRouteDetails);
-        this.isWalkFromRouteDetails = isWalkFromRouteDetails;
-    }
-
-    public boolean getIsWalkFromRouteDetails() {
-        Log.i("getIsWalkFromRouteDetails from MainActivity", "return whether user started walk from route: " + isWalkFromRouteDetails);
-        return this.isWalkFromRouteDetails;
-    }
-
-    public boolean isCreateRouteFromWalk() {
-        Log.i("isCreateRouteFromWalk from MainActivity", "return whether route is created from walk tab: " + createRouteFromWalk);
-        return createRouteFromWalk;
-    }
-
-    public void setCreateRouteFromWalk(boolean createRouteFromWalk) {
-        Log.i("setCreateRouteFromWalk from MainActivity", "user created route from walk? " + createRouteFromWalk);
-        this.createRouteFromWalk = createRouteFromWalk;
     }
 
     @Override
