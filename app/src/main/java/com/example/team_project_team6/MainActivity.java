@@ -7,21 +7,23 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.team_project_team6.fitness.FitnessService;
-import com.example.team_project_team6.fitness.FitnessServiceFactory;
-import com.example.team_project_team6.fitness.GoogleFitAdapter;
-import com.example.team_project_team6.fitness.TestAdapter;
-import com.example.team_project_team6.model.StopWatch;
-import com.example.team_project_team6.ui.home.HomeViewModel;
-import com.example.team_project_team6.ui.walk.WalkViewModel;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import com.example.team_project_team6.fitness.FitnessService;
+import com.example.team_project_team6.fitness.FitnessServiceFactory;
+import com.example.team_project_team6.fitness.GoogleFitAdapter;
+import com.example.team_project_team6.fitness.TestAdapter;
+import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.StopWatch;
+import com.example.team_project_team6.ui.home.HomeViewModel;
+import com.example.team_project_team6.ui.walk.WalkViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,9 +39,12 @@ public class MainActivity extends AppCompatActivity {
     private WalkViewModel walkViewModel;
     private StopWatch sw;
     private Long walkStartingStep;
+    private Route currentRoute;
     private boolean isWalking;
 
     private AppBarConfiguration appBarConfiguration;
+
+    private boolean isWalkFromRouteDetails = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * start the walk stopwatch and set walk mode for step-tracking to on
      */
-    public void runStopWatch (){
+    public void runStopWatch () {
         sw.runStopWatch(walkViewModel);
         isWalking = true;
     }
@@ -156,9 +161,29 @@ public class MainActivity extends AppCompatActivity {
     /**
      * stop the stopwatch and set walk mode for step tracking to off
      */
-    public void stopWatch(){
+    public void stopWatch() {
         sw.stopWatch();
         isWalking = false;
+    }
+
+    public Route getCurrentRoute() {
+        Log.i("getCurrentRoute from MainActivity", "return current route: " + currentRoute.toString());
+        return currentRoute;
+    }
+
+    public void setCurrentRoute(Route currentRoute) {
+        Log.i("setCurrentRoute from MainActivity", "setting current route: " + currentRoute.toString());
+        this.currentRoute = currentRoute;
+    }
+
+    public void setIsWalkFromRouteDetails(boolean isWalkFromRouteDetails) {
+        Log.i("setIsWalkFromRouteDetails from MainActivity", "user started walk from route? " + currentRoute.toString());
+        this.isWalkFromRouteDetails = isWalkFromRouteDetails;
+    }
+
+    public boolean getIsWalkFromRouteDetails() {
+        Log.i("getIsWalkFromRouteDetails from MainActivity", "return if user started walk from route: " + currentRoute.toString());
+        return this.isWalkFromRouteDetails;
     }
 
     @Override

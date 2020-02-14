@@ -51,6 +51,10 @@ public class WalkFragment extends Fragment {
             btStart.setText(R.string.bt_start);
         }
 
+        if(mainActivity.getIsWalkFromRouteDetails()) {
+            runStartSequence(mainActivity, btStart);
+        }
+
         btStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,16 +62,12 @@ public class WalkFragment extends Fragment {
                 // set mode to walking, and get the time of the start of the walk
                 if(!walkViewModel.isCurrentlyWalking().getValue()) {
                     System.out.println("is there herrrrrrrrrrrre");
-                    mainActivity.runStopWatch();
-                    walkViewModel.startWalking();
+                    runStartSequence(mainActivity, btStart);
                     walk.setStartTime(Calendar.getInstance());
-                    btStart.setText(R.string.bt_stop);
 
                 } else {
                     // if user presses button while walk is in progress, end the walk and stop the stopwatch
-                    walkViewModel.endWalking();
-                    btStart.setText(R.string.bt_start);
-                    mainActivity.stopWatch();
+                    runStopSequence(mainActivity, btStart);
 
                     // get the duration, step count, and distance
                     String duration = lbStopWatch.getText().toString();
@@ -89,6 +89,11 @@ public class WalkFragment extends Fragment {
                     // show data when the walk is done!
                     Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
 
+                    if(mainActivity.getIsWalkFromRouteDetails()) {
+                        // TODO GO TO ROUTES
+                    } else {
+                        // TODO GO TO CREATE A ROUTE FORM
+                    }
                 }
             }
         });
@@ -122,5 +127,17 @@ public class WalkFragment extends Fragment {
         });
 
         return root;
+    }
+
+    public void runStartSequence(MainActivity mainActivity, Button btStart) {
+        mainActivity.runStopWatch();
+        walkViewModel.startWalking();
+        btStart.setText(R.string.bt_stop);
+    }
+
+    public void runStopSequence(MainActivity mainActivity, Button btStart) {
+        mainActivity.stopWatch();
+        walkViewModel.endWalking();
+        btStart.setText(R.string.bt_start);
     }
 }
