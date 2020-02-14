@@ -6,7 +6,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +26,8 @@ import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
+import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
+import com.example.team_project_team6.ui.routes.RoutesViewModel;
 
 public class NewRouteFragment extends Fragment {
 
@@ -96,7 +102,6 @@ public class NewRouteFragment extends Fragment {
         btDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // save all of the features recorded by the user
                 Features features = new Features();
                 features.setLevel(rgDiff.getCheckedRadioButtonId());
@@ -134,6 +139,13 @@ public class NewRouteFragment extends Fragment {
                 getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
                 //come back to route
                 getActivity().getSupportFragmentManager().popBackStack();
+
+                NavController controller = NavHostFragment.findNavController(requireParentFragment());
+
+                if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
+                    controller.navigate(R.id.action_newRouteFragment_to_navigation_routes);
+                }
+
             }
         });
 

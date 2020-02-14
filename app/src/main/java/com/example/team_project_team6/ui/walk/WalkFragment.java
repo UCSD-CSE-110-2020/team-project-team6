@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
@@ -98,6 +100,11 @@ public class WalkFragment extends Fragment {
                         saveData.saveWalk(walk); // save walk into SharedPreferences
                         mainActivity.setCreateRouteFromWalk(true);
                         // TODO GO TO CREATE A ROUTE FORM
+                    }
+
+                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                    if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
+                        controller.navigate(R.id.action_navigation_walk_to_newRouteFragment);
                     }
                 }
             }
