@@ -168,12 +168,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public Route getCurrentRoute() {
-        Log.i("getCurrentRoute from MainActivity", "return current route: " + currentRoute.toString());
+        if (currentRoute != null) {
+            Log.i("getCurrentRoute from MainActivity", "return current route: " + currentRoute.toString());
+        } else {
+            Log.i("getCurrentRoute from MainActivity", "return current route: null");
+        }
         return currentRoute;
     }
 
     public void setCurrentRoute(Route currentRoute) {
-        Log.i("setCurrentRoute from MainActivity", "setting current route: " + currentRoute.toString());
+        if (currentRoute != null) {
+            Log.i("setCurrentRoute from MainActivity", "setting current route: " + currentRoute.toString());
+        } else {
+            Log.i("setCurrentRoute from MainActivity", "setting current route: null");
+        }
         this.currentRoute = currentRoute;
     }
 
@@ -188,12 +196,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean isCreateRouteFromWalk() {
-        Log.i("isCreateRouteFromWalk from MainActivity", "return whether route is created from routes tab: " + createRouteFromWalk);
+        Log.i("isCreateRouteFromWalk from MainActivity", "return whether route is created from walk tab: " + createRouteFromWalk);
         return createRouteFromWalk;
     }
 
     public void setCreateRouteFromWalk(boolean createRouteFromWalk) {
-        Log.i("setCreateRouteFromWalk from MainActivity", "user created route from routes? " + createRouteFromWalk);
+        Log.i("setCreateRouteFromWalk from MainActivity", "user created route from walk? " + createRouteFromWalk);
         this.createRouteFromWalk = createRouteFromWalk;
     }
 

@@ -2,6 +2,8 @@ package com.example.team_project_team6.model;
 
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -13,7 +15,7 @@ public class Walk {
 
     public Walk () {
         startTime = Calendar.getInstance();
-        duration = "";
+        duration = "--:--:--";
         dist = 0;
         step = 0;
     }
@@ -33,12 +35,20 @@ public class Walk {
     }
 
     public Calendar getStartTime() {
-        Log.i("getStartTime from Walk", "return: " + startTime);
+        if (startTime != null) {
+            Log.i("getStartTime from Walk", "return: " + startTime);
+        } else {
+            Log.i("getStartTime from Walk", "return: null");
+        }
         return startTime;
     }
 
     public void setStartTime(Calendar startTime) {
-        Log.i("setStartTime from Walk", "value: " + startTime);
+        if (startTime != null) {
+            Log.i("setStartTime from Walk", "value: " + startTime);
+        } else {
+            Log.i("setStartTime from Walk", "value: null");
+        }
         this.startTime = startTime;
     }
 
@@ -65,7 +75,13 @@ public class Walk {
 
     @Override
     public String toString() {
-        return String.format(Locale.ENGLISH, "Steps: %d, Distance: %f, Start Time: %s, Duration: %s",
-                step, dist, startTime, duration);
+        if (startTime != null) {
+            return String.format(Locale.ENGLISH, "Steps: %d, Distance: %f, Start Time: %s, Duration: %s",
+                    step, dist, startTime, duration);
+        } else {
+            return String.format(Locale.ENGLISH, "Steps: %d, Distance: %f, Start Time: null, Duration: %s",
+                    step, dist, duration);
+        }
+
     }
 }
