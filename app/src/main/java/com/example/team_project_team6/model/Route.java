@@ -2,6 +2,8 @@ package com.example.team_project_team6.model;
 
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -12,6 +14,16 @@ public class Route {
     private String notes;
     private Features features;
     private String name;
+
+
+    public Route() {
+        this.walk = null;
+        this.startPoint = "";
+        this.lastStartDate = null;
+        this.notes = "";
+        this.features = null;
+        this.name = "";
+    }
 
     // If never walked, set lastStartDate to null
     public Route(Walk walk, String startPoint, Calendar lastStartDate, String notes, Features features, String name) {
@@ -54,12 +66,22 @@ public class Route {
     }
 
     public Calendar getLastStartDate() {
-        Log.i("getLastStartDate from Route", "return: " + lastStartDate.toString());
+        if (lastStartDate == null) {
+            Log.i("getLastStartDate from Route", "return: null");
+        } else {
+            Log.i("getLastStartDate from Route", "return: " + lastStartDate.toString());
+        }
+
         return lastStartDate;
     }
 
-    public void setLastStartDate(Calendar lastStartDate) {
-        Log.i("setLastStartDate from Route", "value: " + lastStartDate.toString());
+    public void setLastStartDate(@Nullable Calendar lastStartDate) {
+        if (lastStartDate != null) {
+            Log.i("setLastStartDate from Route", "value: " + lastStartDate.toString());
+        } else {
+            Log.i("setLastStartDate from Route", "value: null");
+        }
+
         this.lastStartDate = lastStartDate;
     }
 
@@ -85,7 +107,12 @@ public class Route {
 
     @Override
     public String toString() {
-        return String.format(Locale.ENGLISH, "Name: %s, Walk: (%s), Starting Point: %s, Last Start Date: %s, Notes: %s,  Features: %s",
-                name, walk.toString(), startPoint, lastStartDate.toString(), notes, features.toString());
+        if (lastStartDate != null) {
+            return String.format(Locale.ENGLISH, "Name: %s, Walk: (%s), Starting Point: %s, Last Start Date: %s, Notes: %s,  Features: %s",
+                    name, walk.toString(), startPoint, lastStartDate.toString(), notes, features.toString());
+        } else {
+            return String.format(Locale.ENGLISH, "Name: %s, Walk: (%s), Starting Point: %s, Last Start Date: null, Notes: %s,  Features: %s",
+                    name, walk.toString(), startPoint, notes, features.toString());
+        }
     }
 }

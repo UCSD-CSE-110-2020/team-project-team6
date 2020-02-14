@@ -34,12 +34,20 @@ public class Walk {
     }
 
     public Calendar getStartTime() {
-        Log.i("getStartTime from Walk", "return: " + startTime);
+        if (startTime != null) {
+            Log.i("getStartTime from Walk", "return: " + startTime);
+        } else {
+            Log.i("getStartTime from Walk", "return: null");
+        }
         return startTime;
     }
 
     public void setStartTime(Calendar startTime) {
-        Log.i("setStartTime from Walk", "value: " + startTime);
+        if (startTime != null) {
+            Log.i("setStartTime from Walk", "value: " + startTime);
+        } else {
+            Log.i("setStartTime from Walk", "value: null");
+        }
         this.startTime = startTime;
     }
 
@@ -63,7 +71,6 @@ public class Walk {
         Log.i("setStep from Walk", "value: " + step);
         this.step = step;
     }
-
 
     public static Calendar getWalkStartTimeInCalendar(String stopWatchString) {
         Log.d("MockWalkFragment parseStopWatchTime on: ", stopWatchString);
@@ -135,7 +142,12 @@ public class Walk {
 
     @Override
     public String toString() {
-        return String.format(Locale.ENGLISH, "Steps: %d, Distance: %f, Start Time: %s, Duration: %s",
-                step, dist, startTime, duration);
+        if (startTime != null) {
+            return String.format(Locale.ENGLISH, "Steps: %d, Distance: %f, Start Time: %s, Duration: %s",
+                    step, dist, startTime, duration);
+        } else {
+            return String.format(Locale.ENGLISH, "Steps: %d, Distance: %f, Start Time: null, Duration: %s",
+                    step, dist, duration);
+        }
     }
 }
