@@ -29,22 +29,26 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mActivity = requireActivity();
-        final MainActivity mainActivity = (MainActivity) getActivity();
-        final SaveData saveData = new SaveData(mainActivity);
 
+        mActivity = requireActivity();
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // save reference to MainActivity and create object to handle SharedPreferences calls
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        final SaveData saveData = new SaveData(mainActivity);
+
+        // save references to the steps and distance TextViews
         final TextView dailySteps = root.findViewById(R.id.textDailySteps);
         final TextView dailyDist = root.findViewById(R.id.textDailyDist);
+
+        // get the height from SharedPreferences and calculate stride distance
+        final int heightInInches = saveData.getHeight();
+        final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
+
         homeViewModel.getDailySteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
             public void onChanged(@Nullable Long num) {
-
-                final int heightInInches = saveData.getHeight();
-                final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
-                Log.i("height", String.format(Locale.ENGLISH, "height: %d, distance: %f", heightInInches, strideDistInFt));
 
                 if (num == null) {
                     num = 0L;

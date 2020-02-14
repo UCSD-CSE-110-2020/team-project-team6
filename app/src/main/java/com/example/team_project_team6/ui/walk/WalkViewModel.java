@@ -1,13 +1,8 @@
 package com.example.team_project_team6.ui.walk;
 
-import android.os.Handler;
-import android.os.SystemClock;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import java.util.Locale;
 
 public class WalkViewModel extends ViewModel {
 
@@ -22,30 +17,56 @@ public class WalkViewModel extends ViewModel {
         stopWatch.setValue("00:00:00");
     }
 
-    void start_walking() {
+    /**
+     * informs observers that walk is underway by updating to the stream
+     */
+    void startWalking() {
         mCurrentlyWalking.postValue(true);
     }
 
-    void end_walking() {
+    /**
+     * informs observers that walk is not underway by updating to the stream
+     */
+    void endWalking() {
         mCurrentlyWalking.postValue(false);
     }
 
-    LiveData<Boolean> is_currently_walking() {
+    /**
+     * returns walking status stream to subscribe to
+     * @return livedata object for walking status
+     */
+    LiveData<Boolean> isCurrentlyWalking() {
         return mCurrentlyWalking;
     }
 
+    /**
+     * posts latest stopwatch value
+     * @param s the updated stopwatch time
+     */
     public void updateStopWatch(String s){
         stopWatch.postValue(s);
     }
 
+    /**
+     * returns stopwatch stream to subscribe to
+     * @return livedata object for stopwatch time
+     */
     public LiveData<String> getStopWatch(){
         return stopWatch;
     }
 
+    /**
+     * returns walk steps stream to subscribe to
+     * @return livedata object for latest number of steps on walk
+     */
     public LiveData<Long> getWalkSteps() {
         return mWalkSteps;
     }
 
+    /**
+     * posts latest step count value
+     * @param stepCount latest number of steps user has walked
+     */
     public void updateWalkSteps(long stepCount) {
         mWalkSteps.postValue(stepCount);
     }

@@ -5,29 +5,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.example.team_project_team6.fitness.FitnessService;
 import com.example.team_project_team6.fitness.FitnessServiceFactory;
 import com.example.team_project_team6.fitness.GoogleFitAdapter;
 import com.example.team_project_team6.fitness.TestAdapter;
+import com.example.team_project_team6.model.StopWatch;
 import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.fitness.FitnessOptions;
-import com.google.android.gms.fitness.data.DataType;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.Locale;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -47,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private HomeViewModel homeViewModel;
     private WalkViewModel walkViewModel;
     private StopWatch sw;
+    private Long walkStartingStep;
+    private boolean isWalking;
+
     private AppBarConfiguration appBarConfiguration;
 
     @Override
@@ -119,8 +111,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setStepCount(long stepCount) {
-        homeViewModel.updateDailySteps(stepCount);
-        //walkViewModel.updateWalkSteps(stepCount);
+        homeViewModel.updateDailySteps(stepCount); // update step count on home screen
+
+        // update steps moved just on current walk if the user is currently on a walk
+        if (isWalking) {
+            if (walkStartingStep == null) {
+                walkStartingStep = stepCount;
+            }
+            walkViewModel.updateWalkSteps(stepCount - walkStartingStep);
+        } else {
+            walkStartingStep = null;
+        }
     }
 
     public void setFitnessServiceKey(String fitnessServiceKey) {
@@ -144,13 +145,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * start the walk stopwatch and set walk mode for step-tracking to on
+     */
     public void runStopWatch (){
         sw.runStopWatch(walkViewModel);
+        isWalking = true;
     }
 
+    /**
+     * stop the stopwatch and set walk mode for step tracking to off
+     */
     public void stopWatch(){
         sw.stopWatch();
+        isWalking = false;
     }
 
     @Override
