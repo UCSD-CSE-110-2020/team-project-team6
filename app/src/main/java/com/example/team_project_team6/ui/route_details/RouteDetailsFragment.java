@@ -165,7 +165,7 @@ public class RouteDetailsFragment extends Fragment {
                     controller.navigate(R.id.action_routeDetailsFragment_to_navigation_walk);
                     // TODO: click start walk from walk screen
 
-                    mainActivity.setIsWalkFromRoutes(true);
+                    mainActivity.setIsWalkFromRouteDetails(true);
                 }
 
             }
