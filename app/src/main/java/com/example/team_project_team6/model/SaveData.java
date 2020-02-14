@@ -3,12 +3,9 @@ package com.example.team_project_team6.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.team_project_team6.MainActivity;
 import com.google.gson.Gson;
+
+import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -38,7 +35,7 @@ public class SaveData {
         String json = gson.toJson(walk);
 
         // save the walk information into SharedPreferences to be retrieved when the Route is saved/updated
-        SharedPreferences.Editor editor = spfsRoute.edit();
+        SharedPreferences.Editor editor = spfsUser.edit();
         editor.putString("walk", json);
         editor.apply();
 
@@ -59,13 +56,17 @@ public class SaveData {
         String json = gson.toJson(route);
 
         // save the walk information into SharedPreferences to be retrieved when the Route is saved/updated
-        SharedPreferences.Editor editor = spfsUser.edit();
+        SharedPreferences.Editor editor = spfsRoute.edit();
         editor.putString(route.getName(), json);
         editor.apply();
 
         Log.i("Saving Route " + route.getName() + " in SaveData", json);
 
         return json;
+    }
+
+    public Set<String> getRouteNames() {
+        return spfsRoute.getAll().keySet();
     }
 
     public Route getRoute(String name) {

@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -22,11 +23,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
-import com.example.team_project_team6.ui.new_route.NewRouteFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class RoutesFragment extends Fragment {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -48,6 +53,20 @@ public class RoutesFragment extends Fragment {
         // check if previous screen is RouteDetailsFragment to prevent creation of another walk object
         mainActivity.setIsWalkFromRouteDetails(false);
 
+        // populate list of routes tiles
+        final SaveData saveData = new SaveData(mainActivity);
+        MutableLiveData<ArrayList<Route>> mRoutes = new MutableLiveData<ArrayList<Route>>();
+        Set<String> routeNameSet = saveData.getRouteNames();
+        List<String> routeNameList = new ArrayList<>(routeNameSet);
+        Collections.sort(routeNameList);
+
+        ArrayList<Route> routeList = new ArrayList<>();
+        for(String routeName : routeNameList) {
+            Route route = saveData.getRoute(routeName);
+            routeList.add(route);
+        }
+        mRoutes.postValue(routeList);
+        routesViewModel.setRouteData(mRoutes);
         final FloatingActionButton btNewRoute = root.findViewById(R.id.btNewRoute);
 
         // navigate to newRouteFragment when '+' button is pressed
@@ -67,7 +86,8 @@ public class RoutesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new RouteViewAdapter();
+        mAdapter = new RouteViewAdapter(routeList);
+
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 

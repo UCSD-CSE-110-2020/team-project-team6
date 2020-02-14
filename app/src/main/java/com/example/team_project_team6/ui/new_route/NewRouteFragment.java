@@ -132,6 +132,7 @@ public class NewRouteFragment extends Fragment {
                 route.setStartPoint(txtStartingPoint.getText().toString());
                 route.setNotes(txtNotes.getText().toString());
                 route.setFeatures(features);
+                route.setWalk(saveData.getWalk());
 
                 saveData.saveRoute(route); // save route to SharedPreferences
 

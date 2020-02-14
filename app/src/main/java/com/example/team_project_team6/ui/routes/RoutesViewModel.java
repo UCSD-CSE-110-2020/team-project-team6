@@ -1,13 +1,16 @@
 package com.example.team_project_team6.ui.routes;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
 
 import java.util.ArrayList;
@@ -20,21 +23,12 @@ public class RoutesViewModel extends ViewModel {
 
     public RoutesViewModel() {
         ArrayList<Route> data = new ArrayList<Route>();
-        Walk w = new Walk();
-        w.setDist(123.456);
-        w.setStep(612);
-        w.setDuration("00:24:11");
-        w.setStartTime(Calendar.getInstance());
-        Features f = new Features();
-        f.setDirectionType(1);
-        f.setLevel(1);
-        f.setSurface(1);
-        f.setTerrain(1);
-        f.setType(1);
-        data.add(new Route(w, "University of California, San Diego, EBU3B", null, "Test Walk Notes", f, "Mission Bay"));
-        data.add(new Route(new Walk(), "starting_point", Calendar.getInstance(), "", new Features(0, 0, 0, true, 0, 0), "Park Park"));
-
         mRoutes = new MutableLiveData<>(data);
+    }
+
+    // mRoutes stores a list of all the routes in sharedpreferences
+    public void setRouteData(MutableLiveData<ArrayList<Route>> mRoutes) {
+        this.mRoutes = mRoutes;
     }
 
     public LiveData<ArrayList<Route>> getRouteData() {

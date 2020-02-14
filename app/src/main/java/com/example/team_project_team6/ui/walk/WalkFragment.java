@@ -90,21 +90,22 @@ public class WalkFragment extends Fragment {
                     // show data when the walk is done!
                     Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
 
+                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
                     if(mainActivity.getIsWalkFromRouteDetails()) {
                         Route route = mainActivity.getCurrentRoute();
                         route.setWalk(walk);
                         saveData.saveRoute(route);
-                        // TODO GO BACK TO ROUTES MAIN TAB
-
+                        // go to Routes screen
+                        if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
+                            controller.navigate(R.id.action_navigation_walk_to_navigation_routes);
+                        }
                     } else {
                         saveData.saveWalk(walk); // save walk into SharedPreferences
                         mainActivity.setCreateRouteFromWalk(true);
-                        // TODO GO TO CREATE A ROUTE FORM
-                    }
-
-                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
-                    if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
-                        controller.navigate(R.id.action_navigation_walk_to_newRouteFragment);
+                        // go to newRouteFragment to save Walk in a Route object
+                        if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
+                            controller.navigate(R.id.action_navigation_walk_to_newRouteFragment);
+                        }
                     }
                 }
             }
