@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".HeightActivity" />
-        <activity android:name=".PermissonActivity" />
+        <activity android:name=".PermissionActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"

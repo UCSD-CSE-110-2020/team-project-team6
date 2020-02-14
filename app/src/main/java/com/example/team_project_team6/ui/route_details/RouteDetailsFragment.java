@@ -3,13 +3,11 @@ package com.example.team_project_team6.ui.route_details;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -20,11 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
 import com.google.android.flexbox.FlexboxLayout;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -177,7 +173,7 @@ public class RouteDetailsFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflator) {
         Log.d("Route_Details", "creating options menu");
 
-        inflator.inflate(R.menu.action_bar, menu);
+        inflator.inflate(R.menu.action_bar_route_details, menu);
         super.onCreateOptionsMenu(menu, inflator);
 
         menu.findItem(R.id.menu_filled_star).setVisible(is_favorite);

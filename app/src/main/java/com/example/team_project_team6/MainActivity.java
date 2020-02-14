@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void launchPermissionActivity(){
-        Intent intent = new Intent(this, PermissonActivity.class);
+        Intent intent = new Intent(this, PermissionActivity.class);
         startActivity(intent);
     }
 
