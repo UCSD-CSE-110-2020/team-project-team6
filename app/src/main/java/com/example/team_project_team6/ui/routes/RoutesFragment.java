@@ -50,18 +50,16 @@ public class RoutesFragment extends Fragment {
 
         final FloatingActionButton btNewRoute = root.findViewById(R.id.btNewRoute);
 
+        // navigate to newRouteFragment when '+' button is pressed
         btNewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("Routes", "Clicked on '+' button");
                 mainActivity.setCreateRouteFromWalk(false);
-                NewRouteFragment ftNewRoute = new NewRouteFragment();
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                ft.setCustomAnimations(android.R.animator.fade_in,
-//                        android.R.animator.fade_out);
-                ft.addToBackStack(null);
-                ft.replace(R.id.nav_host_fragment, ftNewRoute);
-
-                ft.commit();
+                NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
+                    controller.navigate(R.id.action_navigation_routes_to_newRouteFragment);
+                }
             }
         });
 
@@ -74,23 +72,6 @@ public class RoutesFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
         bind_views();
-
-        mAdapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {
-            @Override
-            public void onItemClick(int position, View v) {
-                Route route = routesViewModel.getRouteAt(position);
-                if (route != null) {
-                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
-                    Log.d("Routes", "Clicked on route: " + route.getName());
-                    if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
-                        RouteDetailsViewModel route_details_view_model = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
-                        route_details_view_model.setRoute(route);
-
-                        controller.navigate(R.id.action_navigation_routes_to_routeDetailsFragment);
-                    }
-                }
-            }
-        });
 
         // Navcontroller provides some cool animations and task stack management for us
         mAdapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {

@@ -52,6 +52,12 @@
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"
             app:launchSingleTop="false" />
+        <action
+            android:id="@+id/action_navigation_routes_to_newRouteFragment"
+            app:destination="@id/newRouteFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
     </fragment>
 
     <fragment

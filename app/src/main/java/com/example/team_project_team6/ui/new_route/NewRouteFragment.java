@@ -137,9 +137,8 @@ public class NewRouteFragment extends Fragment {
 
                 //showing up bottom navigation bar
                 getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
-                //come back to route
-                getActivity().getSupportFragmentManager().popBackStack();
 
+                //come back to route
                 NavController controller = NavHostFragment.findNavController(requireParentFragment());
 
                 if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
