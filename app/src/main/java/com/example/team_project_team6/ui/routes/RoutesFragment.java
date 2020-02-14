@@ -77,16 +77,19 @@ public class RoutesFragment extends Fragment {
 
         bind_views();
 
-        mAdapter.setOnFavoriteClickListener(new RouteViewAdapter.ClickListener() {
+        mAdapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
                 Route route = routesViewModel.getRouteAt(position);
                 if (route != null) {
-                    Features feature = route.getFeatures();
-                    feature.setFavorite(!feature.isFavorite());
-                    route.setFeatures(feature);
+                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                    Log.d("Routes", "Clicked on route: " + route.getName());
+                    if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
+                        RouteDetailsViewModel route_details_view_model = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
+                        route_details_view_model.setRoute(route);
 
-                    routesViewModel.updateRouteAt(position, route);
+                        controller.navigate(R.id.action_navigation_routes_to_routeDetailsFragment);
+                    }
                 }
             }
         });
