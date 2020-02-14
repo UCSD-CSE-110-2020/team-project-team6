@@ -12,6 +12,7 @@ import com.example.team_project_team6.model.Walk;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -38,6 +39,13 @@ public class RoutesViewModel extends ViewModel {
     }
 
     public LiveData<ArrayList<Route>> getRouteData() {
+        mRoutes.getValue().sort(new Comparator<Route>() {
+            @Override
+            public int compare(Route o1, Route o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
         return mRoutes;
     }
 

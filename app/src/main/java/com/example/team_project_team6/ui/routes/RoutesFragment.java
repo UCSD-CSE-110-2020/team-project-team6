@@ -79,25 +79,23 @@ public class RoutesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         mAdapter = new RouteViewAdapter();
         recyclerView.setAdapter(mAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
         bind_views();
 
-        mAdapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {
+        // Toggle favorite when favorite icon is pressed
+        mAdapter.setOnFavoriteClickListener(new RouteViewAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
                 Route route = routesViewModel.getRouteAt(position);
                 if (route != null) {
-                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
-                    Log.d("Routes", "Clicked on route: " + route.getName());
-                    if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
-                        RouteDetailsViewModel route_details_view_model = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
-                        route_details_view_model.setRoute(route);
+                    Features feature = route.getFeatures();
+                    feature.setFavorite(!feature.isFavorite());
+                    route.setFeatures(feature);
 
-                        controller.navigate(R.id.action_navigation_routes_to_routeDetailsFragment);
-                    }
+                    routesViewModel.updateRouteAt(position, route);
                 }
             }
         });
@@ -127,13 +125,6 @@ public class RoutesFragment extends Fragment {
         routesViewModel.getRouteData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Route>>() {
             @Override
             public void onChanged(ArrayList<Route> routes) {
-                routes.sort(new Comparator<Route>() {
-                    @Override
-                    public int compare(Route o1, Route o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
-
                 mAdapter.updateData(routes);
                 mAdapter.notifyDataSetChanged();
             }
