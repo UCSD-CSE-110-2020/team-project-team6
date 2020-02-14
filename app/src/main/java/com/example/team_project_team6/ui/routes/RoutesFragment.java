@@ -31,6 +31,8 @@ import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.example.team_project_team6.ui.new_route.NewRouteFragment;
+import com.example.team_project_team6.ui.routes.RouteViewAdapter;
+import com.example.team_project_team6.ui.routes.RoutesViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -93,7 +95,7 @@ public class RoutesFragment extends Fragment {
                 }
             }
         });
-      
+
         // Navcontroller provides some cool animations and task stack management for us
         mAdapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {
             @Override
