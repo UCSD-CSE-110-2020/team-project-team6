@@ -3,7 +3,11 @@ package com.example.team_project_team6.ui.walk;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -12,9 +16,12 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
@@ -24,6 +31,7 @@ import java.util.Locale;
 public class WalkFragment extends Fragment {
 
     private WalkViewModel dashboardViewModel;
+    private AppCompatActivity mActivity;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,10 +44,12 @@ public class WalkFragment extends Fragment {
         final Button btStart = root.findViewById(R.id.btStart);
 
         final MainActivity mainActivity = (MainActivity) getActivity();
+        mActivity = (AppCompatActivity) requireActivity();
+        setHasOptionsMenu(true);
 
         if(dashboardViewModel.is_currently_walking().getValue()) {
             btStart.setText(R.string.bt_stop);
-        }else {
+        } else {
             btStart.setText(R.string.bt_start);
         }
 
@@ -47,11 +57,10 @@ public class WalkFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!dashboardViewModel.is_currently_walking().getValue()) {
-                    System.out.println("is there herrrrrrrrrrrre");
                     mainActivity.runStopWatch();
                     dashboardViewModel.start_walking();
                     btStart.setText(R.string.bt_stop);
-                }else {
+                } else {
                     dashboardViewModel.end_walking();
                     btStart.setText(R.string.bt_start);
                     mainActivity.stopWatch();
@@ -93,4 +102,33 @@ public class WalkFragment extends Fragment {
 
         return root;
     }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.d("Opening fragment", "mock walk");
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflator) {
+        Log.d("Mock Walk", "creating options menu");
+
+        inflator.inflate(R.menu.action_bar, menu);
+        super.onCreateOptionsMenu(menu, inflator);
+
+        MenuItem mockWalkAction = menu.findItem(R.id.menu_mock_walk_action);
+        mockWalkAction.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                if(controller.getCurrentDestination().getId() == R.id.navigation_walk) {
+                    controller.navigate(R.id.action_navigation_walk_to_mockWalkFragment);
+                }
+
+                return true;
+            }
+        });
+    }
+
+
 }
