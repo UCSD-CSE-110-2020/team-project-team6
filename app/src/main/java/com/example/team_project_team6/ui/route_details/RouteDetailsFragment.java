@@ -156,8 +156,6 @@ public class RouteDetailsFragment extends Fragment {
 
                 if (controller.getCurrentDestination().getId() == R.id.routeDetailsFragment) {
                     controller.navigate(R.id.action_routeDetailsFragment_to_navigation_walk);
-                    // TODO: click start walk from walk screen
-
                     mainActivity.setIsWalkFromRouteDetails(true);
                 }
 
