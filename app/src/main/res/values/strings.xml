@@ -24,4 +24,13 @@
     <string name="tx_height">Height</string>
     <string name="tx_feet">Feet</string>
     <string name="tx_in">In</string>
+    <string name="mock_bt_start">START</string>
+    <string name="mock_text_new_walk">New Mock Walk</string>
+    <string name="mock_text_steps_title">Steps</string>
+    <string name="mock_text_dist_title">Distance</string>
+    <string name="mock_bt_add_steps">+ 500 Steps</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
