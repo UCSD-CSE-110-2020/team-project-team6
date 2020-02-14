@@ -137,10 +137,12 @@ public class MockWalkFragment extends Fragment {
         inflator.inflate(R.menu.action_bar_mock_walk, menu);
         super.onCreateOptionsMenu(menu, inflator);
 
+        // find action for navigating to the mock walk screen from action bar
         MenuItem mockWalkAction = menu.findItem(R.id.menu_mock_walk_action);
         mockWalkAction.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                // navigate to mock walk screen on click
                 NavController controller = NavHostFragment.findNavController(requireParentFragment());
                 if(controller.getCurrentDestination().getId() == R.id.mockWalkFragment) {
                     controller.navigate(R.id.action_mockWalkFragment_to_navigation_walk);

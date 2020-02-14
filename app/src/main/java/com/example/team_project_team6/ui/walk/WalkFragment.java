@@ -93,7 +93,7 @@ public class WalkFragment extends Fragment {
                     walkDist.setText(R.string.dist_empty);
 
                     // show data when the walk is done!
-                    Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
+                    // Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -128,6 +128,9 @@ public class WalkFragment extends Fragment {
         return root;
     }
 
+    /**
+     * return calculated total step distance using height and step count
+     */
     public double getStepDistanceInMiles(int heightInInches, Long stepCount) {
         double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
         return (strideDistInFt * (double) stepCount) / 5280.0;
@@ -146,10 +149,12 @@ public class WalkFragment extends Fragment {
         inflator.inflate(R.menu.action_bar_mock_walk, menu);
         super.onCreateOptionsMenu(menu, inflator);
 
+        // find action for navigating to the mock walk screen from action bar
         MenuItem mockWalkAction = menu.findItem(R.id.menu_mock_walk_action);
         mockWalkAction.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                // navigate to mock walk screen on click
                 NavController controller = NavHostFragment.findNavController(requireParentFragment());
                 if(controller.getCurrentDestination().getId() == R.id.navigation_walk) {
                     controller.navigate(R.id.action_navigation_walk_to_mockWalkFragment);
