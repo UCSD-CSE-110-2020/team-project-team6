@@ -1,8 +1,11 @@
 package com.example.team_project_team6.model;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.team_project_team6.MainActivity;
 import com.google.gson.Gson;
@@ -10,9 +13,9 @@ import com.google.gson.Gson;
 import static android.content.Context.MODE_PRIVATE;
 
 public class SaveData {
-    MainActivity mainActivity;
+    private Context mainActivity;
 
-    public SaveData(MainActivity mainActivity){
+    public SaveData(Context mainActivity){
         this.mainActivity = mainActivity;
     }
 
@@ -26,7 +29,7 @@ public class SaveData {
     }
 
 
-    public void saveWalk(Walk walk) {
+    public String saveWalk(Walk walk) {
         // convert walk into a json object
         Gson gson = new Gson();
         String json = gson.toJson(walk);
@@ -38,5 +41,7 @@ public class SaveData {
         editor.apply();
 
         Log.i("Saving Walk in SaveData", json);
+
+        return json;
     }
 }
