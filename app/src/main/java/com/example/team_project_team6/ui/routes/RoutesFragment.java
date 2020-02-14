@@ -58,14 +58,13 @@ public class RoutesFragment extends Fragment {
         btNewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NewRouteFragment ftNewRoute = new NewRouteFragment();
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                ft.setCustomAnimations(android.R.animator.fade_in,
-//                        android.R.animator.fade_out);
-                ft.addToBackStack(null);
-                ft.replace(R.id.nav_host_fragment, ftNewRoute);
 
-                ft.commit();
+                NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
+
+                    controller.navigate(R.id.action_navigation_routes_to_newRouteFragment);
+                }
+
             }
         });
 

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,10 +105,12 @@ public class NewRouteFragment extends Fragment {
                 //save data here
 
 
-                //showing up bottom navigation bar
-                getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
+
                 //come back to route
-                getActivity().getSupportFragmentManager().popBackStack();
+                NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
+                    controller.navigate(R.id.action_newRouteFragment_to_navigation_routes);
+                }
             }
         });
 
@@ -115,5 +119,11 @@ public class NewRouteFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        //showing up bottom bar
+        getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
+    }
 
 }
