@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_mock_walk_action"
+        android:icon="@drawable/ic_mock_walk_action"
+        android:title="@string/mock_text_new_walk"
+        app:showAsAction="ifRoom" />
+</menu>

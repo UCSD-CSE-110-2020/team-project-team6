@@ -5,23 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.TextView;
-
-import com.example.team_project_team6.fitness.FitnessService;
-import com.example.team_project_team6.fitness.FitnessServiceFactory;
-import com.example.team_project_team6.fitness.GoogleFitAdapter;
-import com.example.team_project_team6.fitness.TestAdapter;
-import com.example.team_project_team6.ui.home.HomeViewModel;
-import com.example.team_project_team6.ui.walk.WalkViewModel;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.fitness.FitnessOptions;
-import com.google.android.gms.fitness.data.DataType;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,6 +13,16 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import com.example.team_project_team6.fitness.FitnessService;
+import com.example.team_project_team6.fitness.FitnessServiceFactory;
+import com.example.team_project_team6.fitness.GoogleFitAdapter;
+import com.example.team_project_team6.fitness.TestAdapter;
+import com.example.team_project_team6.model.StopWatch;
+import com.example.team_project_team6.ui.home.HomeViewModel;
+import com.example.team_project_team6.ui.walk.WalkViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,7 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private HomeViewModel homeViewModel;
     private WalkViewModel walkViewModel;
     private StopWatch sw;
+    private Long walkStartingStep;
+    private boolean isWalking;
 
+    private AppBarConfiguration appBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+        appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_walk, R.id.navigation_routes)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -94,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         runner.execute(1000); // update once a second
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -111,13 +107,22 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void launchPermissionActivity(){
-        Intent intent = new Intent(this, PermissonActivity.class);
+        Intent intent = new Intent(this, PermissionActivity.class);
         startActivity(intent);
     }
 
     public void setStepCount(long stepCount) {
-        homeViewModel.updateDailySteps(stepCount);
-        //walkViewModel.updateWalkSteps(stepCount);
+        homeViewModel.updateDailySteps(stepCount); // update step count on home screen
+
+        // update steps moved just on current walk if the user is currently on a walk
+        if (isWalking) {
+            if (walkStartingStep == null) {
+                walkStartingStep = stepCount;
+            }
+            walkViewModel.updateWalkSteps(stepCount - walkStartingStep);
+        } else {
+            walkStartingStep = null;
+        }
     }
 
     public void setFitnessServiceKey(String fitnessServiceKey) {
@@ -141,15 +146,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * start the walk stopwatch and set walk mode for step-tracking to on
+     */
     public void runStopWatch (){
         sw.runStopWatch(walkViewModel);
+        isWalking = true;
     }
 
+    /**
+     * stop the stopwatch and set walk mode for step tracking to off
+     */
     public void stopWatch(){
         sw.stopWatch();
+        isWalking = false;
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
-
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
+    }
 }

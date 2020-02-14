@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".ui.new_route.NewRouteFragment">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="100dp">
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="104dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/lb_route_name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/txtRouteName"
+            android:layout_width="215dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="12dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/lb_starting_point"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtRouteName" />
+
+        <EditText
+            android:id="@+id/txtStartingPoint"
+            android:layout_width="215dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="12dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/lb_route_fea"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtStartingPoint" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="258dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView13">
+
+            <RadioButton
+                android:id="@+id/rdEasy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/lb_route_easy" />
+
+            <RadioButton
+                android:id="@+id/rdMed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/lb_route_med" />
+
+            <RadioButton
+                android:id="@+id/rdHard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lb_route_hard" />
+
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/radioGroup2"
+            android:layout_width="173dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup">
+
+            <RadioButton
+                android:id="@+id/rdHilly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:text="@string/lb_route_hilly" />
+
+            <RadioButton
+                android:id="@+id/rdFlat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/lb_route_flat" />
+
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/radioGroup3"
+            android:layout_width="184dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup2">
+
+            <RadioButton
+                android:id="@+id/rdStreet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/lb_route_street" />
+
+            <RadioButton
+                android:id="@+id/rdTrail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/lb_route_trail" />
+
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/radioGroup4"
+            android:layout_width="184dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup3">
+
+            <RadioButton
+                android:id="@+id/rdEven"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/lb_route_even" />
+
+            <RadioButton
+                android:id="@+id/rdUneven"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/lb_route_uneven" />
+
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/txtNotes"
+            android:layout_width="274dp"
+            android:layout_height="139dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="28dp"
+            android:background="#B3CFCFCF"
+            android:gravity="top|left"
+            android:hint="@string/lb_route_note"
+            android:inputType="textMultiLine"
+            android:lines="6"
+            android:overScrollMode="always"
+            android:padding="5dp"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup4" />
+
+        <Button
+            android:id="@+id/btDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="128dp"
+            android:layout_marginTop="28dp"
+            android:backgroundTint="#2196F3"
+            android:text="@string/bt_done"
+            android:textColor="#F5F1F1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtNotes" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
