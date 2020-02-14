@@ -37,6 +37,7 @@ import com.example.team_project_team6.ui.routes.RoutesViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class RoutesFragment extends Fragment {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -126,6 +127,13 @@ public class RoutesFragment extends Fragment {
         routesViewModel.getRouteData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Route>>() {
             @Override
             public void onChanged(ArrayList<Route> routes) {
+                routes.sort(new Comparator<Route>() {
+                    @Override
+                    public int compare(Route o1, Route o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
+
                 mAdapter.updateData(routes);
                 mAdapter.notifyDataSetChanged();
             }
