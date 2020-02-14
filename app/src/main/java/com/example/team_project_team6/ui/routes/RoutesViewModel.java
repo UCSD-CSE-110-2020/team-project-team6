@@ -37,7 +37,7 @@ public class RoutesViewModel extends ViewModel {
         mRoutes = new MutableLiveData<>(data);
     }
 
-    LiveData<ArrayList<Route>> getRouteData() {
+    public LiveData<ArrayList<Route>> getRouteData() {
         return mRoutes;
     }
 
