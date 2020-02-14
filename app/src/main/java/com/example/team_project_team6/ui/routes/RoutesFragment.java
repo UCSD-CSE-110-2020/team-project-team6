@@ -3,64 +3,89 @@ package com.example.team_project_team6.ui.routes;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
-import androidx.navigation.NavHost;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.model.Walk;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
+import com.example.team_project_team6.ui.new_route.NewRouteFragment;
+import com.example.team_project_team6.ui.routes.RouteViewAdapter;
+import com.example.team_project_team6.ui.routes.RoutesViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Comparator;
 
 public class RoutesFragment extends Fragment {
-
-    private RoutesViewModel routesViewModel;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public RoutesViewModel routesViewModel = null;
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RouteViewAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        routesViewModel = ViewModelProviders.of(requireActivity()).get(RoutesViewModel.class);
+        if (routesViewModel == null) {
+            routesViewModel = new ViewModelProvider(requireActivity()).get(RoutesViewModel.class);
+        }
+
         View root = inflater.inflate(R.layout.fragment_routes, container, false);
+
+        // check if previous screen is RouteDetailsFragment to prevent creation of another walk object
+        RouteDetailsViewModel routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        routeDetailsViewModel.setIsWalkFromRouteDetails(false);
+
+        final FloatingActionButton btNewRoute = root.findViewById(R.id.btNewRoute);
+        btNewRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NewRouteFragment ftNewRoute = new NewRouteFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                ft.setCustomAnimations(android.R.animator.fade_in,
+//                        android.R.animator.fade_out);
+                ft.addToBackStack(null);
+                ft.replace(R.id.nav_host_fragment, ftNewRoute);
+
+                ft.commit();
+            }
+        });
 
         recyclerView = root.findViewById(R.id.recycler_view_routes);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        final RouteViewAdapter adapter = new RouteViewAdapter();
-        mAdapter = adapter;
-        recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        mAdapter = new RouteViewAdapter();
+        recyclerView.setAdapter(mAdapter);
 
-        routesViewModel.getRouteData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Route>>() {
-            @Override
-            public void onChanged(ArrayList<Route> routes) {
-                adapter.updateData(routes);
-                adapter.notifyDataSetChanged();
-            }
-        });
+        bind_views();
 
-        adapter.setOnFavoriteClickListener(new RouteViewAdapter.ClickListener() {
+        // Toggle favorite when favorite icon is pressed
+        mAdapter.setOnFavoriteClickListener(new RouteViewAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
                 Route route = routesViewModel.getRouteAt(position);
@@ -75,12 +100,12 @@ public class RoutesFragment extends Fragment {
         });
 
         // Navcontroller provides some cool animations and task stack management for us
-        final NavController controller = NavHostFragment.findNavController(this);
-        adapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {
+        mAdapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
                 Route route = routesViewModel.getRouteAt(position);
                 if (route != null) {
+                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
                     Log.d("Routes", "Clicked on route: " + route.getName());
                     if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
                         RouteDetailsViewModel route_details_view_model = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
@@ -93,5 +118,15 @@ public class RoutesFragment extends Fragment {
         });
 
         return root;
+    }
+
+    public void bind_views() {
+        routesViewModel.getRouteData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Route>>() {
+            @Override
+            public void onChanged(ArrayList<Route> routes) {
+                mAdapter.updateData(routes);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

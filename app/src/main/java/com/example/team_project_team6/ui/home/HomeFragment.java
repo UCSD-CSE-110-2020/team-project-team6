@@ -1,9 +1,6 @@
 package com.example.team_project_team6.ui.home;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.SaveData;
+import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 
 import java.util.Locale;
 
@@ -45,6 +43,10 @@ public class HomeFragment extends Fragment {
         // get the height from SharedPreferences and calculate stride distance
         final int heightInInches = saveData.getHeight();
         final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
+
+        // check if previous screen is RouteDetailsFragment to prevent creation of another walk object
+        RouteDetailsViewModel detailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        detailsViewModel.setIsWalkFromRouteDetails(false);
 
         homeViewModel.getDailySteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
