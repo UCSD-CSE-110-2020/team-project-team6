@@ -34,6 +34,11 @@ public class HomeFragment extends Fragment {
 
         final TextView dailySteps = root.findViewById(R.id.textDailySteps);
         final TextView dailyDist = root.findViewById(R.id.textDailyDist);
+        final MainActivity mainActivity = (MainActivity) getActivity();
+
+        // check if previous screen is RouteDetailsFragment to prevent creation of another walk object
+        mainActivity.setIsWalkFromRouteDetails(false);
+
         homeViewModel.getDailySteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
             public void onChanged(@Nullable Long num) {

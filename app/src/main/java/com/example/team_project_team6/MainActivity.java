@@ -22,6 +22,8 @@ import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String FITNESS_SERVICE_KEY = "FITNESS_SERVICE_KEY";
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private WalkViewModel walkViewModel;
     private StopWatch sw;
     private AppBarConfiguration appBarConfiguration;
+
+    private boolean isWalkFromRouteDetails = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +136,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void setIsWalkFromRouteDetails(boolean isWalkFromRouteDetails) {
+        this.isWalkFromRouteDetails = isWalkFromRouteDetails;
+    }
+
+    public boolean getIsWalkFromRouteDetails() {
+        return this.isWalkFromRouteDetails;
+    }
 
     public void runStopWatch (){
         sw.runStopWatch(walkViewModel);

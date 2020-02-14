@@ -11,6 +11,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,12 +20,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.ui.walk.WalkFragment;
+import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
@@ -41,7 +48,7 @@ public class RouteDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mViewModel = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_route_details, container, false);
+        final View root = inflater.inflate(R.layout.fragment_route_details, container, false);
 
         mActivity = (AppCompatActivity) requireActivity();
         route = mViewModel.getRoute();
@@ -144,6 +151,23 @@ public class RouteDetailsFragment extends Fragment {
         final AppCompatEditText notes = root.findViewById(R.id.details_notes);
         notes.setText(route.getNotes());
         notes.setEnabled(false); // make it non editable
+
+        final MainActivity mainActivity = (MainActivity) getActivity();
+
+        // navigate to walk screen and start a walk
+        final NavController controller = NavHostFragment.findNavController(this);
+        final FloatingActionButton btnDetailsStartWalk = root.findViewById(R.id.details_btn_start_walk);
+        btnDetailsStartWalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (controller.getCurrentDestination().getId() == R.id.routeDetailsFragment) {
+                    controller.navigate(R.id.action_routeDetailsFragment_to_navigation_walk);
+                    mainActivity.setIsWalkFromRouteDetails(true);
+                }
+
+            }
+        });
 
         return root;
     }

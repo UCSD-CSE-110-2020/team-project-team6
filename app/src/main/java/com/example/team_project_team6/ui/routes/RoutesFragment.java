@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
@@ -52,6 +53,10 @@ public class RoutesFragment extends Fragment {
         }
 
         View root = inflater.inflate(R.layout.fragment_routes, container, false);
+
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        // check if previous screen is RouteDetailsFragment to prevent creation of another walk object
+        mainActivity.setIsWalkFromRouteDetails(false);
 
         final FloatingActionButton btNewRoute = root.findViewById(R.id.btNewRoute);
 
