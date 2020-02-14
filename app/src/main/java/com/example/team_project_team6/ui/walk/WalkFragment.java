@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 
 import java.util.Locale;
 
@@ -43,7 +44,8 @@ public class WalkFragment extends Fragment {
             btStart.setText(R.string.bt_start);
         }
 
-        if(mainActivity.getIsWalkFromRouteDetails()) {
+        RouteDetailsViewModel routeViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        if (routeViewModel.getIsWalkFromRouteDetails()) {
             runStartSequence(mainActivity, btStart);
         }
 

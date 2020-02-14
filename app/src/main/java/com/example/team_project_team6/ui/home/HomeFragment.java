@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 
 import java.util.Locale;
 
@@ -37,7 +38,8 @@ public class HomeFragment extends Fragment {
         final MainActivity mainActivity = (MainActivity) getActivity();
 
         // check if previous screen is RouteDetailsFragment to prevent creation of another walk object
-        mainActivity.setIsWalkFromRouteDetails(false);
+        RouteDetailsViewModel detailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        detailsViewModel.setIsWalkFromRouteDetails(false);
 
         homeViewModel.getDailySteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override

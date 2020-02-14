@@ -152,8 +152,6 @@ public class RouteDetailsFragment extends Fragment {
         notes.setText(route.getNotes());
         notes.setEnabled(false); // make it non editable
 
-        final MainActivity mainActivity = (MainActivity) getActivity();
-
         // navigate to walk screen and start a walk
         final NavController controller = NavHostFragment.findNavController(this);
         final FloatingActionButton btnDetailsStartWalk = root.findViewById(R.id.details_btn_start_walk);
@@ -163,7 +161,7 @@ public class RouteDetailsFragment extends Fragment {
 
                 if (controller.getCurrentDestination().getId() == R.id.routeDetailsFragment) {
                     controller.navigate(R.id.action_routeDetailsFragment_to_navigation_walk);
-                    mainActivity.setIsWalkFromRouteDetails(true);
+                    mViewModel.setIsWalkFromRouteDetails(true);
                 }
 
             }

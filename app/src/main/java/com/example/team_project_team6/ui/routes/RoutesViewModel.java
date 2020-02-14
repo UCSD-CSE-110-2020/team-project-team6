@@ -38,14 +38,8 @@ public class RoutesViewModel extends ViewModel {
         mRoutes = new MutableLiveData<>(data);
     }
 
+    // Routes are displayed in the same order they are present in
     public LiveData<ArrayList<Route>> getRouteData() {
-        mRoutes.getValue().sort(new Comparator<Route>() {
-            @Override
-            public int compare(Route o1, Route o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-
         return mRoutes;
     }
 

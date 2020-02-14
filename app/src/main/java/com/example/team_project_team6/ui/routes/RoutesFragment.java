@@ -55,12 +55,11 @@ public class RoutesFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_routes, container, false);
 
-        final MainActivity mainActivity = (MainActivity) getActivity();
         // check if previous screen is RouteDetailsFragment to prevent creation of another walk object
-        mainActivity.setIsWalkFromRouteDetails(false);
+        RouteDetailsViewModel routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        routeDetailsViewModel.setIsWalkFromRouteDetails(false);
 
         final FloatingActionButton btNewRoute = root.findViewById(R.id.btNewRoute);
-
         btNewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
