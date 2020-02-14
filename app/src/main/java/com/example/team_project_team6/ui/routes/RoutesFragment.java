@@ -102,6 +102,12 @@ public class RoutesFragment extends Fragment {
                 if (route != null) {
                     NavController controller = NavHostFragment.findNavController(requireParentFragment());
                     Log.d("Routes", "Clicked on route: " + route.getName());
+                    if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
+                        RouteDetailsViewModel route_details_view_model = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
+                        route_details_view_model.setRoute(route);
+
+                        controller.navigate(R.id.action_navigation_routes_to_routeDetailsFragment);
+                    }
                 }
             }
         });
