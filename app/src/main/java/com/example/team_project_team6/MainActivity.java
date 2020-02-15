@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //setFitnessServiceKey(getIntent().getStringExtra(FITNESS_SERVICE_KEY));
-        setFitnessServiceKey(GOOGLE_FITNESS_KEY);
+        setFitnessServiceKey(MOCK_FITNESS_KEY);
         fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
         fitnessService.setup();
 
@@ -116,10 +116,11 @@ public class MainActivity extends AppCompatActivity {
         homeViewModel.updateDailySteps(stepCount); // update step count on home screen
 
         // update steps moved just on current walk if the user is currently on a walk
-        if (isWalking) {
+        if (walkViewModel.isWalking()) {
             if (walkStartingStep == null) {
                 walkStartingStep = stepCount;
             }
+
             walkViewModel.updateWalkSteps(stepCount - walkStartingStep);
         } else {
             walkStartingStep = null;
@@ -145,22 +146,6 @@ public class MainActivity extends AppCompatActivity {
 
             return null;
         }
-    }
-
-    /**
-     * start the walk stopwatch and set walk mode for step-tracking to on
-     */
-    public void runStopWatch () {
-        sw.runStopWatch(walkViewModel);
-        isWalking = true;
-    }
-
-    /**
-     * stop the stopwatch and set walk mode for step tracking to off
-     */
-    public void stopWatch() {
-        sw.stopWatch();
-        isWalking = false;
     }
 
     @Override
