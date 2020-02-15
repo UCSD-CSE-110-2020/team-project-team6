@@ -23,6 +23,7 @@ import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 import static junit.framework.TestCase.assertEquals;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 
@@ -89,14 +90,8 @@ public class SaveDataUnitTest {
 
     @Test
     public void getRouteNames() {
-        Map<String, String> testMap = new HashMap<>();
-        Set<String> testSet = new HashSet<>();
-//        testSet.add("Sun God Lawn");
-//        testSet.add("Mandeville");
-
-        Mockito.when(spfs.getAll()).thenReturn(testMap);
-        Mockito.when(spfs.getAll().keySet()).thenReturn(testSet);
-        assertEquals(testSet, saveData.getRouteNames());
+        Mockito.when(spfs.getAll()).thenReturn(new HashMap<>());
+        assertEquals(new HashSet<>(), saveData.getRouteNames());
     }
 
     @Test
