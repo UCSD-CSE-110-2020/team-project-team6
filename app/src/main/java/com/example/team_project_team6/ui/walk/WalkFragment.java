@@ -102,6 +102,7 @@ public class WalkFragment extends Fragment {
                     if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
                         Route route = routeDetailsViewModel.getRoute();
                         route.setWalk(walk);
+                        route.setLastStartDate(walk.getStartTime());
                         saveData.saveRoute(route);
                         // go to Routes screen
                         if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
