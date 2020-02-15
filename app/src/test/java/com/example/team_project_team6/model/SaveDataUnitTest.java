@@ -48,13 +48,13 @@ public class SaveDataUnitTest {
     }
 
     @Test
-    public void getHeight() {
+    public void getHeightTest() {
         Mockito.when(spfs.getInt(anyString(), anyInt())).thenReturn(65);
         assertEquals(saveData.getHeight(), 65);
     }
 
     @Test
-    public void saveWalk() {
+    public void saveWalkTest() {
         Walk walk = new Walk();
         walk.setDist(20.2);
         walk.setStep(55);
@@ -69,7 +69,7 @@ public class SaveDataUnitTest {
 
 
     @Test
-    public void saveRoute() {
+    public void saveRouteTest() {
         Route route = new Route();
         Walk walk = new Walk();
         walk.setDist(20.2);
@@ -89,13 +89,13 @@ public class SaveDataUnitTest {
     }
 
     @Test
-    public void getRouteNames() {
+    public void getRouteNamesTest() {
         Mockito.when(spfs.getAll()).thenReturn(new HashMap<>());
         assertEquals(new HashSet<>(), saveData.getRouteNames());
     }
 
     @Test
-    public void getRoute() {
+    public void getRouteTest() {
         Route route =  new Route();
         route.setWalk(new Walk());
         route.setName("test route");
@@ -111,7 +111,7 @@ public class SaveDataUnitTest {
     }
 
     @Test
-    public void getWalk(){
+    public void getWalkTest(){
         Walk walk = new Walk();
 
         Gson gson = new Gson();
