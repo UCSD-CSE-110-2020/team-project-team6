@@ -83,6 +83,10 @@ public class WalkViewModel extends AndroidViewModel {
         mWalkSteps.postValue(stepCount);
     }
 
+    public boolean isWalking() {
+        return isWalking;
+    }
+
     /**
      * start the walk stopwatch and set walk mode for step-tracking to on
      */
