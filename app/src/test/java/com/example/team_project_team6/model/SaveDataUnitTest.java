@@ -7,11 +7,19 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.gson.Gson;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 import static junit.framework.TestCase.assertEquals;
@@ -32,10 +40,10 @@ public class SaveDataUnitTest {
         this.context = Mockito.mock(Context.class);
         this.spfs = Mockito.mock(SharedPreferences.class);
         this.editor = Mockito.mock(SharedPreferences.Editor.class);
-        saveData = new SaveData(context);
-
         Mockito.when(context.getSharedPreferences(anyString(), anyInt())).thenReturn(spfs);
-        Mockito.when(context.getSharedPreferences(anyString(), anyInt()).edit()).thenReturn(editor);
+        Mockito.when(spfs.edit()).thenReturn(editor);
+
+        saveData = new SaveData(context);
     }
 
     @Test
@@ -56,5 +64,65 @@ public class SaveDataUnitTest {
 
         Mockito.when(editor.putString(anyString(), anyString())).thenReturn(editor);
         assertEquals(saveData.saveWalk(walk), walkJson);
+    }
+
+
+    @Test
+    public void saveRoute() {
+        Route route = new Route();
+        Walk walk = new Walk();
+        walk.setDist(20.2);
+        walk.setStep(55);
+        walk.setDuration("10:45:37");
+        route.setWalk(walk);
+        route.setName("test route");
+        route.setFeatures(new Features());
+        route.setStartPoint("test-start-point");
+        route.setLastStartDate(Calendar.getInstance());
+
+        Gson gson = new Gson();
+        String routeJson = gson.toJson(route);
+
+        Mockito.when(editor.putString(anyString(), anyString())).thenReturn(editor);
+        assertEquals(saveData.saveRoute(route), routeJson);
+    }
+
+    @Test
+    public void getRouteNames() {
+        Map<String, String> testMap = new HashMap<>();
+        Set<String> testSet = new HashSet<>();
+//        testSet.add("Sun God Lawn");
+//        testSet.add("Mandeville");
+
+        Mockito.when(spfs.getAll()).thenReturn(testMap);
+        Mockito.when(spfs.getAll().keySet()).thenReturn(testSet);
+        assertEquals(testSet, saveData.getRouteNames());
+    }
+
+    @Test
+    public void getRoute() {
+        Route route =  new Route();
+        route.setWalk(new Walk());
+        route.setName("test route");
+        route.setFeatures(new Features());
+        route.setStartPoint("test-start-point");
+        route.setLastStartDate(Calendar.getInstance());
+
+        Gson gson = new Gson();
+        String routeJson = gson.toJson(route);
+
+        Mockito.when(spfs.getString(anyString(), anyString())).thenReturn(routeJson);
+        assertEquals(routeJson, gson.toJson(saveData.getRoute(route.getName())));
+    }
+
+    @Test
+    public void getWalk(){
+        Walk walk = new Walk();
+
+        Gson gson = new Gson();
+        String walkJson = gson.toJson(walk);
+
+        Mockito.when(spfs.getString(anyString(), anyString())).thenReturn(walkJson);
+        assertEquals(walkJson, gson.toJson(saveData.getWalk()));
     }
 }
