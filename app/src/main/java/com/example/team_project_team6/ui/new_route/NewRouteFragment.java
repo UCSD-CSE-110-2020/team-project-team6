@@ -1,6 +1,7 @@
 package com.example.team_project_team6.ui.new_route;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.team_project_team6.R;
@@ -40,7 +42,10 @@ public class NewRouteFragment extends Fragment {
         //hide bottom navigation bar
         getActivity().findViewById(R.id.nav_view).setVisibility(View.GONE);
 
-        final EditText txtRouteNme = root.findViewById(R.id.txtRouteName);
+        final EditText txtRouteName = root.findViewById(R.id.txtRouteName);
+        //final TextView tvName = root.findViewById(R.id.textView11);
+        //tvName.setText(getString(R.string.lb_route_name) + " "+ getString(R.string.asteriskred));
+
         final EditText txtStartingPoint = root.findViewById(R.id.txtStartingPoint);
         final EditText txtNotes = root.findViewById(R.id.txtNotes);
 
@@ -59,7 +64,7 @@ public class NewRouteFragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // checkedId is the RadioButton selected
                 radDiff = root.findViewById(checkedId);
-                Toast.makeText(getActivity(), "Selected: " + radDiff.getText(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Selected: " + radDiff.getText(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -99,17 +104,29 @@ public class NewRouteFragment extends Fragment {
             }
         });
 
+
         btDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //save data here
 
 
 
-                //come back to route
-                NavController controller = NavHostFragment.findNavController(requireParentFragment());
-                if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
-                    controller.navigate(R.id.action_newRouteFragment_to_navigation_routes);
+                if(txtRouteName.getText().toString().isEmpty()){
+                   Toast alert =  Toast.makeText(getActivity(), getString(R.string.alert_route_name), Toast.LENGTH_SHORT);
+                   alert.getView().setBackgroundColor(Color.parseColor("#e74c3c"));
+                   alert.show();
+                }else if(txtStartingPoint.getText().toString().isEmpty()){
+                    Toast alert =  Toast.makeText(getActivity(), getString(R.string.alert_starting_point), Toast.LENGTH_SHORT);
+                    alert.getView().setBackgroundColor(Color.parseColor("#e74c3c"));
+                    alert.show();
+                }else {
+                    //save data here
+
+                    //come back to route
+                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                    if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
+                        controller.navigate(R.id.action_newRouteFragment_to_navigation_routes);
+                    }
                 }
             }
         });
