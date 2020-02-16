@@ -61,7 +61,11 @@ public class Route {
     }
 
     public void setWalk(Walk walk) {
-        Log.i("setWalk from Route", "value: " + walk.toString());
+        if(walk != null) {
+            Log.i("setWalk from Route", "value: " + walk.toString());
+        } else {
+            Log.i("setWalk from Route", "value: null");
+        }
         this.walk = walk;
     }
 
@@ -126,7 +130,11 @@ public class Route {
     }
 
     public void setFeatures(Features features) {
-        Log.i("setFeatures from Route", "value: " + features.toString());
+        if(features != null) {
+            Log.i("setFeatures from Route", "value: " + features.toString());
+        } else {
+            Log.i("setFeatures from Route", "value: null");
+        }
         this.features = features;
     }
 

@@ -40,6 +40,23 @@ public class Features {
         this.level = level;
     }
 
+    public void setLevel(String level) {
+        switch (level) {
+            case "Easy":
+                this.level = 1;
+                break;
+            case "Medium":
+                this.level = 2;
+                break;
+            case "Hard":
+                this.level = 3;
+                break;
+            default:
+                this.level = 0;
+                break;
+        }
+    }
+
     public int getDirectionType() {
         Log.i("getDirectionType from Features", "return: " + directionType);
         return directionType;
@@ -50,6 +67,20 @@ public class Features {
         this.directionType = directionType;
     }
 
+    public void setDirectionType(String directionType) {
+        switch (directionType) {
+            case "Loop":
+                this.directionType = 1;
+                break;
+            case "Out and Back":
+                this.directionType = 2;
+                break;
+            default:
+                this.directionType = 0;
+                break;
+        }
+    }
+
     public int getTerrain() {
         Log.i("getTerrain from Features", "return: " + terrain);
         return terrain;
@@ -58,6 +89,20 @@ public class Features {
     public void setTerrain(int terrain) {
         Log.i("setTerrain from Features", "value: " + terrain);
         this.terrain = terrain;
+    }
+
+    public void setTerrain(String terrain) {
+        switch (terrain) {
+            case "Flat":
+                this.terrain = 1;
+                break;
+            case "Hilly":
+                this.terrain = 2;
+                break;
+            default:
+                this.terrain = 0;
+                break;
+        }
     }
 
     public boolean isFavorite() {
@@ -80,6 +125,20 @@ public class Features {
         this.type = type;
     }
 
+    public void setType(String type) {
+        switch (type) {
+            case "Street":
+                this.type = 1;
+                break;
+            case "Trail":
+                this.type = 2;
+                break;
+            default:
+                this.type = 0;
+                break;
+        }
+    }
+
     public int getSurface() {
         Log.i("getSurface from Features", "return: " + surface);
         return surface;
@@ -90,9 +149,23 @@ public class Features {
         this.surface = surface;
     }
 
+    public void setSurface(String surface) {
+        switch (surface) {
+            case "Even":
+                this.surface = 1;
+                break;
+            case "Uneven":
+                this.surface = 2;
+                break;
+            default:
+                this.surface = 0;
+                break;
+        }
+    }
+
     @Override
     public String toString() {
-        return String.format(Locale.ENGLISH, "Level: %d, Direction Type: (%d), Terrain: %d, Favorite?: %b, Type: %s,  Surface: %s",
+        return String.format(Locale.ENGLISH, "Level: %d, Direction Type: %d, Terrain: %d, Favorite?: %b, Type: %s,  Surface: %s",
                 level, directionType, terrain, isFavorite, type, surface);
     }
 }

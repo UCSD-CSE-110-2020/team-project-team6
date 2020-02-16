@@ -110,7 +110,7 @@ public class RouteDetailsFragment extends Fragment {
 
         // street/trail
         final TextView street = (TextView)root.findViewById(R.id.detail_features_street);
-        switch (route.getFeatures().getTerrain()) {
+        switch (route.getFeatures().getType()) {
             case 1:
                 street.setText(R.string.details_features_street);
                 break;
@@ -123,7 +123,7 @@ public class RouteDetailsFragment extends Fragment {
 
         // even/not even
         final TextView evenness = (TextView)root.findViewById(R.id.detail_features_eveness);
-        switch (route.getFeatures().getTerrain()) {
+        switch (route.getFeatures().getSurface()) {
             case 1:
                 evenness.setText(R.string.details_features_even);
                 break;
