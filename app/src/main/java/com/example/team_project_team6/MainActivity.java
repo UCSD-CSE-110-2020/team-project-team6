@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         FitnessServiceFactory.put(MOCK_FITNESS_KEY, new FitnessServiceFactory.BluePrint() {
             @Override
             public FitnessService create(MainActivity mainActivity) {
-                return new TestAdapter(mainActivity);
+                return new GoogleFitAdapter(mainActivity);
             }
         });
 
