@@ -53,17 +53,9 @@ public class WalkFragment extends Fragment {
         final TextView walkDist = root.findViewById(R.id.lbDistance);
 
         final Walk walk = new Walk(); // create walk object to store walk info
-
-        // save reference to MainActivity and create object to handle SharedPreferences calls
-
         final SaveData saveData = new SaveData(getActivity());
 
-        // update text on walk screen button depending on whether or not user is on a walk
-        if(walkViewModel.isCurrentlyWalking().getValue()) {
-            btStart.setText(R.string.bt_stop);
-        } else {
-            btStart.setText(R.string.bt_start);
-        }
+        updateStartStopButton(btStart);
 
         RouteDetailsViewModel routeViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
         if (routeViewModel.getIsWalkFromRouteDetails()) {
@@ -76,24 +68,13 @@ public class WalkFragment extends Fragment {
                 // if user is not currently on a walk when button is pressed, initialize stopwatch,
                 // set mode to walking, and get the time of the start of the walk
                 if(!walkViewModel.isCurrentlyWalking().getValue()) {
-                    System.out.println("is there herrrrrrrrrrrre");
                     runStartSequence(btStart);
                     walk.setStartTime(Calendar.getInstance());
 
                 } else {
                     // if user presses button while walk is in progress, end the walk and stop the stopwatch
                     runStopSequence(btStart);
-
-                    // get the duration, step count, and distance
-                    String duration = lbStopWatch.getText().toString();
-                    long stepCount = Long.parseLong(walkSteps.getText().toString());
-                    String[] distData = walkDist.getText().toString().split("\\s+");
-                    double distance = Double.parseDouble(distData[0]);
-
-                    // save the information about the walk inside of the walk object
-                    walk.setDuration(duration);
-                    walk.setStep(stepCount);
-                    walk.setDist(distance);
+                    setWalkInfo(walk, lbStopWatch, walkSteps, walkDist);
 
                     // reset values
                     walkSteps.setText(R.string.walk_step_empty);
@@ -102,24 +83,7 @@ public class WalkFragment extends Fragment {
                     // show data when the walk is done!
                     // Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
 
-                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
-                    if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
-                        Route route = routeDetailsViewModel.getRoute();
-                        route.setWalk(walk);
-                        route.setLastStartDate(walk.getStartTime());
-                        saveData.saveRoute(route);
-                        // go to Routes screen
-                        if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
-                            controller.navigate(R.id.action_navigation_walk_to_navigation_routes);
-                        }
-                    } else {
-                        saveData.saveWalk(walk); // save walk into SharedPreferences
-                        routeDetailsViewModel.setIsWalkFromRouteDetails(true);
-                        // go to newRouteFragment to save Walk in a Route object
-                        if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
-                            controller.navigate(R.id.action_navigation_walk_to_newRouteFragment);
-                        }
-                    }
+                    navigateFromWalkFragment(walk, saveData);
                 }
             }
         });
@@ -135,7 +99,7 @@ public class WalkFragment extends Fragment {
                     num = 0L;
                 }
 
-                double dist = getStepDistanceInMiles(heightInInches, num);
+                double dist = Walk.getStepDistanceInMiles(heightInInches, num);
 
                 walkSteps.setText(String.format(Locale.ENGLISH, "%d", num));
                 walkDist.setText(String.format(Locale.ENGLISH, "%.2f mi", dist));
@@ -153,23 +117,61 @@ public class WalkFragment extends Fragment {
         return root;
     }
 
-    /**
-     * return calculated total step distance using height and step count
-     */
-    public double getStepDistanceInMiles(int heightInInches, Long stepCount) {
-        double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
-        return (strideDistInFt * (double) stepCount) / 5280.0;
+    public void updateStartStopButton(Button btStart) {
+        Log.i("WalkFragment", "update start/stop button");
+        // update text on walk screen button depending on whether or not user is on a walk
+        if(walkViewModel.isCurrentlyWalking().getValue()) {
+            btStart.setText(R.string.bt_stop);
+        } else {
+            btStart.setText(R.string.bt_start);
+        }
+    }
+
+    public void setWalkInfo(Walk walk, TextView lbStopWatch, TextView walkSteps, TextView walkDist) {
+        Log.i("WalkFragment", "setWalkInfo");
+        // get the duration, step count, and distance
+        String duration = lbStopWatch.getText().toString();
+        long stepCount = Long.parseLong(walkSteps.getText().toString());
+        String[] distData = walkDist.getText().toString().split("\\s+");
+        double distance = Double.parseDouble(distData[0]);
+
+        // save the information about the walk inside of the walk object
+        walk.setDuration(duration);
+        walk.setStep(stepCount);
+        walk.setDist(distance);
+    }
+
+    public void navigateFromWalkFragment(Walk walk, SaveData saveData) {
+        Log.i("WalkFragment", "navigation");
+        NavController controller = NavHostFragment.findNavController(requireParentFragment());
+        if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
+            Route route = routeDetailsViewModel.getRoute();
+            route.setWalk(walk);
+            route.setLastStartDate(walk.getStartTime());
+            saveData.saveRoute(route);
+            // go to Routes screen
+            if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
+                controller.navigate(R.id.action_navigation_walk_to_navigation_routes);
+            }
+        } else {
+            saveData.saveWalk(walk); // save walk into SharedPreferences
+            routeDetailsViewModel.setIsWalkFromRouteDetails(true);
+            // go to newRouteFragment to save Walk in a Route object
+            if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
+                controller.navigate(R.id.action_navigation_walk_to_newRouteFragment);
+            }
+        }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.d("Opening fragment", "mock walk");
+        Log.i("Opening fragment", "walkFragment");
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflator) {
-        Log.d("Mock Walk", "creating options menu");
+        Log.i("WalkFragment", "creating options menu");
 
         inflator.inflate(R.menu.action_bar_mock_walk, menu);
         super.onCreateOptionsMenu(menu, inflator);
@@ -184,20 +186,20 @@ public class WalkFragment extends Fragment {
                 if(controller.getCurrentDestination().getId() == R.id.navigation_walk) {
                     controller.navigate(R.id.action_navigation_walk_to_mockWalkFragment);
                 }
-
                 return true;
             }
         });
     }
 
-
     public void runStartSequence(Button btStart) {
+        Log.i("WalkFragment", "start walk");
         walkViewModel.runStopWatch();
         walkViewModel.startWalking();
         btStart.setText(R.string.bt_stop);
     }
 
     public void runStopSequence(Button btStart) {
+        Log.i("WalkFragment", "stop walk");
         walkViewModel.stopWatch();
         walkViewModel.endWalking();
         btStart.setText(R.string.bt_start);
