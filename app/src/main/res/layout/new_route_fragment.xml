@@ -27,10 +27,10 @@
 
         <EditText
             android:id="@+id/txtRouteName"
-            android:layout_width="215dp"
-            android:layout_height="36dp"
+            android:layout_width="213dp"
+            android:layout_height="45dp"
             android:layout_marginStart="44dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="20dp"
             android:ems="10"
             android:inputType="textPersonName"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,10 +50,10 @@
 
         <EditText
             android:id="@+id/txtStartingPoint"
-            android:layout_width="215dp"
-            android:layout_height="37dp"
+            android:layout_width="220dp"
+            android:layout_height="45dp"
             android:layout_marginStart="44dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="20dp"
             android:ems="10"
             android:inputType="textPersonName"
             app:layout_constraintStart_toStartOf="parent"
@@ -180,10 +180,11 @@
                 android:text="@string/lb_route_uneven" />
 
         </RadioGroup>
+
         <RadioGroup
             android:id="@+id/radioGroup5"
-            android:layout_width="200dp"
-            android:layout_height="38dp"
+            android:layout_width="240dp"
+            android:layout_height="31dp"
             android:layout_marginStart="44dp"
             android:layout_marginTop="19dp"
             android:orientation="horizontal"
@@ -211,7 +212,7 @@
             android:layout_width="274dp"
             android:layout_height="139dp"
             android:layout_marginStart="44dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="24dp"
             android:background="#B3CFCFCF"
             android:gravity="top|left"
             android:hint="@string/lb_route_note"
@@ -230,8 +231,8 @@
             android:id="@+id/btDone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="128dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="24dp"
             android:backgroundTint="#2196F3"
             android:text="@string/bt_done"
             android:textColor="#F5F1F1"
