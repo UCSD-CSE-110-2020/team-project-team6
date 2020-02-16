@@ -38,7 +38,7 @@ public class NewRouteFragment extends Fragment {
     private RadioButton radHilly;
     private RadioButton radStreet;
     private RadioButton radEven;
-
+    private RadioButton radLoop;
 
 
     @Override
@@ -163,5 +163,10 @@ public class NewRouteFragment extends Fragment {
         return root;
     }
 
-
+    @Override
+    public void onStop(){
+        super.onStop();
+        //showing up bottom bar
+        getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
+    }
 }
