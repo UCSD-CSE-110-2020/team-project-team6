@@ -1,20 +1,32 @@
 package com.example.team_project_team6.ui.walk;
 
+import android.app.Application;
+import android.content.Context;
+
+import com.example.team_project_team6.model.StopWatch;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class WalkViewModel extends ViewModel {
+public class WalkViewModel extends AndroidViewModel {
 
     private MutableLiveData<String> stopWatch;
     private MutableLiveData<Long> mWalkSteps;
     private MutableLiveData<Boolean> mCurrentlyWalking;
+    private StopWatch sw;
+    private boolean isWalking;
+    private Context context;
 
-    public WalkViewModel() {
+    public WalkViewModel(Application application) {
+        super(application);
         mCurrentlyWalking = new MutableLiveData<>(false);
         mWalkSteps = new MutableLiveData<>();
         stopWatch = new MutableLiveData<>();
         stopWatch.setValue("00:00:00");
+        this.context = application;
+        sw = new StopWatch();
     }
 
     /**
@@ -71,4 +83,23 @@ public class WalkViewModel extends ViewModel {
         mWalkSteps.postValue(stepCount);
     }
 
+    public boolean isWalking() {
+        return isWalking;
+    }
+
+    /**
+     * start the walk stopwatch and set walk mode for step-tracking to on
+     */
+    public void runStopWatch () {
+        sw.runStopWatch(this);
+        isWalking = true;
+    }
+
+    /**
+     * stop the stopwatch and set walk mode for step tracking to off
+     */
+    public void stopWatch() {
+        sw.stopWatch();
+        isWalking = false;
+    }
 }

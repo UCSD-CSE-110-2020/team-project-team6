@@ -180,6 +180,31 @@
                 android:text="@string/lb_route_uneven" />
 
         </RadioGroup>
+        <RadioGroup
+            android:id="@+id/radioGroup5"
+            android:layout_width="200dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="19dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup4">
+
+            <RadioButton
+                android:id="@+id/rdLoop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/details_features_loop" />
+
+            <RadioButton
+                android:id="@+id/rdOutBack"
+                android:layout_width="162dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/details_features_outandback" />
+
+        </RadioGroup>
 
         <EditText
             android:id="@+id/txtNotes"
@@ -199,7 +224,7 @@
             android:scrollHorizontally="false"
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup4" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup5" />
 
         <Button
             android:id="@+id/btDone"

@@ -1,5 +1,6 @@
 package com.example.team_project_team6.ui.routes;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.Walk;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,11 +69,11 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
         RouteViewAdapter.itemClickListener = listener;
     }
 
-    RouteViewAdapter() {
+    public RouteViewAdapter() {
         this.items = new ArrayList<>();
     }
 
-    RouteViewAdapter(ArrayList<Route> items) {
+    public RouteViewAdapter(ArrayList<Route> items) {
         this.items = items;
     }
 
@@ -84,18 +86,29 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
 
     @Override
     public void onBindViewHolder(@NonNull RouteViewHolder holder, int position) {
-        if (items.get(position).getFeatures().isFavorite()) {
+        if (items.get(position).getFeatures().isFavorite() && items.get(position).getFeatures() != null) {
             holder.favoriteButton.setBackgroundResource(R.drawable.ic_filled_star);
         } else {
             holder.favoriteButton.setBackgroundResource(R.drawable.ic_empty_star);
         }
 
+
         holder.trailName.setText(items.get(position).getName());
 
-        String steps = String.format(Locale.ENGLISH, "%d steps", items.get(position).getWalk().getStep());
+        Route currRoute = items.get(position);
+        Walk walkInCurrRoute = items.get(position).getWalk();
+
+        Log.i("RouteViewAdapter onBindViewHolder", "route name: " + currRoute.getName());
+        if(currRoute == null) {
+            Log.e("RouteViewAdapter onBindViewHolder","currRoute is null");
+        } else {
+            Log.e("RouteViewAdapter onBindViewHolder","walkInCurrRoute is null");
+        }
+
+        String steps = String.format(Locale.ENGLISH, "%d steps", walkInCurrRoute.getStep());
         holder.steps.setText(steps);
 
-        String dist = String.format(Locale.ENGLISH, "%.2f mi", items.get(position).getWalk().getDist());
+        String dist = String.format(Locale.ENGLISH, "%.2f mi", walkInCurrRoute.getDist());
         holder.distance.setText(dist);
 
         if (items.get(position).getLastStartDate() != null) {

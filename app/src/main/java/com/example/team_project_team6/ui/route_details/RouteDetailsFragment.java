@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -39,6 +40,7 @@ public class RouteDetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         mViewModel = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
         final View root = inflater.inflate(R.layout.fragment_route_details, container, false);
 
@@ -107,7 +109,7 @@ public class RouteDetailsFragment extends Fragment {
 
         // street/trail
         final TextView street = (TextView)root.findViewById(R.id.detail_features_street);
-        switch (route.getFeatures().getTerrain()) {
+        switch (route.getFeatures().getType()) {
             case 1:
                 street.setText(R.string.details_features_street);
                 break;
@@ -120,7 +122,7 @@ public class RouteDetailsFragment extends Fragment {
 
         // even/not even
         final TextView evenness = (TextView)root.findViewById(R.id.detail_features_eveness);
-        switch (route.getFeatures().getTerrain()) {
+        switch (route.getFeatures().getSurface()) {
             case 1:
                 evenness.setText(R.string.details_features_even);
                 break;
@@ -153,7 +155,10 @@ public class RouteDetailsFragment extends Fragment {
 
                 if (controller.getCurrentDestination().getId() == R.id.routeDetailsFragment) {
                     controller.navigate(R.id.action_routeDetailsFragment_to_navigation_walk);
+
+
                     mViewModel.setIsWalkFromRouteDetails(true);
+                    mViewModel.setRoute(route);
                 }
 
             }

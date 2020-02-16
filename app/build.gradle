@@ -33,6 +33,10 @@ android {
             storeFile file("./external/debug.keystore")
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 dependencies {
@@ -64,8 +68,12 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     implementation 'com.google.android.gms:play-services-fitness:18.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    testImplementation 'androidx.test.ext:junit:1.1.1'
+    testImplementation 'androidx.test.ext:truth:1.2.0'
+    testImplementation 'androidx.test:rules:1.2.0'
+    testImplementation "org.mockito:mockito-core:1.+"
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.google.android.material:material:1.1.0-alpha06'
     debugImplementation 'androidx.fragment:fragment-testing:1.2.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
