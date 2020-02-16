@@ -15,6 +15,7 @@ public class WalkViewModel extends AndroidViewModel {
     private MutableLiveData<String> stopWatch;
     private MutableLiveData<Long> mWalkSteps;
     private MutableLiveData<Boolean> mCurrentlyWalking;
+    private MutableLiveData<Boolean> mCurrentlyWalkingMock;
     private StopWatch sw;
     private boolean isWalking;
     private Context context;
@@ -22,6 +23,7 @@ public class WalkViewModel extends AndroidViewModel {
     public WalkViewModel(Application application) {
         super(application);
         mCurrentlyWalking = new MutableLiveData<>(false);
+        mCurrentlyWalkingMock = new MutableLiveData<>(false);
         mWalkSteps = new MutableLiveData<>();
         stopWatch = new MutableLiveData<>();
         stopWatch.setValue("00:00:00");
@@ -32,23 +34,37 @@ public class WalkViewModel extends AndroidViewModel {
     /**
      * informs observers that walk is underway by updating to the stream
      */
-    void startWalking() {
-        mCurrentlyWalking.postValue(true);
+    void startWalking(boolean isMockWalk) {
+        if(!isMockWalk) {
+            mCurrentlyWalking.postValue(true);
+        } else {
+            mCurrentlyWalkingMock.postValue(true);
+        }
     }
 
     /**
      * informs observers that walk is not underway by updating to the stream
      */
-    void endWalking() {
-        mCurrentlyWalking.postValue(false);
+    void endWalking(boolean isMockWalk) {
+        if(!isMockWalk) {
+            mCurrentlyWalking.postValue(false);
+        } else {
+            mCurrentlyWalkingMock.postValue(false);
+        }
+
     }
 
     /**
      * returns walking status stream to subscribe to
      * @return livedata object for walking status
      */
-    LiveData<Boolean> isCurrentlyWalking() {
-        return mCurrentlyWalking;
+    LiveData<Boolean> isCurrentlyWalking(boolean isMockWalk) {
+        if(!isMockWalk) {
+            return mCurrentlyWalking;
+        } else {
+            return mCurrentlyWalkingMock;
+        }
+
     }
 
     /**

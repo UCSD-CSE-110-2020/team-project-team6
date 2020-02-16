@@ -26,6 +26,9 @@ import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
+import com.example.team_project_team6.ui.routes.RoutesViewModel;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -34,31 +37,28 @@ public class WalkFragment extends Fragment {
 
     private WalkViewModel walkViewModel;
     private RouteDetailsViewModel routeDetailsViewModel;
+    private boolean isMockWalk;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
+        isMockWalk = false;
         walkViewModel = new ViewModelProvider(requireActivity()).get(WalkViewModel.class);
+        routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_walk, container, false);
         setHasOptionsMenu(true);
 
-        if (routeDetailsViewModel == null) {
-            routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
-        }
-
         // create objects for necessary parts on the walk fragment page
-        final TextView lbStopWatch = root.findViewById(R.id.lbTime);
         final Button btStart = root.findViewById(R.id.btStart);
+        final TextView walkTime = root.findViewById(R.id.lbTime);
         final TextView walkSteps = root.findViewById(R.id.lbStep);
         final TextView walkDist = root.findViewById(R.id.lbDistance);
 
         final Walk walk = new Walk(); // create walk object to store walk info
         final SaveData saveData = new SaveData(getActivity());
 
-        updateStartStopButton(btStart);
+        updateDisplay(btStart, walkDist, walkSteps, walkTime);
 
-        RouteDetailsViewModel routeViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
-        if (routeViewModel.getIsWalkFromRouteDetails()) {
+        if (routeDetailsViewModel.getIsWalkFromRouteDetails()) {
             runStartSequence(btStart);
         }
 
@@ -67,14 +67,14 @@ public class WalkFragment extends Fragment {
             public void onClick(View view) {
                 // if user is not currently on a walk when button is pressed, initialize stopwatch,
                 // set mode to walking, and get the time of the start of the walk
-                if(!walkViewModel.isCurrentlyWalking().getValue()) {
+                if(!walkViewModel.isCurrentlyWalking(isMockWalk).getValue()) {
                     runStartSequence(btStart);
                     walk.setStartTime(Calendar.getInstance());
 
                 } else {
                     // if user presses button while walk is in progress, end the walk and stop the stopwatch
                     runStopSequence(btStart);
-                    setWalkInfo(walk, lbStopWatch, walkSteps, walkDist);
+                    setWalkInfo(walk, walkTime, walkSteps, walkDist);
 
                     // reset values
                     walkSteps.setText(R.string.walk_step_empty);
@@ -110,23 +110,45 @@ public class WalkFragment extends Fragment {
         walkViewModel.getStopWatch().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                lbStopWatch.setText(s);
+                walkTime.setText(s);
             }
         });
 
         return root;
     }
 
-    public void updateStartStopButton(Button btStart) {
+    public void updateDisplay(Button btStart, TextView walkTime, TextView walkSteps, TextView walkDist) {
         Log.i("WalkFragment", "update start/stop button");
         // update text on walk screen button depending on whether or not user is on a walk
-        if(walkViewModel.isCurrentlyWalking().getValue()) {
+        if(walkViewModel.isCurrentlyWalking(isMockWalk).getValue()) {
             btStart.setText(R.string.bt_stop);
         } else {
+            resetToZero(walkTime, walkSteps, walkDist);
             btStart.setText(R.string.bt_start);
         }
     }
 
+    public void runStartSequence(Button btStart) {
+        Log.i("WalkFragment", "start walk");
+        walkViewModel.runStopWatch();
+        walkViewModel.startWalking(isMockWalk);
+        btStart.setText(R.string.bt_stop);
+    }
+
+    public void runStopSequence(Button btStart) {
+        Log.i("WalkFragment", "stop walk");
+        walkViewModel.stopWatch();
+        walkViewModel.endWalking(isMockWalk);
+        btStart.setText(R.string.bt_start);
+    }
+
+
+    public void resetToZero(TextView walkDist, TextView walkSteps, TextView walkTime) {
+        Log.i("MockWalkFragment", "reset step and distance to 0");
+        walkTime.setText(R.string.time_empty);
+        walkSteps.setText(R.string.walk_step_empty);
+        walkDist.setText(R.string.dist_empty);
+    }
     public void setWalkInfo(Walk walk, TextView lbStopWatch, TextView walkSteps, TextView walkDist) {
         Log.i("WalkFragment", "setWalkInfo");
         // get the duration, step count, and distance
@@ -149,6 +171,7 @@ public class WalkFragment extends Fragment {
             route.setWalk(walk);
             route.setLastStartDate(walk.getStartTime());
             saveData.saveRoute(route);
+            routeDetailsViewModel.setIsWalkFromRouteDetails(false);
             // go to Routes screen
             if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
                 controller.navigate(R.id.action_navigation_walk_to_navigation_routes);
@@ -189,19 +212,5 @@ public class WalkFragment extends Fragment {
                 return true;
             }
         });
-    }
-
-    public void runStartSequence(Button btStart) {
-        Log.i("WalkFragment", "start walk");
-        walkViewModel.runStopWatch();
-        walkViewModel.startWalking();
-        btStart.setText(R.string.bt_stop);
-    }
-
-    public void runStopSequence(Button btStart) {
-        Log.i("WalkFragment", "stop walk");
-        walkViewModel.stopWatch();
-        walkViewModel.endWalking();
-        btStart.setText(R.string.bt_start);
     }
 }
