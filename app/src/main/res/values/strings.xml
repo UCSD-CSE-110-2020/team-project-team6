@@ -17,14 +17,21 @@
     <string name="bt_stop">STOP</string>
     <string name="bt_continue">Continue</string>
     <string name="bt_back">Back</string>
-    <string name="permisson_tilte">Walk Walk Revolution</string>
-    <string name="permisson_intro">Coach you to a healthier and more active life</string>
-    <string name="permisson_policy">By continuing, you agree to the Terms of Service</string>
+    <string name="permission_title">Walk Walk Revolution</string>
+    <string name="permission_intro">Coach you to a healthier and more active life</string>
+    <string name="permission_policy">By continuing, you agree to the Terms of Service</string>
     <string name="profile">My Profile</string>
     <string name="profile_detail">To ensure the accuracy, Please input your accurate information.</string>
     <string name="tx_height">Height</string>
     <string name="tx_feet">Feet</string>
     <string name="tx_in">In</string>
+
+    <string name="mock_bt_start">START</string>
+    <string name="mock_text_new_walk">New Mock Walk</string>
+    <string name="mock_text_steps_title">Steps</string>
+    <string name="mock_text_dist_title">Distance</string>
+    <string name="mock_bt_add_steps">+ 500 Steps</string>
+
     <string name="never_completed">Never Completed</string>
     <string name="title_fragment_route_details">Route Details</string>
     <string name="details_notes_hint">Enter your route notes here…</string>

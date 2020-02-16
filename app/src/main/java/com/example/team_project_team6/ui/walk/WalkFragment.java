@@ -2,12 +2,15 @@ package com.example.team_project_team6.ui.walk;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -37,6 +40,7 @@ public class WalkFragment extends Fragment {
 
         walkViewModel = new ViewModelProvider(requireActivity()).get(WalkViewModel.class);
         View root = inflater.inflate(R.layout.fragment_walk, container, false);
+        setHasOptionsMenu(true);
 
         if (routeDetailsViewModel == null) {
             routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
@@ -96,7 +100,7 @@ public class WalkFragment extends Fragment {
                     walkDist.setText(R.string.dist_empty);
 
                     // show data when the walk is done!
-                    Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
+                    // Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
 
                     NavController controller = NavHostFragment.findNavController(requireParentFragment());
                     if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
@@ -122,18 +126,16 @@ public class WalkFragment extends Fragment {
 
         // get height from SharedPreferences and calculate stride distance
         final int heightInInches = saveData.getHeight();
-        final double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
 
         // update the current step count and distance walked on the screen
         walkViewModel.getWalkSteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
             public void onChanged(@Nullable Long num) {
-
                 if (num == null) {
                     num = 0L;
                 }
 
-                double dist = strideDistInFt * num / 5280.0;
+                double dist = getStepDistanceInMiles(heightInInches, num);
 
                 walkSteps.setText(String.format(Locale.ENGLISH, "%d", num));
                 walkDist.setText(String.format(Locale.ENGLISH, "%.2f mi", dist));
@@ -150,6 +152,44 @@ public class WalkFragment extends Fragment {
 
         return root;
     }
+
+    /**
+     * return calculated total step distance using height and step count
+     */
+    public double getStepDistanceInMiles(int heightInInches, Long stepCount) {
+        double strideDistInFt = (0.413 * (double) heightInInches) / 12.0;
+        return (strideDistInFt * (double) stepCount) / 5280.0;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.d("Opening fragment", "mock walk");
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflator) {
+        Log.d("Mock Walk", "creating options menu");
+
+        inflator.inflate(R.menu.action_bar_mock_walk, menu);
+        super.onCreateOptionsMenu(menu, inflator);
+
+        // find action for navigating to the mock walk screen from action bar
+        MenuItem mockWalkAction = menu.findItem(R.id.menu_mock_walk_action);
+        mockWalkAction.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // navigate to mock walk screen on click
+                NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                if(controller.getCurrentDestination().getId() == R.id.navigation_walk) {
+                    controller.navigate(R.id.action_navigation_walk_to_mockWalkFragment);
+                }
+
+                return true;
+            }
+        });
+    }
+
 
     public void runStartSequence(Button btStart) {
         walkViewModel.runStopWatch();

@@ -92,8 +92,8 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
             holder.favoriteButton.setBackgroundResource(R.drawable.ic_empty_star);
         }
 
-
-        holder.trailName.setText(items.get(position).getName());
+        String features = " " + getFeaturesString(items.get(position));
+        holder.trailName.setText(items.get(position).getName() + features);
 
         Route currRoute = items.get(position);
         Walk walkInCurrRoute = items.get(position).getWalk();
@@ -127,5 +127,69 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
 
     public void updateData(ArrayList<Route> data) {
         this.items = data;
+    }
+
+    private String getFeaturesString(Route route) {
+        String features = "";
+
+        // difficulty
+        switch (route.getFeatures().getLevel()) {
+            case 1:
+                features += "\uD83C\uDDEA ";
+                break;
+            case 2:
+                features += "\uD83C\uDDF2 ";
+                break;
+            case 3:
+                features += "\uD83C\uDDED ";
+                break;
+            default:
+        }
+
+        // one way or circular
+        switch(route.getFeatures().getDirectionType()) {
+            case 1:
+                features += "\u2197\ufe0f ";
+                break;
+            case 2:
+                features += "\uD83D\uDD04 ";
+                break;
+            default:
+        }
+
+        // flat/hilly
+        switch (route.getFeatures().getTerrain()) {
+            case 1:
+                features += "\uD83C\uDDEB ";
+                break;
+            case 2:
+                features += "\u26f0\ufe0f ";
+                break;
+            default:
+        }
+
+        // street/trail
+        switch (route.getFeatures().getType()) {
+            case 1:
+                features += "\u2796 ";
+                break;
+            case 2:
+                features += "\uD83C\uDF32 ";
+                break;
+            default:
+        }
+
+        // even/not even
+        switch (route.getFeatures().getSurface()) {
+            case 1:
+                features += "\u2696\ufe0f ";
+                break;
+            case 2:
+                features += "\u3030\ufe0f ";
+                break;
+            default:
+        }
+
+        return features;
     }
 }
