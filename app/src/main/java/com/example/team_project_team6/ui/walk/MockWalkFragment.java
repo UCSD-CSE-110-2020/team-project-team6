@@ -74,7 +74,7 @@ public class MockWalkFragment extends Fragment {
                     mock_btAddSteps.setVisibility(View.VISIBLE);
                     walkViewModel.startWalking();
 
-                    Calendar startTime = Walk.getWalkStartTimeInCalendar(mock_walkTime.getText().toString());
+                    Calendar startTime = Walk.convertWalkStartTimeStringToCalendar(Calendar.getInstance(TimeZone.getTimeZone("PST")), mock_walkTime.getText().toString());
                     walk.setStartTime(startTime);
                     mock_btStart.setText(R.string.bt_stop);
                 } else {

@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -24,6 +23,7 @@ import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
+import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -58,22 +58,23 @@ public class WalkFragment extends Fragment {
             btStart.setText(R.string.bt_start);
         }
 
+        RouteDetailsViewModel routeViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        if (routeViewModel.getIsWalkFromRouteDetails()) {
+            runStartSequence(mainActivity, btStart);
+        }
+
         btStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // if user is not currently on a walk when button is pressed, initialize stopwatch,
                 // set mode to walking, and get the time of the start of the walk
                 if(!walkViewModel.isCurrentlyWalking().getValue()) {
-                    mainActivity.runStopWatch();
-                    walkViewModel.startWalking();
+                    runStartSequence(mainActivity, btStart);
                     walk.setStartTime(Calendar.getInstance());
-                    btStart.setText(R.string.bt_stop);
 
                 } else {
                     // if user presses button while walk is in progress, end the walk and stop the stopwatch
-                    walkViewModel.endWalking();
-                    btStart.setText(R.string.bt_start);
-                    mainActivity.stopWatch();
+                    runStopSequence(mainActivity, btStart);
 
                     // get the duration, step count, and distance
                     String duration = lbStopWatch.getText().toString();
@@ -166,4 +167,15 @@ public class WalkFragment extends Fragment {
     }
 
 
+    public void runStartSequence(MainActivity mainActivity, Button btStart) {
+        mainActivity.runStopWatch();
+        walkViewModel.startWalking();
+        btStart.setText(R.string.bt_stop);
+    }
+
+    public void runStopSequence(MainActivity mainActivity, Button btStart) {
+        mainActivity.stopWatch();
+        walkViewModel.endWalking();
+        btStart.setText(R.string.bt_start);
+    }
 }

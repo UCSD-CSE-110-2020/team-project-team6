@@ -12,6 +12,7 @@ import com.example.team_project_team6.model.Walk;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -32,12 +33,13 @@ public class RoutesViewModel extends ViewModel {
         f.setTerrain(1);
         f.setType(1);
         data.add(new Route(w, "University of California, San Diego, EBU3B", null, "Test Walk Notes", f, "Mission Bay"));
-        data.add(new Route(new Walk(), "starting_point", Calendar.getInstance(), "", new Features(0, 0, 0, true, 0, 0), "Park Park"));
+        data.add(new Route(new Walk(), "starting_point", Calendar.getInstance(), "", new Features(0, 0, 0, true, 0, 0), "Aardvark Park"));
 
         mRoutes = new MutableLiveData<>(data);
     }
 
-    LiveData<ArrayList<Route>> getRouteData() {
+    // Routes are displayed in the same order they are present in
+    public LiveData<ArrayList<Route>> getRouteData() {
         return mRoutes;
     }
 

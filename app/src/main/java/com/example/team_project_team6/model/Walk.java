@@ -13,14 +13,11 @@ public class Walk {
     private long step;
 
     public Walk () {
+        Log.i("Walk constructor Walk() ", "creating new Walk object");
         startTime = Calendar.getInstance();
         duration = "";
         dist = 0;
         step = 0;
-    }
-
-    public Walk (Calendar startTime) {
-        this.setStartTime(startTime);
     }
 
     public String getDuration() {
@@ -34,12 +31,20 @@ public class Walk {
     }
 
     public Calendar getStartTime() {
-        Log.i("getStartTime from Walk", "return: " + startTime);
+        if (startTime != null) {
+            Log.i("getStartTime from Walk", "return: " + startTime);
+        } else {
+            Log.i("getStartTime from Walk", "return: null");
+        }
         return startTime;
     }
 
     public void setStartTime(Calendar startTime) {
-        Log.i("setStartTime from Walk", "value: " + startTime);
+        if (startTime != null) {
+            Log.i("setStartTime from Walk", "value: " + startTime);
+        } else {
+            Log.i("setStartTime from Walk", "value: null");
+        }
         this.startTime = startTime;
     }
 
@@ -64,11 +69,9 @@ public class Walk {
         this.step = step;
     }
 
-
-    public static Calendar getWalkStartTimeInCalendar(String stopWatchString) {
-        Log.d("MockWalkFragment parseStopWatchTime on: ", stopWatchString);
+    public static Calendar convertWalkStartTimeStringToCalendar(Calendar now, String stopWatchString) {
+        Log.i("MockWalkFragment parseStopWatchTime on: ", stopWatchString);
         String zone = "PST";
-        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("PST"));
 
         int month = now.get(Calendar.MONTH);
         int year = now.get(Calendar.YEAR);
@@ -103,17 +106,26 @@ public class Walk {
     }
 
     public static String getWalkDuration(Calendar startTimeCal, String endTimeString) {
-        Calendar endTimeCal = getWalkStartTimeInCalendar(endTimeString);
+        Calendar endTimeCal = convertWalkStartTimeStringToCalendar(startTimeCal, endTimeString);
 
         int hours = endTimeCal.get(Calendar.HOUR_OF_DAY) - startTimeCal.get(Calendar.HOUR_OF_DAY);
         int minutes = endTimeCal.get(Calendar.MINUTE) - startTimeCal.get(Calendar.MINUTE);
         int seconds = endTimeCal.get(Calendar.SECOND) - startTimeCal.get(Calendar.SECOND);
 
         StringBuilder sb = new StringBuilder();
+        if(hours < 10) {
+            sb.append(0);
+        }
         sb.append(hours);
         sb.append(':');
+        if(minutes < 10) {
+            sb.append(0);
+        }
         sb.append(minutes);
         sb.append(':');
+        if(seconds < 10) {
+            sb.append(0);
+        }
         sb.append(seconds);
 
         return sb.toString();
@@ -125,7 +137,7 @@ public class Walk {
     }
 
     public static Long parseStepCountStringToLong(String stepCountString) {
-        Log.d("parseStepCountStringToLong", "Cast step count from String to Long");
+        Log.i("parseStepCountStringToLong", "Cast step count from String to Long");
         Long stepCountLong = 0l;
         if(stepCountString != null) {
             stepCountLong = Long.parseLong(stepCountString);
@@ -135,7 +147,12 @@ public class Walk {
 
     @Override
     public String toString() {
-        return String.format(Locale.ENGLISH, "Steps: %d, Distance: %f, Start Time: %s, Duration: %s",
-                step, dist, startTime, duration);
+        if (startTime != null) {
+            return String.format(Locale.ENGLISH, "Steps: %d, Distance: %f, Start Time: %s, Duration: %s",
+                    step, dist, startTime, duration);
+        } else {
+            return String.format(Locale.ENGLISH, "Steps: %d, Distance: %f, Start Time: null, Duration: %s",
+                    step, dist, duration);
+        }
     }
 }

@@ -7,6 +7,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
 import com.example.team_project_team6.fitness.FitnessService;
 import com.example.team_project_team6.fitness.FitnessServiceFactory;
 import com.example.team_project_team6.fitness.GoogleFitAdapter;
@@ -16,12 +23,6 @@ import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
 
