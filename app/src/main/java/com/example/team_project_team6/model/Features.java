@@ -13,6 +13,7 @@ public class Features {
     private int surface; // even or uneven
 
     public Features() {
+        Log.i("empty Features constructor", "Initializing all values");
         level = 0;
         directionType = 0;
         terrain = 0;
@@ -22,6 +23,7 @@ public class Features {
     }
 
     public Features(int level, int directionType, int terrain, boolean isFavorite, int type, int surface) {
+        Log.i("Features constructor with all parameters", "Initializing all values");
         this.level = level;
         this.directionType = directionType;
         this.terrain = terrain;
@@ -41,6 +43,7 @@ public class Features {
     }
 
     public void setLevel(String level) {
+        Log.i("setLevel from Features", "value: " + level);
         switch (level) {
             case "Easy":
                 this.level = 1;
@@ -68,6 +71,7 @@ public class Features {
     }
 
     public void setDirectionType(String directionType) {
+        Log.i("setDirectionType from Features", "value: " + directionType);
         switch (directionType) {
             case "Loop":
                 this.directionType = 1;
@@ -92,6 +96,7 @@ public class Features {
     }
 
     public void setTerrain(String terrain) {
+        Log.i("setTerrain from Features", "value: " + terrain);
         switch (terrain) {
             case "Flat":
                 this.terrain = 1;
@@ -126,6 +131,7 @@ public class Features {
     }
 
     public void setType(String type) {
+        Log.i("setType from Features", "value: " + type);
         switch (type) {
             case "Street":
                 this.type = 1;
@@ -150,6 +156,7 @@ public class Features {
     }
 
     public void setSurface(String surface) {
+        Log.i("setSurface from Features", "value: " + surface);
         switch (surface) {
             case "Even":
                 this.surface = 1;

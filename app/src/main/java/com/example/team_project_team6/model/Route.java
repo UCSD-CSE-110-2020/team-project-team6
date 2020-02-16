@@ -17,6 +17,7 @@ public class Route {
 
 
     public Route() {
+        Log.i("empty Route constructor", "Initializing all values");
         this.walk = null;
         this.startPoint = "";
         this.lastStartDate = null;
@@ -27,6 +28,7 @@ public class Route {
 
     // If never walked, set lastStartDate to null
     public Route(Walk walk, String startPoint, Calendar lastStartDate, String notes, Features features, String name) {
+        Log.i("Route constructor with all features", "Initializing all values");
         this.walk = walk;
         this.startPoint = startPoint;
         this.lastStartDate = lastStartDate;
