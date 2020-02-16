@@ -26,6 +26,7 @@ import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
+import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 
 import java.util.Calendar;
@@ -36,6 +37,7 @@ public class MockWalkFragment extends Fragment {
 
     private WalkViewModel walkViewModel;
     private RouteDetailsViewModel routeDetailsViewModel;
+    private HomeViewModel homeViewModel;
 
     // TODO hook to home page
     // TODO hook back from route details page
@@ -44,10 +46,13 @@ public class MockWalkFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         walkViewModel = new ViewModelProvider(requireActivity()).get(WalkViewModel.class);
         routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_mock_walk, container, false);
         setHasOptionsMenu(true);
         walkViewModel.setIsMockWalk(true);
 
+        final TextView mock_walkTitle = root.findViewById(R.id.mock_text_new_walk);
         final Button mock_btStart = root.findViewById(R.id.mock_btStart);
         final Button mock_btAddSteps = root.findViewById(R.id.mock_btMockAddSteps);
         final TextView mock_walkDist = root.findViewById(R.id.mock_lbDistance);
@@ -59,7 +64,8 @@ public class MockWalkFragment extends Fragment {
 
         updateDisplay(mock_btStart, mock_btAddSteps, mock_walkDist, mock_walkSteps, mock_walkTime);
 
-        if (routeDetailsViewModel.getIsWalkFromRouteDetails()) {
+        if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
+            mock_walkTitle.setText(routeDetailsViewModel.getRoute().getName());
             runStartSequence(mock_btStart, mock_btAddSteps);
         }
 
@@ -135,6 +141,7 @@ public class MockWalkFragment extends Fragment {
         btStart.setText(R.string.bt_start);
         // reset values
         walkViewModel.resetToZero();
+
     }
 
     public void setWalkInfo(Walk walk, TextView mock_walkDist, TextView mock_walkSteps, TextView mock_walkTime) {
@@ -149,6 +156,8 @@ public class MockWalkFragment extends Fragment {
         walk.setDuration(duration);
         walk.setStep(stepCount);
         walk.setDist(distance);
+
+        homeViewModel.updateDailySteps(homeViewModel.getDailyStepCount() + stepCount);
     }
 
     public void navigateFromWalkFragment(Walk walk, SaveData saveData) {
