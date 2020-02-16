@@ -2,7 +2,10 @@ package com.example.team_project_team6.ui.walk;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
+import android.widget.TextView;
 
+import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.StopWatch;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -14,14 +17,18 @@ public class WalkViewModel extends AndroidViewModel {
 
     private MutableLiveData<String> stopWatch;
     private MutableLiveData<Long> mWalkSteps;
+    private MutableLiveData<Boolean> isMockWalk;
     private MutableLiveData<Boolean> mCurrentlyWalking;
+    private MutableLiveData<Boolean> mCurrentlyWalkingMock;
     private StopWatch sw;
     private boolean isWalking;
     private Context context;
 
     public WalkViewModel(Application application) {
         super(application);
+        isMockWalk = new MutableLiveData<>(false);
         mCurrentlyWalking = new MutableLiveData<>(false);
+        mCurrentlyWalkingMock = new MutableLiveData<>(false);
         mWalkSteps = new MutableLiveData<>();
         stopWatch = new MutableLiveData<>();
         stopWatch.setValue("00:00:00");
@@ -33,14 +40,31 @@ public class WalkViewModel extends AndroidViewModel {
      * informs observers that walk is underway by updating to the stream
      */
     void startWalking() {
-        mCurrentlyWalking.postValue(true);
+        if(!getIsMockWalk()) {
+            mCurrentlyWalking.postValue(true);
+        } else {
+            mCurrentlyWalkingMock.postValue(true);
+        }
     }
 
     /**
      * informs observers that walk is not underway by updating to the stream
      */
     void endWalking() {
-        mCurrentlyWalking.postValue(false);
+        if(!getIsMockWalk()) {
+            mCurrentlyWalking.postValue(false);
+        } else {
+            mCurrentlyWalkingMock.postValue(false);
+        }
+
+    }
+
+    void setIsMockWalk(boolean isMockWalk) {
+        this.isMockWalk.postValue(isMockWalk);
+    }
+
+    public boolean getIsMockWalk() {
+        return this.isMockWalk.getValue();
     }
 
     /**
@@ -48,7 +72,12 @@ public class WalkViewModel extends AndroidViewModel {
      * @return livedata object for walking status
      */
     LiveData<Boolean> isCurrentlyWalking() {
-        return mCurrentlyWalking;
+        if(!getIsMockWalk()) {
+            return mCurrentlyWalking;
+        } else {
+            return mCurrentlyWalkingMock;
+        }
+
     }
 
     /**
@@ -85,6 +114,11 @@ public class WalkViewModel extends AndroidViewModel {
 
     public boolean isWalking() {
         return isWalking;
+    }
+
+    public void resetToZero() {
+        mWalkSteps.postValue(0l);
+        updateStopWatch("00:00:00");
     }
 
     /**
