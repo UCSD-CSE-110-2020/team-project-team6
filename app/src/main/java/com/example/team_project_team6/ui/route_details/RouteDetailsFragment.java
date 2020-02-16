@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
 import com.google.android.flexbox.FlexboxLayout;
@@ -157,7 +156,6 @@ public class RouteDetailsFragment extends Fragment {
                 if (controller.getCurrentDestination().getId() == R.id.routeDetailsFragment) {
                     controller.navigate(R.id.action_routeDetailsFragment_to_navigation_walk);
 
-
                     mViewModel.setIsWalkFromRouteDetails(true);
                     mViewModel.setRoute(route);
                 }
@@ -197,7 +195,7 @@ public class RouteDetailsFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflator) {
         Log.d("Route_Details", "creating options menu");
 
-        inflator.inflate(R.menu.action_bar, menu);
+        inflator.inflate(R.menu.action_bar_route_details, menu);
         super.onCreateOptionsMenu(menu, inflator);
 
         menu.findItem(R.id.menu_filled_star).setVisible(is_favorite);

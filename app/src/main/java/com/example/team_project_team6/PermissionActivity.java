@@ -7,14 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class PermissonActivity extends AppCompatActivity {
+public class PermissionActivity extends AppCompatActivity {
 
     private Button btContinue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_permisson);
+        setContentView(R.layout.activity_permission);
 
         btContinue = findViewById(R.id.btContinue);
         btContinue.setOnClickListener(new View.OnClickListener() {

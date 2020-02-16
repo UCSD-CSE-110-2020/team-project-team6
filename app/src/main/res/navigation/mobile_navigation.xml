@@ -21,6 +21,12 @@
         android:label="@string/title_walk"
         tools:layout="@layout/fragment_walk" >
         <action
+            android:id="@+id/action_navigation_walk_to_mockWalkFragment"
+            app:destination="@id/mockWalkFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
+        <action
             android:id="@+id/action_navigation_walk_to_newRouteFragment"
             app:destination="@id/newRouteFragment"
             app:enterAnim="@anim/fragment_open_enter"
@@ -58,6 +64,17 @@
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"
             app:launchSingleTop="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mockWalkFragment"
+        android:name="com.example.team_project_team6.ui.walk.MockWalkFragment"
+        android:label="Mock Walk"
+        tools:layout="@layout/fragment_mock_walk" >
+        <action
+            android:id="@+id/action_mockWalkFragment_to_navigation_walk"
+            app:destination="@id/navigation_walk"
+            tools:layout="@layout/fragment_routes" />
         <action
             android:id="@+id/action_navigation_routes_to_newRouteFragment"
             app:destination="@id/newRouteFragment"
