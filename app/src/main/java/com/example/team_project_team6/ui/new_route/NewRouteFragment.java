@@ -1,6 +1,9 @@
 package com.example.team_project_team6.ui.new_route;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -38,7 +41,7 @@ public class NewRouteFragment extends Fragment {
     private RadioButton radHilly;
     private RadioButton radStreet;
     private RadioButton radEven;
-
+    private RadioButton radLoop;
 
 
     @Override
@@ -61,6 +64,7 @@ public class NewRouteFragment extends Fragment {
         final RadioGroup rgHilly = root.findViewById(R.id.radioGroup2);
         final RadioGroup rgStreet = root.findViewById(R.id.radioGroup3);
         final RadioGroup rgEven = root.findViewById(R.id.radioGroup4);
+        final RadioGroup rgLoop = root.findViewById(R.id.radioGroup5);
 
         final Button btDone = root.findViewById(R.id.btDone);
 
@@ -74,7 +78,7 @@ public class NewRouteFragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // checkedId is the RadioButton selected
                 radDiff = root.findViewById(checkedId);
-                Toast.makeText(getActivity(), "Selected: " + radDiff.getText(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Selected: " + radDiff.getText(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -105,56 +109,73 @@ public class NewRouteFragment extends Fragment {
             }
         });
 
+        rgLoop.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // checkedID if the RadioButton is selected
+                radLoop = root.findViewById(checkedId);
+
+            }
+        });
 
         btDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(txtRouteNme.getText().toString().isEmpty()){
+                    txtRouteNme.requestFocus();
+                    Toast alert =  Toast.makeText(getActivity(), getString(R.string.alert_route_name), Toast.LENGTH_SHORT);
+                    int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(),R.color.colorAccent, null);
+                    alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
+                    alert.show();
+                }else if(txtStartingPoint.getText().toString().isEmpty()){
+                    txtStartingPoint.requestFocus();
+                    Toast alert =  Toast.makeText(getActivity(), getString(R.string.alert_starting_point), Toast.LENGTH_SHORT);
+                    int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(),R.color.colorAccent, null);
+                    alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
+                    alert.show();
+                }else {
                 // save all of the features recorded by the user
-                Features features = new Features();
-                features.setLevel(rgDiff.getCheckedRadioButtonId());
-//                features.setDirectionType(); // TODO add radio button for this
-                features.setTerrain(rgHilly.getCheckedRadioButtonId());
-                features.setFavorite(false);
-                features.setType(rgStreet.getCheckedRadioButtonId());
-                features.setSurface(rgEven.getCheckedRadioButtonId());
+                    Features features = new Features();
+                    features.setLevel(rgDiff.getCheckedRadioButtonId());
+    //                features.setDirectionType(); // TODO add radio button for this
+                    features.setTerrain(rgHilly.getCheckedRadioButtonId());
+                    features.setFavorite(false);
+                    features.setType(rgStreet.getCheckedRadioButtonId());
+                    features.setSurface(rgEven.getCheckedRadioButtonId());
 
-                Route route = new Route();
+                    Route route = new Route();
 
 
+                    // if a new route is being created after redirection from the walk fragment, retrieve
+                    // the walk's data to save inside the route
+                    if (routeDetailsViewModel.getIsWalkFromRouteDetails()) {
+                        Walk walk = saveData.getWalk();
+                        route.setWalk(walk);
+                        route.setLastStartDate(walk.getStartTime());
 
-                // if a new route is being created after redirection from the walk fragment, retrieve
-                // the walk's data to save inside the route
-                if (routeDetailsViewModel.getIsWalkFromRouteDetails()) {
-                    Walk walk = saveData.getWalk();
-                    route.setWalk(walk);
-                    route.setLastStartDate(walk.getStartTime());
+                    // otherwise, create a new walk object and save that inside route along with an unset
+                    // last start date
+                    } else {
+                        route.setWalk(new Walk());
+                        route.setLastStartDate(null);
+                    }
 
-                // otherwise, create a new walk object and save that inside route along with an unset
-                // last start date
-                } else {
-                    route.setWalk(new Walk());
-                    route.setLastStartDate(null);
+                    // update remaining parameters of route object
+                    route.setName(txtRouteNme.getText().toString());
+                    route.setStartPoint(txtStartingPoint.getText().toString());
+                    route.setNotes(txtNotes.getText().toString());
+                    route.setFeatures(features);
+                    route.setWalk(saveData.getWalk());
+
+                    saveData.saveRoute(route); // save route to SharedPreferences
+
+                    //come back to route
+                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                    if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
+                        controller.navigate(R.id.action_newRouteFragment_to_navigation_routes);
+                    }
                 }
-
-                // update remaining parameters of route object
-                route.setName(txtRouteNme.getText().toString());
-                route.setStartPoint(txtStartingPoint.getText().toString());
-                route.setNotes(txtNotes.getText().toString());
-                route.setFeatures(features);
-                route.setWalk(saveData.getWalk());
-
-                saveData.saveRoute(route); // save route to SharedPreferences
-
-                //showing up bottom navigation bar
-                getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
-
-                //come back to route
-                NavController controller = NavHostFragment.findNavController(requireParentFragment());
-
-                if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
-                    controller.navigate(R.id.action_newRouteFragment_to_navigation_routes);
-                }
-
             }
         });
 
@@ -163,5 +184,10 @@ public class NewRouteFragment extends Fragment {
         return root;
     }
 
-
+    @Override
+    public void onStop(){
+        super.onStop();
+        //showing up bottom bar
+        getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
+    }
 }
