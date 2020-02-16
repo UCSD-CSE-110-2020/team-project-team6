@@ -108,7 +108,7 @@ public class RoutesFragmentTest {
     public void DisplaySameOrderTest() {
         Route mission = new Route(new Walk(), "", null, "", new Features(), "Mission Bay");
         Route aardvark_park = new Route(new Walk(), "", null, "", new Features(), "Aardvark Park");
-        ArrayList< Route > data = new ArrayList<Route>();
+        ArrayList<Route> data = new ArrayList<Route>();
         data.add(aardvark_park);
         data.add(mission);
 

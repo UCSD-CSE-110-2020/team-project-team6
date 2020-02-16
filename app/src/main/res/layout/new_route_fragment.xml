@@ -56,6 +56,8 @@
             android:layout_marginTop="12dp"
             android:ems="10"
             android:inputType="textPersonName"
+            android:textColorHighlight="@android:color/black"
+            android:textColorLink="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
