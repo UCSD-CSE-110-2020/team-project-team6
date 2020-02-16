@@ -130,13 +130,6 @@ public class NewRouteFragment extends Fragment {
                     alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
                     alert.show();
 
-                } else if(txtStartingPoint.getText().toString().isEmpty()) {
-                    txtStartingPoint.requestFocus();
-                    Toast alert =  Toast.makeText(getActivity(), getString(R.string.alert_starting_point), Toast.LENGTH_SHORT);
-                    int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(),R.color.colorAccent, null);
-                    alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
-                    alert.show();
-
                 } else {
                 // save all of the features recorded by the user
                     Features features = new Features();
@@ -175,7 +168,7 @@ public class NewRouteFragment extends Fragment {
 
                     // if a new route is being created after redirection from the walk fragment, retrieve
                     // the walk's data to save inside the route
-                    if (routeDetailsViewModel.getIsWalkFromRouteDetails()) {
+                    if (!routeDetailsViewModel.getIsWalkFromRouteDetails()) {
                         Walk walk = saveData.getWalk();
                         route.setWalk(walk);
                         route.setLastStartDate(walk.getStartTime());
