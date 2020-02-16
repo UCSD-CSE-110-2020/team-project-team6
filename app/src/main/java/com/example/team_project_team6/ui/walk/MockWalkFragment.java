@@ -38,6 +38,9 @@ public class MockWalkFragment extends Fragment {
     private RouteDetailsViewModel routeDetailsViewModel;
     private boolean isMockWalk;
 
+    // TODO hook to home page
+    // TODO hook back from route details page
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         isMockWalk = true;
@@ -98,7 +101,7 @@ public class MockWalkFragment extends Fragment {
 
                     // show data when the walk is done!
                     // Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %.2f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
-                    walkViewModel.resetStepsToZero();
+                    walkViewModel.resetToZero();
                     navigateFromWalkFragment(walk, saveData);
                 }
             }
@@ -115,7 +118,7 @@ public class MockWalkFragment extends Fragment {
             btStart.setText(R.string.bt_stop);
         } else {
             mock_btAddSteps.setVisibility(View.INVISIBLE);
-            walkViewModel.resetStepsToZero();
+            walkViewModel.resetToZero();
             btStart.setText(R.string.bt_start);
         }
     }
@@ -134,7 +137,7 @@ public class MockWalkFragment extends Fragment {
         walkViewModel.endWalking(isMockWalk);
         btStart.setText(R.string.bt_start);
         // reset values
-        walkViewModel.resetStepsToZero();
+        walkViewModel.resetToZero();
     }
 
     public void setWalkInfo(Walk walk, TextView walkDist, TextView walkSteps, TextView mock_walkTime) {

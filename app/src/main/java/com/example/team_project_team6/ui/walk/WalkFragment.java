@@ -80,7 +80,7 @@ public class WalkFragment extends Fragment {
                     // Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
 
                     // reset values to 0
-                    walkViewModel.resetStepsToZero();
+                    walkViewModel.resetToZero();
                     navigateFromWalkFragment(walk, saveData);
                 }
             }
@@ -124,7 +124,7 @@ public class WalkFragment extends Fragment {
         if(walkViewModel.isCurrentlyWalking(isMockWalk).getValue()) {
             btStart.setText(R.string.bt_stop);
         } else {
-            walkViewModel.resetStepsToZero();
+            walkViewModel.resetToZero();
             btStart.setText(R.string.bt_start);
         }
     }

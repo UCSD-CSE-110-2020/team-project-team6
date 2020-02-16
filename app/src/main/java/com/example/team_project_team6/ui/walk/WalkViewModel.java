@@ -106,8 +106,9 @@ public class WalkViewModel extends AndroidViewModel {
         return isWalking;
     }
 
-    public void resetStepsToZero() {
+    public void resetToZero() {
         mWalkSteps.postValue(0l);
+        updateStopWatch("00:00:00");
     }
 
     /**
