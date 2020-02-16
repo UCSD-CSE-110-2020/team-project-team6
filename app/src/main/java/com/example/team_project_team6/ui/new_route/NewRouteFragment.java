@@ -2,6 +2,7 @@ package com.example.team_project_team6.ui.new_route;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -50,7 +51,7 @@ public class NewRouteFragment extends Fragment {
         mNewRouteModel = new ViewModelProvider(requireActivity()).get(NewRouteViewModel.class);
         final View root =  inflater.inflate(R.layout.new_route_fragment, container, false);
 
-        final MainActivity mainActivity = (MainActivity) getActivity();
+        final Context mainActivity = getActivity();
         final SaveData saveData = new SaveData(mainActivity);
 
         //hide bottom navigation bar
@@ -122,27 +123,52 @@ public class NewRouteFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(txtRouteNme.getText().toString().isEmpty()){
+                if(txtRouteNme.getText().toString().isEmpty()) {
                     txtRouteNme.requestFocus();
                     Toast alert =  Toast.makeText(getActivity(), getString(R.string.alert_route_name), Toast.LENGTH_SHORT);
                     int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(),R.color.colorAccent, null);
                     alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
                     alert.show();
-                }else if(txtStartingPoint.getText().toString().isEmpty()){
+
+                } else if(txtStartingPoint.getText().toString().isEmpty()) {
                     txtStartingPoint.requestFocus();
                     Toast alert =  Toast.makeText(getActivity(), getString(R.string.alert_starting_point), Toast.LENGTH_SHORT);
                     int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(),R.color.colorAccent, null);
                     alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
                     alert.show();
-                }else {
+
+                } else {
                 // save all of the features recorded by the user
                     Features features = new Features();
-                    features.setLevel(rgDiff.getCheckedRadioButtonId());
-    //                features.setDirectionType(); // TODO add radio button for this
-                    features.setTerrain(rgHilly.getCheckedRadioButtonId());
+
+                    if(radDiff != null) {
+                        String lvlType = radDiff.getText().toString();
+                        features.setLevel(lvlType);
+                    }
+
+                    if(radLoop != null) {
+                        String dirType = radLoop.getText().toString();
+                        features.setDirectionType(dirType);
+                    }
+
+                    if(radHilly != null) {
+                        String terrainType = radHilly.getText().toString();
+                        features.setTerrain(terrainType);
+                    }
+
                     features.setFavorite(false);
-                    features.setType(rgStreet.getCheckedRadioButtonId());
-                    features.setSurface(rgEven.getCheckedRadioButtonId());
+
+                    if(radStreet != null) {
+                        String typeType = radStreet.getText().toString();
+                        features.setType(typeType);
+                    }
+
+                    if (radEven != null) {
+                        String surfaceType = radEven.getText().toString();
+                        features.setSurface(surfaceType);
+                    }
+
+                    Log.i("value of Features in NewRouteFragment", features.toString());
 
                     Route route = new Route();
 
@@ -166,7 +192,6 @@ public class NewRouteFragment extends Fragment {
                     route.setStartPoint(txtStartingPoint.getText().toString());
                     route.setNotes(txtNotes.getText().toString());
                     route.setFeatures(features);
-                    route.setWalk(saveData.getWalk());
 
                     saveData.saveRoute(route); // save route to SharedPreferences
 

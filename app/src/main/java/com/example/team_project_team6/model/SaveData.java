@@ -10,13 +10,12 @@ import java.util.Set;
 import static android.content.Context.MODE_PRIVATE;
 
 public class SaveData {
-    private Context mainActivity;
     private Gson gson;
     private SharedPreferences spfsUser;
     private SharedPreferences spfsRoute;
 
-    public SaveData(Context mainActivity){
-        this.mainActivity = mainActivity;
+    public SaveData(Context mainActivity) {
+        Log.i("Creating new SaveData", "new SaveData with context: " + mainActivity.toString());
         gson = new Gson();
         spfsUser = mainActivity.getSharedPreferences("user_data", MODE_PRIVATE);
         spfsRoute = mainActivity.getSharedPreferences("route_data", MODE_PRIVATE);
@@ -66,6 +65,7 @@ public class SaveData {
     }
 
     public Set<String> getRouteNames() {
+        Log.i("Retrieving All Routes from SaveData", "Getting all Route names...");
         return spfsRoute.getAll().keySet();
     }
 
