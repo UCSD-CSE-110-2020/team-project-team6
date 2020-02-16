@@ -165,7 +165,10 @@ public class WalkFragment extends Fragment {
 
     public void navigateFromWalkFragment(Walk walk, SaveData saveData) {
         Log.i("WalkFragment", "navigation");
+        // stop the watch on navigation
+        walkViewModel.stopWatch();
         NavController controller = NavHostFragment.findNavController(requireParentFragment());
+        // previous screen was route details screen
         if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
             Route route = routeDetailsViewModel.getRoute();
             route.setWalk(walk);
