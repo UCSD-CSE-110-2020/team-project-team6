@@ -36,18 +36,17 @@ public class MockWalkFragment extends Fragment {
 
     private WalkViewModel walkViewModel;
     private RouteDetailsViewModel routeDetailsViewModel;
-    private boolean isMockWalk;
 
     // TODO hook to home page
     // TODO hook back from route details page
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        isMockWalk = true;
         walkViewModel = new ViewModelProvider(requireActivity()).get(WalkViewModel.class);
         routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_mock_walk, container, false);
         setHasOptionsMenu(true);
+        walkViewModel.setIsMockWalk(true);
 
         final Button mock_btStart = root.findViewById(R.id.mock_btStart);
         final Button mock_btAddSteps = root.findViewById(R.id.mock_btMockAddSteps);
@@ -84,7 +83,7 @@ public class MockWalkFragment extends Fragment {
             public void onClick(View view) {
                 // if user is not currently on a walk when button is pressed,
                 // set mode to walking, and get the time of the start of the walk
-                if(!walkViewModel.isCurrentlyWalking(isMockWalk).getValue()) {
+                if(!walkViewModel.isCurrentlyWalking().getValue()) {
                     runStartSequence(mock_btStart, mock_btAddSteps);
 
                     Calendar startTime = Walk.convertWalkStartTimeStringToCalendar(
@@ -93,16 +92,15 @@ public class MockWalkFragment extends Fragment {
                     walk.setStartTime(startTime);
 
                 } else {
-                    runStopSequence(mock_btStart, mock_btAddSteps, mock_walkDist, mock_walkSteps, mock_walkTime);
-
-                    // save the information about the walk inside of the walk object
-                    setWalkInfo(walk, mock_walkTime, mock_walkSteps, mock_walkDist);
-                    saveData.saveWalk(walk); // save walk into SharedPreferences
+                    // if user presses button while walk is in progress, end the walk
+                    runStopSequence(mock_btStart, mock_btAddSteps);
+                    setWalkInfo(walk, mock_walkDist, mock_walkSteps, mock_walkTime);
 
                     // show data when the walk is done!
                     // Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %.2f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
-                    walkViewModel.resetToZero();
                     navigateFromWalkFragment(walk, saveData);
+                    routeDetailsViewModel.setIsWalkFromRouteDetails(false);
+                    walkViewModel.resetToZero();
                 }
             }
         });
@@ -113,7 +111,7 @@ public class MockWalkFragment extends Fragment {
     public void updateDisplay(Button btStart, Button mock_btAddSteps, TextView mock_walkTime, TextView mock_walkSteps, TextView mock_walkDist) {
         Log.i("MockWalkFragment", "update start/stop button");
         // update text on walk screen button depending on whether or not user is on a walk
-        if(walkViewModel.isCurrentlyWalking(isMockWalk).getValue()) {
+        if(walkViewModel.isCurrentlyWalking().getValue()) {
             mock_btAddSteps.setVisibility(View.VISIBLE);
             btStart.setText(R.string.bt_stop);
         } else {
@@ -126,26 +124,25 @@ public class MockWalkFragment extends Fragment {
     public void runStartSequence(Button mock_btStart, Button mock_btAddSteps) {
         Log.i("MockWalkFragment", "start walk");
         mock_btAddSteps.setVisibility(View.VISIBLE);
-        walkViewModel.startWalking(isMockWalk);
+        walkViewModel.startWalking();
         mock_btStart.setText(R.string.bt_stop);
     }
 
-    public void runStopSequence(Button btStart, Button mock_btAddSteps,
-                                TextView mock_walkTime, TextView mock_walkSteps, TextView mock_walkDist) {
+    public void runStopSequence(Button btStart, Button mock_btAddSteps) {
         Log.i("MockWalkFragment", "stop walk");
         mock_btAddSteps.setVisibility(View.INVISIBLE);
-        walkViewModel.endWalking(isMockWalk);
+        walkViewModel.endWalking();
         btStart.setText(R.string.bt_start);
         // reset values
         walkViewModel.resetToZero();
     }
 
-    public void setWalkInfo(Walk walk, TextView walkDist, TextView walkSteps, TextView mock_walkTime) {
+    public void setWalkInfo(Walk walk, TextView mock_walkDist, TextView mock_walkSteps, TextView mock_walkTime) {
         Log.i("MockWalkFragment", "setWalkInfo");
         // get the duration, step count, and distance
         String duration = mock_walkTime.getText().toString();
-        long stepCount = Long.parseLong(walkSteps.getText().toString());
-        String[] distData = walkDist.getText().toString().split("\\s+");
+        long stepCount = Long.parseLong(mock_walkSteps.getText().toString());
+        String[] distData = mock_walkDist.getText().toString().split("\\s+");
         double distance = Double.parseDouble(distData[0]);
 
         // save the information about the walk inside of the walk object
@@ -162,17 +159,15 @@ public class MockWalkFragment extends Fragment {
             route.setWalk(walk);
             route.setLastStartDate(walk.getStartTime());
             saveData.saveRoute(route);
-            routeDetailsViewModel.setIsWalkFromRouteDetails(false);
             // go to Routes screen
-            if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
-                controller.navigate(R.id.action_navigation_walk_to_navigation_routes);
+            if (controller.getCurrentDestination().getId() == R.id.mockWalkFragment) {
+                controller.navigate(R.id.action_mockWalkFragment_to_navigation_routes);
             }
         } else {
             saveData.saveWalk(walk); // save walk into SharedPreferences
-            routeDetailsViewModel.setIsWalkFromRouteDetails(true);
             // go to newRouteFragment to save Walk in a Route object
-            if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
-                controller.navigate(R.id.action_navigation_walk_to_newRouteFragment);
+            if (controller.getCurrentDestination().getId() == R.id.mockWalkFragment) {
+                controller.navigate(R.id.action_mockWalkFragment_to_newRouteFragment);
             }
         }
     }

@@ -81,6 +81,18 @@
             android:id="@+id/action_mockWalkFragment_to_navigation_walk"
             app:destination="@id/navigation_walk"
             tools:layout="@layout/fragment_routes" />
+        <action
+            android:id="@+id/action_mockWalkFragment_to_newRouteFragment"
+            app:destination="@id/newRouteFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
+        <action
+            android:id="@+id/action_mockWalkFragment_to_navigation_routes"
+            app:destination="@id/navigation_routes"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
     </fragment>
 
     <fragment
@@ -91,6 +103,13 @@
         <action
             android:id="@+id/action_routeDetailsFragment_to_navigation_walk"
             app:destination="@id/navigation_walk"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
+
+        <action
+            android:id="@+id/action_routeDetailsFragment_to_mockWalkFragment"
+            app:destination="@id/mockWalkFragment"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"
             app:launchSingleTop="false" />

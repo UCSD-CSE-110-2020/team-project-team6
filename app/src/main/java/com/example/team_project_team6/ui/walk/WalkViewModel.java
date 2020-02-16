@@ -17,6 +17,7 @@ public class WalkViewModel extends AndroidViewModel {
 
     private MutableLiveData<String> stopWatch;
     private MutableLiveData<Long> mWalkSteps;
+    private MutableLiveData<Boolean> isMockWalk;
     private MutableLiveData<Boolean> mCurrentlyWalking;
     private MutableLiveData<Boolean> mCurrentlyWalkingMock;
     private StopWatch sw;
@@ -25,6 +26,7 @@ public class WalkViewModel extends AndroidViewModel {
 
     public WalkViewModel(Application application) {
         super(application);
+        isMockWalk = new MutableLiveData<>(false);
         mCurrentlyWalking = new MutableLiveData<>(false);
         mCurrentlyWalkingMock = new MutableLiveData<>(false);
         mWalkSteps = new MutableLiveData<>();
@@ -37,8 +39,8 @@ public class WalkViewModel extends AndroidViewModel {
     /**
      * informs observers that walk is underway by updating to the stream
      */
-    void startWalking(boolean isMockWalk) {
-        if(!isMockWalk) {
+    void startWalking() {
+        if(!getIsMockWalk()) {
             mCurrentlyWalking.postValue(true);
         } else {
             mCurrentlyWalkingMock.postValue(true);
@@ -48,8 +50,8 @@ public class WalkViewModel extends AndroidViewModel {
     /**
      * informs observers that walk is not underway by updating to the stream
      */
-    void endWalking(boolean isMockWalk) {
-        if(!isMockWalk) {
+    void endWalking() {
+        if(!getIsMockWalk()) {
             mCurrentlyWalking.postValue(false);
         } else {
             mCurrentlyWalkingMock.postValue(false);
@@ -57,12 +59,20 @@ public class WalkViewModel extends AndroidViewModel {
 
     }
 
+    void setIsMockWalk(boolean isMockWalk) {
+        this.isMockWalk.postValue(isMockWalk);
+    }
+
+    public boolean getIsMockWalk() {
+        return this.isMockWalk.getValue();
+    }
+
     /**
      * returns walking status stream to subscribe to
      * @return livedata object for walking status
      */
-    LiveData<Boolean> isCurrentlyWalking(boolean isMockWalk) {
-        if(!isMockWalk) {
+    LiveData<Boolean> isCurrentlyWalking() {
+        if(!getIsMockWalk()) {
             return mCurrentlyWalking;
         } else {
             return mCurrentlyWalkingMock;
