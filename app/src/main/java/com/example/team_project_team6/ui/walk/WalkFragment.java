@@ -191,8 +191,8 @@ public class WalkFragment extends Fragment {
     }
 
 
-    public void runStartSequence(MainActivity mainActivity, Button btStart) {
-        mainActivity.runStopWatch();
+    public void runStartSequence(Button btStart) {
+        walkViewModel.runStopWatch();
         walkViewModel.startWalking();
         btStart.setText(R.string.bt_stop);
     }
