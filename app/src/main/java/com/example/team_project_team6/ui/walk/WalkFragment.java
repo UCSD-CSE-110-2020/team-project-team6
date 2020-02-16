@@ -76,7 +76,7 @@ public class WalkFragment extends Fragment {
                 // if user is not currently on a walk when button is pressed, initialize stopwatch,
                 // set mode to walking, and get the time of the start of the walk
                 if(!walkViewModel.isCurrentlyWalking().getValue()) {
-                    //System.out.println("is there herrrrrrrrrrrre");
+                    System.out.println("is there herrrrrrrrrrrre");
                     runStartSequence(btStart);
                     walk.setStartTime(Calendar.getInstance());
 
