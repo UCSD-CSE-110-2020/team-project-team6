@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -153,6 +155,13 @@ public class RouteDetailsFragment extends Fragment {
         // navigate to walk screen and start a walk
         final NavController controller = NavHostFragment.findNavController(this);
         final FloatingActionButton btnDetailsStartWalk = root.findViewById(R.id.details_btn_start_walk);
+
+        if(walkViewModel.isWalking()) {
+            btnDetailsStartWalk.setEnabled(false);
+//            btnDetailsStartWalk.setBackgroundColor(Color.GRAY);
+            btnDetailsStartWalk.setSupportBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+        }
+
         btnDetailsStartWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
