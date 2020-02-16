@@ -79,7 +79,7 @@ public class MockWalkFragment extends Fragment {
         mock_btStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // if user is not currently on a walk when button is pressed, initialize stopwatch,
+                // if user is not currently on a walk when button is pressed,
                 // set mode to walking, and get the time of the start of the walk
                 if(!walkViewModel.isCurrentlyWalking(isMockWalk).getValue()) {
                     runStartSequence(mock_btStart, mock_btAddSteps);
@@ -90,7 +90,7 @@ public class MockWalkFragment extends Fragment {
                     walk.setStartTime(startTime);
 
                 } else {
-                    runStopSequence(mock_btStart, mock_btAddSteps, mock_walkTime, mock_walkSteps, mock_walkDist);
+                    runStopSequence(mock_btStart, mock_btAddSteps, mock_walkDist, mock_walkSteps, mock_walkTime);
 
                     // save the information about the walk inside of the walk object
                     setWalkInfo(walk, mock_walkTime, mock_walkSteps, mock_walkDist);
@@ -98,7 +98,7 @@ public class MockWalkFragment extends Fragment {
 
                     // show data when the walk is done!
                     // Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %.2f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
-
+                    walkViewModel.resetStepsToZero();
                     navigateFromWalkFragment(walk, saveData);
                 }
             }
@@ -115,7 +115,7 @@ public class MockWalkFragment extends Fragment {
             btStart.setText(R.string.bt_stop);
         } else {
             mock_btAddSteps.setVisibility(View.INVISIBLE);
-            resetStepsAndDistance(mock_walkTime, mock_walkSteps, mock_walkDist);
+            walkViewModel.resetStepsToZero();
             btStart.setText(R.string.bt_start);
         }
     }
@@ -134,14 +134,7 @@ public class MockWalkFragment extends Fragment {
         walkViewModel.endWalking(isMockWalk);
         btStart.setText(R.string.bt_start);
         // reset values
-        resetStepsAndDistance(mock_walkTime, mock_walkSteps, mock_walkDist);
-    }
-
-    public void resetStepsAndDistance(TextView mock_walkDist, TextView mock_walkSteps, TextView mock_walkTime) {
-        Log.i("MockWalkFragment", "reset step and distance to 0");
-        mock_walkTime.setText(R.string.time_empty);
-        mock_walkSteps.setText(R.string.walk_step_empty);
-        mock_walkDist.setText(R.string.dist_empty);
+        walkViewModel.resetStepsToZero();
     }
 
     public void setWalkInfo(Walk walk, TextView walkDist, TextView walkSteps, TextView mock_walkTime) {

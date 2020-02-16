@@ -2,7 +2,10 @@ package com.example.team_project_team6.ui.walk;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
+import android.widget.TextView;
 
+import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.StopWatch;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -101,6 +104,10 @@ public class WalkViewModel extends AndroidViewModel {
 
     public boolean isWalking() {
         return isWalking;
+    }
+
+    public void resetStepsToZero() {
+        mWalkSteps.postValue(0l);
     }
 
     /**

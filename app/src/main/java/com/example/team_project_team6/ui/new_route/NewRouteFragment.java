@@ -175,7 +175,7 @@ public class NewRouteFragment extends Fragment {
 
                     // if a new route is being created after redirection from the walk fragment, retrieve
                     // the walk's data to save inside the route
-                    if (routeDetailsViewModel.getIsWalkFromRouteDetails()) {
+                    if (!routeDetailsViewModel.getIsWalkFromRouteDetails()) {
                         Walk walk = saveData.getWalk();
                         route.setWalk(walk);
                         route.setLastStartDate(walk.getStartTime());

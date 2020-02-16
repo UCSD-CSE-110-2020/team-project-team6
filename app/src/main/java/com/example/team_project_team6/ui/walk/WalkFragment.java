@@ -76,13 +76,11 @@ public class WalkFragment extends Fragment {
                     runStopSequence(btStart);
                     setWalkInfo(walk, walkTime, walkSteps, walkDist);
 
-                    // reset values
-                    walkSteps.setText(R.string.walk_step_empty);
-                    walkDist.setText(R.string.dist_empty);
-
                     // show data when the walk is done!
                     // Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
 
+                    // reset values to 0
+                    walkViewModel.resetStepsToZero();
                     navigateFromWalkFragment(walk, saveData);
                 }
             }
@@ -95,14 +93,17 @@ public class WalkFragment extends Fragment {
         walkViewModel.getWalkSteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
             public void onChanged(@Nullable Long num) {
-                if (num == null) {
-                    num = 0L;
+                if(walkViewModel.isCurrentlyWalking(isMockWalk).getValue()) {
+                    if (num == null) {
+                        num = 0L;
+                    }
+
+                    double dist = Walk.getStepDistanceInMiles(heightInInches, num);
+
+                    walkSteps.setText(String.format(Locale.ENGLISH, "%d", num));
+                    walkDist.setText(String.format(Locale.ENGLISH, "%.2f mi", dist));
                 }
 
-                double dist = Walk.getStepDistanceInMiles(heightInInches, num);
-
-                walkSteps.setText(String.format(Locale.ENGLISH, "%d", num));
-                walkDist.setText(String.format(Locale.ENGLISH, "%.2f mi", dist));
             }
         });
 
@@ -123,7 +124,7 @@ public class WalkFragment extends Fragment {
         if(walkViewModel.isCurrentlyWalking(isMockWalk).getValue()) {
             btStart.setText(R.string.bt_stop);
         } else {
-            resetToZero(walkTime, walkSteps, walkDist);
+            walkViewModel.resetStepsToZero();
             btStart.setText(R.string.bt_start);
         }
     }
@@ -143,12 +144,13 @@ public class WalkFragment extends Fragment {
     }
 
 
-    public void resetToZero(TextView walkDist, TextView walkSteps, TextView walkTime) {
-        Log.i("MockWalkFragment", "reset step and distance to 0");
-        walkTime.setText(R.string.time_empty);
-        walkSteps.setText(R.string.walk_step_empty);
-        walkDist.setText(R.string.dist_empty);
-    }
+//    public void resetToZero(TextView walkDist, TextView walkSteps, TextView walkTime) {
+//        Log.i("MockWalkFragment", "reset step and distance to 0");
+//        walkTime.setText(R.string.time_empty);
+//        walkSteps.setText(R.string.walk_step_empty);
+//        walkDist.setText(R.string.dist_empty);
+//    }
+
     public void setWalkInfo(Walk walk, TextView lbStopWatch, TextView walkSteps, TextView walkDist) {
         Log.i("WalkFragment", "setWalkInfo");
         // get the duration, step count, and distance
@@ -165,8 +167,6 @@ public class WalkFragment extends Fragment {
 
     public void navigateFromWalkFragment(Walk walk, SaveData saveData) {
         Log.i("WalkFragment", "navigation");
-        // stop the watch on navigation
-        walkViewModel.stopWatch();
         NavController controller = NavHostFragment.findNavController(requireParentFragment());
         // previous screen was route details screen
         if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
@@ -174,14 +174,12 @@ public class WalkFragment extends Fragment {
             route.setWalk(walk);
             route.setLastStartDate(walk.getStartTime());
             saveData.saveRoute(route);
-            routeDetailsViewModel.setIsWalkFromRouteDetails(false);
             // go to Routes screen
             if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
                 controller.navigate(R.id.action_navigation_walk_to_navigation_routes);
             }
         } else {
             saveData.saveWalk(walk); // save walk into SharedPreferences
-            routeDetailsViewModel.setIsWalkFromRouteDetails(true);
             // go to newRouteFragment to save Walk in a Route object
             if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
                 controller.navigate(R.id.action_navigation_walk_to_newRouteFragment);
