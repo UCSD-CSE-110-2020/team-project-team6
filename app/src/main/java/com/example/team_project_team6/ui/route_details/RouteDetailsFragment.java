@@ -158,7 +158,6 @@ public class RouteDetailsFragment extends Fragment {
 
         if(walkViewModel.isWalking()) {
             btnDetailsStartWalk.setEnabled(false);
-//            btnDetailsStartWalk.setBackgroundColor(Color.GRAY);
             btnDetailsStartWalk.setSupportBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
         }
 

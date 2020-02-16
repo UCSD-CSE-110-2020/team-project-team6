@@ -51,8 +51,8 @@
     <string name="details_features_outandback">Out and Back</string>
     <string name="add_new_route">Add</string>
     <string name="title_activity_main2">Main2Activity</string>
-    <string name="lb_route_name"><font color="#e74c3c">*</font> Route Name</string>
-    <string name="lb_starting_point"><font color="#e74c3c">*</font> Starting Point</string>
+    <string name="lb_route_name"><font color="#e74c3c">*</font>Route Name</string>
+    <string name="lb_starting_point">Starting Point</string>
     <string name="alert_route_name">Please Enter The Route Name!</string>
     <string name="alert_starting_point">Please Enter The Starting Point!</string>
     <string name="lb_route_fea">Route Features</string>

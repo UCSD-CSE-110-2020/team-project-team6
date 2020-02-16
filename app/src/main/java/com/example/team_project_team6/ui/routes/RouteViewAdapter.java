@@ -32,6 +32,7 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
             super(itemView);
 
             trailName = itemView.findViewById(R.id.item_view_routename);
+            System.out.println(trailName);
             steps = itemView.findViewById(R.id.item_view_steps);
             distance = itemView.findViewById(R.id.item_view_dist);
             lastCompleted = itemView.findViewById(R.id.item_view_date);
