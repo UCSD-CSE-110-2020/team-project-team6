@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
@@ -164,7 +165,7 @@ public class MockWalkFragment extends Fragment {
 
     public void navigateFromWalkFragment(Walk walk, SaveData saveData) {
         Log.i("MockWalkFragment", "navigation");
-        NavController controller = NavHostFragment.findNavController(requireParentFragment());
+        NavController controller = Navigation.findNavController(requireView());
         if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
             Route route = routeDetailsViewModel.getRoute();
             route.setWalk(walk);

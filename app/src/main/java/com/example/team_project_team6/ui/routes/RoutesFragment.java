@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -110,7 +111,7 @@ public class RoutesFragment extends Fragment {
             public void onItemClick(int position, View v) {
                 Route route = routesViewModel.getRouteAt(position);
                 if (route != null) {
-                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                    NavController controller = Navigation.findNavController(requireView());
                     Log.d("Routes", "Clicked on route: " + route.getName());
                     if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
                         RouteDetailsViewModel route_details_view_model = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);

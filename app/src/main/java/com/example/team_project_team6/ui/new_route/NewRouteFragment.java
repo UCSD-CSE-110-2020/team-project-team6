@@ -1,21 +1,7 @@
 package com.example.team_project_team6.ui.new_route;
-import androidx.annotation.VisibleForTesting;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,14 +12,21 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.team_project_team6.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
-import com.example.team_project_team6.ui.routes.RoutesViewModel;
 
 public class NewRouteFragment extends Fragment {
 
