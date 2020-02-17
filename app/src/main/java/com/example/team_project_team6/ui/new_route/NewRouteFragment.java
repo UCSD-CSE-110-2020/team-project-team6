@@ -1,4 +1,5 @@
 package com.example.team_project_team6.ui.new_route;
+import androidx.annotation.VisibleForTesting;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -36,7 +37,8 @@ import com.example.team_project_team6.ui.routes.RoutesViewModel;
 public class NewRouteFragment extends Fragment {
 
     private NewRouteViewModel mNewRouteModel;
-    private RouteDetailsViewModel routeDetailsViewModel = null;
+    @VisibleForTesting
+    RouteDetailsViewModel routeDetailsViewModel = null;
 
     private RadioButton radDiff;
     private RadioButton radHilly;
@@ -51,11 +53,13 @@ public class NewRouteFragment extends Fragment {
         mNewRouteModel = new ViewModelProvider(requireActivity()).get(NewRouteViewModel.class);
         final View root =  inflater.inflate(R.layout.new_route_fragment, container, false);
 
-        final Context mainActivity = getActivity();
-        final SaveData saveData = new SaveData(mainActivity);
+        final SaveData saveData = new SaveData(requireActivity());
 
         //hide bottom navigation bar
-        getActivity().findViewById(R.id.nav_view).setVisibility(View.GONE);
+        View bottom_bar = requireActivity().findViewById(R.id.nav_view);
+        if (bottom_bar != null) {
+            bottom_bar.setVisibility(View.GONE);
+        }
 
         final EditText txtRouteNme = root.findViewById(R.id.txtRouteName);
         final EditText txtStartingPoint = root.findViewById(R.id.txtStartingPoint);
@@ -206,6 +210,9 @@ public class NewRouteFragment extends Fragment {
     public void onStop(){
         super.onStop();
         //showing up bottom bar
-        getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
+        View bottom_bar = requireActivity().findViewById(R.id.nav_view);
+        if (bottom_bar != null) {
+            bottom_bar.setVisibility(View.VISIBLE);
+        }
     }
 }
