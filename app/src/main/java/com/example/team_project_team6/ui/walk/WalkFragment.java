@@ -46,6 +46,7 @@ public class WalkFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // create objects for necessary parts on the walk fragment page
+        final TextView walkTitle = root.findViewById(R.id.text_walk);
         final Button btStart = root.findViewById(R.id.btStart);
         final TextView walkTime = root.findViewById(R.id.lbTime);
         final TextView walkSteps = root.findViewById(R.id.lbStep);
@@ -57,6 +58,7 @@ public class WalkFragment extends Fragment {
         updateDisplay(btStart, walkDist, walkSteps, walkTime);
 
         if (!walkViewModel.getIsMockWalk() && routeDetailsViewModel.getIsWalkFromRouteDetails()) {
+            walkTitle.setText(routeDetailsViewModel.getRoute().getName());
             runStartSequence(btStart);
         }
 

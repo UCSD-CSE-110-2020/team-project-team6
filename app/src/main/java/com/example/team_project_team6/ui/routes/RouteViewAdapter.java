@@ -25,17 +25,19 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
     private static ClickListener itemClickListener;
 
     static class RouteViewHolder extends RecyclerView.ViewHolder {
-        TextView trailName, steps, distance, lastCompleted;
+        TextView trailName, steps, distance, lastCompleted, textFeatures;
         ImageButton favoriteButton;
 
         RouteViewHolder(final View itemView) {
             super(itemView);
 
             trailName = itemView.findViewById(R.id.item_view_routename);
+            System.out.println(trailName);
             steps = itemView.findViewById(R.id.item_view_steps);
             distance = itemView.findViewById(R.id.item_view_dist);
             lastCompleted = itemView.findViewById(R.id.item_view_date);
             favoriteButton = itemView.findViewById(R.id.item_view_favorite);
+            textFeatures = itemView.findViewById(R.id.item_view_features);
 
             favoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -92,8 +94,10 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
             holder.favoriteButton.setBackgroundResource(R.drawable.ic_empty_star);
         }
 
-        String features = " " + getFeaturesString(items.get(position));
-        holder.trailName.setText(items.get(position).getName() + features);
+        String features = getFeaturesString(items.get(position));
+        holder.textFeatures.setText(features);
+
+        holder.trailName.setText(items.get(position).getName());
 
         Route currRoute = items.get(position);
         Walk walkInCurrRoute = items.get(position).getWalk();
@@ -188,6 +192,11 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
                 features += "\u3030\ufe0f ";
                 break;
             default:
+        }
+
+        // remove trailing space
+        if (!features.isEmpty()) {
+            features = features.substring(0, features.length() - 1);
         }
 
         return features;
