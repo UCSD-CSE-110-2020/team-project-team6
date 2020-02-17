@@ -36,7 +36,7 @@ import java.util.Locale;
 
 public class RouteDetailsFragment extends Fragment {
 
-    private RouteDetailsViewModel mViewModel;
+    public RouteDetailsViewModel mViewModel;
     private WalkViewModel walkViewModel;
     private AppCompatActivity mActivity;
     private Route route;
