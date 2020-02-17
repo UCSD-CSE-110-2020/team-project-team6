@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
@@ -193,7 +194,7 @@ public class NewRouteFragment extends Fragment {
                     saveData.saveRoute(route); // save route to SharedPreferences
 
                     //come back to route
-                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                    NavController controller = Navigation.findNavController(requireView());
                     if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
                         controller.navigate(R.id.action_newRouteFragment_to_navigation_routes);
                     }
