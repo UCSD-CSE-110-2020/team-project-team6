@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
@@ -37,15 +39,15 @@ public class MockWalkFragment extends Fragment {
     private WalkViewModel walkViewModel;
     private RouteDetailsViewModel routeDetailsViewModel;
     private HomeViewModel homeViewModel;
+    private MainActivity mainActivity;
 
-    // TODO hook to home page
-    // TODO hook back from route details page
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         walkViewModel = new ViewModelProvider(requireActivity()).get(WalkViewModel.class);
         routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        mainActivity = (MainActivity) getActivity();
 
         View root = inflater.inflate(R.layout.fragment_mock_walk, container, false);
         setHasOptionsMenu(true);
@@ -155,13 +157,15 @@ public class MockWalkFragment extends Fragment {
         walk.setStep(stepCount);
         walk.setDist(distance);
 
+        mainActivity.stopAsyncTaskRunner();
+
         homeViewModel.updateDailySteps(homeViewModel.getDailyStepCount() + stepCount);
         Log.e("Setting homeViewModel step count in mockWalk","step count: " + (homeViewModel.getDailyStepCount() + stepCount));
     }
 
     public void navigateFromWalkFragment(Walk walk, SaveData saveData) {
         Log.i("MockWalkFragment", "navigation");
-        NavController controller = NavHostFragment.findNavController(requireParentFragment());
+        NavController controller = Navigation.findNavController(requireView());
         if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
             Route route = routeDetailsViewModel.getRoute();
             route.setWalk(walk);

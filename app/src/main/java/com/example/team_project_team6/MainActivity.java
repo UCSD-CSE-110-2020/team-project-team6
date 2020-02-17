@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         runner.execute(1000); // update once a second
     }
 
-    void stopAsyncTaskRunner() {
+    public void stopAsyncTaskRunner() {
         runner.cancel(true);
     }
 
