@@ -28,6 +28,11 @@ public class HomeFragment extends Fragment {
     double strideDistInFt;
     private TextView dailySteps, dailyDist;
 
+    @Override
+    public void onCreate(Bundle savedInstance) {
+        super.onCreate(savedInstance);
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -66,7 +71,7 @@ public class HomeFragment extends Fragment {
                     steps = 0L;
                 }
 
-                double dist = strideDistInFt * steps / 5280.0;
+                double dist = Math.abs(strideDistInFt * steps / 5280.0);
 
                 dailySteps.setText(String.format(Locale.ENGLISH, "%d steps", steps));
                 dailyDist.setText(String.format(Locale.ENGLISH, "%.2f mi", dist));
