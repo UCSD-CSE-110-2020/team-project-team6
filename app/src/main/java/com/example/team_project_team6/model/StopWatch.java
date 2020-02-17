@@ -11,6 +11,9 @@ import java.util.Locale;
 public class StopWatch {
     private long millisecondTime, startTime;
     private int seconds, minutes, hours;
+    private final int TIME_CIRCLE = 60;
+    private final int MILLI_TO_SEC = 1000;
+
     private Handler handler;
 
     private WalkViewModel walkViewModel;
@@ -64,14 +67,15 @@ public class StopWatch {
 
             millisecondTime = SystemClock.uptimeMillis() - startTime;
 
+            seconds = (int) (millisecondTime / MILLI_TO_SEC);
 
-            seconds = (int) (millisecondTime / 1000);
+            minutes = seconds / TIME_CIRCLE;
 
-            minutes = seconds / 60;
+            hours = minutes / TIME_CIRCLE;
 
-            hours = minutes / 60;
+            minutes = minutes % TIME_CIRCLE;
 
-            seconds = seconds % 60;
+            seconds = seconds % TIME_CIRCLE;
 
             walkViewModel.updateStopWatch(String.format(Locale.ENGLISH, "%02d:%02d:%02d", hours, minutes, seconds));
 
