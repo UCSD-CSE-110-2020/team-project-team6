@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean isWalkFromRouteDetails = false;
     private boolean createRouteFromWalk = false;
 
+    private AsyncTaskRunner runner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
         if (!spfs.contains("user_height")) {
             launchPermissionActivity();
         }
+
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        walkViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -85,11 +90,12 @@ public class MainActivity extends AppCompatActivity {
         fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
         fitnessService.setup();
 
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        walkViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
-
-        AsyncTaskRunner runner = new AsyncTaskRunner();
+        runner = new AsyncTaskRunner();
         runner.execute(1000); // update once a second
+    }
+
+    void stopAsyncTaskRunner() {
+        runner.cancel(true);
     }
 
     @Override
