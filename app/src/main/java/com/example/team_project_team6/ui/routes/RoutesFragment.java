@@ -72,6 +72,7 @@ public class RoutesFragment extends Fragment {
                 routeDetailsViewModel.setIsWalkFromRouteDetails(false);
                 NavController controller = NavHostFragment.findNavController(requireParentFragment());
                 if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
+                    routeDetailsViewModel.setIsWalkFromRouteDetails(true);
                     controller.navigate(R.id.action_navigation_routes_to_newRouteFragment);
                 }
             }
