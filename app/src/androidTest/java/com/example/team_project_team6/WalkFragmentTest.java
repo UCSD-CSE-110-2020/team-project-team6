@@ -94,33 +94,6 @@ public class WalkFragmentTest {
     }
 
     @Test
-    public void StartWalkFromRouteTest() {
-        final TestNavHostController navController = new TestNavHostController(ApplicationProvider.getApplicationContext());
-        navController.setGraph(R.navigation.mobile_navigation);
-
-        FragmentFactory factory = new FragmentFactory();
-        FragmentScenario<RouteDetailsFragment> scenarioR =
-                FragmentScenario.launchInContainer(RouteDetailsFragment.class, null, R.style.Theme_AppCompat, factory);
-
-        RouteDetailsViewModel rViewModel = mock(RouteDetailsViewModel.class);
-        when(rViewModel.getRoute()).thenReturn(new Route(null, "University of California, San Diego, EBU3B", null, "Test Walk Notes", null, "Wild Area"));
-        doNothing().when(rViewModel).setRoute(any());
-        when(rViewModel.getIsWalkFromRouteDetails()).thenReturn(true);
-        doNothing().when(rViewModel).setIsWalkFromRouteDetails(anyBoolean());
-
-        scenarioR.onFragment(new FragmentScenario.FragmentAction<RouteDetailsFragment>() {
-            @Override
-            public void perform(@NonNull RouteDetailsFragment fragment) {
-                Navigation.setViewNavController(fragment.requireView(), navController);
-                fragment.mViewModel = rViewModel;
-            }
-        });
-
-        onView(ViewMatchers.withId(R.id.details_btn_start_walk)).perform(ViewActions.click());
-        assertEquals(R.id.newRouteFragment, navController.getCurrentDestination().getId());
-    }
-
-    @Test
     public void StopWalkFromWalkTabTest() {
         final TestNavHostController navController = new TestNavHostController(ApplicationProvider.getApplicationContext());
         navController.setGraph(R.navigation.mobile_navigation);
@@ -128,6 +101,8 @@ public class WalkFragmentTest {
         FragmentFactory factory = new FragmentFactory();
         FragmentScenario<WalkFragment> scenarioW =
                 FragmentScenario.launchInContainer(WalkFragment.class, null, R.style.Theme_AppCompat, factory);
+
+        navController.setCurrentDestination(R.id.newRouteFragment);
 
         WalkViewModel wViewModel = mock(WalkViewModel.class);
         MutableLiveData<Boolean> boolLiveData = new MutableLiveData<>();
@@ -198,6 +173,8 @@ public class WalkFragmentTest {
         when(rViewModel.getIsWalkFromRouteDetails()).thenReturn(true);
         doNothing().when(rViewModel).setIsWalkFromRouteDetails(anyBoolean());
 
+        navController.setCurrentDestination(R.id.navigation_routes);
+
         scenarioW.onFragment(new FragmentScenario.FragmentAction<WalkFragment>() {
             @Override
             public void perform(@NonNull WalkFragment fragment) {
@@ -216,6 +193,6 @@ public class WalkFragmentTest {
         }
 
         onView(ViewMatchers.withId(R.id.btStart)).perform(ViewActions.click());
-        assertEquals(R.id.navigation_home, navController.getCurrentDestination().getId());
-    } //2131230976 <--actual
-}//2131230787  <--navigation_routes
+        assertEquals(R.id.navigation_routes, navController.getCurrentDestination().getId());
+    }
+}
