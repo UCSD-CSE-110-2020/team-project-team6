@@ -1,45 +1,68 @@
 package com.example.team_project_team6;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
-import com.example.team_project_team6.model.Features;
-import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.model.Walk;
-import com.example.team_project_team6.ui.routes.RoutesFragment;
-import com.example.team_project_team6.ui.routes.RoutesViewModel;
+import com.example.team_project_team6.ui.walk.WalkFragment;
+import com.example.team_project_team6.ui.walk.WalkViewModel;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.Calendar;
+import static androidx.test.espresso.Espresso.onView;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class WalkFragmentTest {
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
     @Test
     public void StartWalkFromWalkTabTest() {
 
+        final TestNavHostController navHostController = new TestNavHostController(ApplicationProvider.getApplicationContext());
+        navHostController.setGraph(R.navigation.mobile_navigation);
+
+        Bundle bundle = new Bundle();
+        FragmentFactory factory = new FragmentFactory();
+        FragmentScenario<WalkFragment> scenario = FragmentScenario.launchInContainer(WalkFragment.class, bundle, R.style.Theme_AppCompat, factory);
+
+        scenario.onFragment(fragment -> {
+                    Navigation.setViewNavController(fragment.requireView(), navHostController);
+                }
+        );
+        onView(ViewMatchers.withId(R.id.btStart)).perform(ViewActions.click());
+
+//        scenario.onFragment(new FragmentScenario.FragmentAction<WalkFragment>() {
+//            @Override
+//            public void perform(@NonNull WalkFragment fragment) {
+//                Navigation.setViewNavController(fragment.requireView(), navHostController);
+//                fragment.walkViewModel = mWalkVM;
+//                fragment.routeDetailsViewModel = mRouteDetailsVM;
+//
+//                Button startBtn = fragment.getView().findViewById(R.id.btStart);
+//
+//
+//
+//                assertEquals(0, 0);
+//            }
+//        });
     }
 
     @Test
@@ -49,6 +72,24 @@ public class WalkFragmentTest {
 
     @Test
     public void NoNewWalkOnCurrentWalkTest() {
+
+    }
+
+    @Test
+    public void StopWalkFromWalkTabTest() {
+        final TestNavHostController navHostController = new TestNavHostController(ApplicationProvider.getApplicationContext());
+        navHostController.setGraph(R.navigation.mobile_navigation);
+
+        Bundle bundle = new Bundle();
+        FragmentFactory factory = new FragmentFactory();
+        FragmentScenario<WalkFragment> scenario = FragmentScenario.launchInContainer(WalkFragment.class, bundle, R.style.Theme_AppCompat, factory);
+        final WalkViewModel mockedViewModel = Mockito.mock(WalkViewModel.class);
+        Mockito.when(mockedViewModel.getStopWatch()).thenReturn(new MutableLiveData<>());
+
+    }
+
+    @Test
+    public void StopWalkFromRouteTest() {
 
     }
 
