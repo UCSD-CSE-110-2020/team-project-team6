@@ -15,7 +15,6 @@ public class RouteDetailsViewModel extends ViewModel {
     private boolean fromRouteDetails;
 
     public RouteDetailsViewModel() {
-//        mRoute = new Route(new Walk(), "", null, "", new Features(), "");
         fromRouteDetails = false;
     }
 

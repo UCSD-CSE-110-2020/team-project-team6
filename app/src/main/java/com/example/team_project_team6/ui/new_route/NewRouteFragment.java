@@ -1,19 +1,7 @@
 package com.example.team_project_team6.ui.new_route;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,19 +12,27 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.team_project_team6.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
-import com.example.team_project_team6.ui.routes.RoutesViewModel;
 
 public class NewRouteFragment extends Fragment {
 
     private NewRouteViewModel mNewRouteModel;
-    private RouteDetailsViewModel routeDetailsViewModel = null;
+    @VisibleForTesting
+    RouteDetailsViewModel routeDetailsViewModel = null;
 
     private RadioButton radDiff;
     private RadioButton radHilly;
@@ -51,11 +47,13 @@ public class NewRouteFragment extends Fragment {
         mNewRouteModel = new ViewModelProvider(requireActivity()).get(NewRouteViewModel.class);
         final View root =  inflater.inflate(R.layout.new_route_fragment, container, false);
 
-        final Context mainActivity = getActivity();
-        final SaveData saveData = new SaveData(mainActivity);
+        final SaveData saveData = new SaveData(requireActivity());
 
         //hide bottom navigation bar
-        getActivity().findViewById(R.id.nav_view).setVisibility(View.GONE);
+        View bottom_bar = requireActivity().findViewById(R.id.nav_view);
+        if (bottom_bar != null) {
+            bottom_bar.setVisibility(View.GONE);
+        }
 
         final EditText txtRouteNme = root.findViewById(R.id.txtRouteName);
         final EditText txtStartingPoint = root.findViewById(R.id.txtStartingPoint);
@@ -189,7 +187,7 @@ public class NewRouteFragment extends Fragment {
                     saveData.saveRoute(route); // save route to SharedPreferences
 
                     //come back to route
-                    NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                    NavController controller = Navigation.findNavController(requireView());
                     if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
                         controller.navigate(R.id.action_newRouteFragment_to_navigation_routes);
                     }
@@ -206,6 +204,9 @@ public class NewRouteFragment extends Fragment {
     public void onStop(){
         super.onStop();
         //showing up bottom bar
-        getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
+        View bottom_bar = requireActivity().findViewById(R.id.nav_view);
+        if (bottom_bar != null) {
+            bottom_bar.setVisibility(View.VISIBLE);
+        }
     }
 }
