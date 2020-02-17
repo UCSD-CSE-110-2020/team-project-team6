@@ -37,10 +37,9 @@ public class StopWatchTest {
     FragmentScenario<WalkFragment> scenario;
     WalkViewModel walkViewModel;
     TextView tv;
+    @Before
+    public void setUp() throws Exception {
 
-
-    @Test
-    public void stopWatchTest() {
         bundle = new Bundle();
         new FragmentFactory();
         scenario = FragmentScenario.launchInContainer(WalkFragment.class, bundle, R.style.Theme_AppCompat, factory);
@@ -48,17 +47,32 @@ public class StopWatchTest {
             @Override
             public void perform(@NonNull WalkFragment fragment){
                 tv = fragment.getView().findViewById(R.id.lbTime);
+                walkViewModel = new ViewModelProvider(fragment).get(WalkViewModel.class);
+                //walkViewModel.runStopWatch();
+                //System.out.println("final: " + walkViewModel.getStopWatch().toString());
                 //fragment.getView().findViewById(R.id.btStart).performClick();
-                //walkViewModel = new ViewModelProvider(fragment).get(WalkViewModel.class);
-                    try {
-                        //fragment.getView().findViewById(R.id.btStart).performClick();
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
 
-                //fragment.getView().findViewById(R.id.btStart).performClick();
-                //System.out.println("final: " + tv.getText().toString());
+            }
+        });
+    }
+    @After
+    public void tearDown() throws Exception {
+        walkViewModel.stopWatch();
+    }
+
+    @Test
+    public void stopWatchTest() {
+        try {
+            //fragment.getView().findViewById(R.id.btStart).performClick();
+            Thread.sleep(5000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        scenario.onFragment(new FragmentScenario.FragmentAction<WalkFragment>() {
+            @Override
+            public void perform(@NonNull WalkFragment fragment){
+                TextView tv = fragment.getView().findViewById(R.id.lbTime);
                 assertThat(tv.getText().toString()).isEqualTo("00:00:00");
             }
         });
