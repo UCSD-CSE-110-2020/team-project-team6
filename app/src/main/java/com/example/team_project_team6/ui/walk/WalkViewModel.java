@@ -39,7 +39,7 @@ public class WalkViewModel extends AndroidViewModel {
     /**
      * informs observers that walk is underway by updating to the stream
      */
-    void startWalking() {
+    public void startWalking() {
         if(!getIsMockWalk()) {
             mCurrentlyWalking.postValue(true);
         } else {
@@ -50,7 +50,7 @@ public class WalkViewModel extends AndroidViewModel {
     /**
      * informs observers that walk is not underway by updating to the stream
      */
-    void endWalking() {
+    public void endWalking() {
         if(!getIsMockWalk()) {
             mCurrentlyWalking.postValue(false);
         } else {
@@ -71,7 +71,7 @@ public class WalkViewModel extends AndroidViewModel {
      * returns walking status stream to subscribe to
      * @return livedata object for walking status
      */
-    LiveData<Boolean> isCurrentlyWalking() {
+    public LiveData<Boolean> isCurrentlyWalking() {
         if(!getIsMockWalk()) {
             return mCurrentlyWalking;
         } else {
