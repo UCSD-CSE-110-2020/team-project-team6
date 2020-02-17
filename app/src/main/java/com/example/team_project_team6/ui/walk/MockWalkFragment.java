@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
@@ -141,7 +140,6 @@ public class MockWalkFragment extends Fragment {
         btStart.setText(R.string.bt_start);
         // reset values
         walkViewModel.resetToZero();
-
     }
 
     public void setWalkInfo(Walk walk, TextView mock_walkDist, TextView mock_walkSteps, TextView mock_walkTime) {
@@ -158,6 +156,7 @@ public class MockWalkFragment extends Fragment {
         walk.setDist(distance);
 
         homeViewModel.updateDailySteps(homeViewModel.getDailyStepCount() + stepCount);
+        Log.e("Setting homeViewModel step count in mockWalk","step count: " + (homeViewModel.getDailyStepCount() + stepCount));
     }
 
     public void navigateFromWalkFragment(Walk walk, SaveData saveData) {
