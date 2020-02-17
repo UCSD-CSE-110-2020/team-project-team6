@@ -1,4 +1,4 @@
-package com.example.team_project_team6;
+package com.example.team_project_team6.model;
 
 import com.example.team_project_team6.model.Walk;
 

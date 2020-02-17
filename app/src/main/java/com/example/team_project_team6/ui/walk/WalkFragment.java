@@ -35,8 +35,8 @@ import java.util.Locale;
 
 public class WalkFragment extends Fragment {
 
-    private WalkViewModel walkViewModel;
-    private RouteDetailsViewModel routeDetailsViewModel;
+    public WalkViewModel walkViewModel;
+    public RouteDetailsViewModel routeDetailsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -117,6 +117,7 @@ public class WalkFragment extends Fragment {
 
         return root;
     }
+
 
     public void updateDisplay(Button btStart, TextView walkTime, TextView walkSteps, TextView walkDist) {
         Log.i("WalkFragment", "update start/stop button");

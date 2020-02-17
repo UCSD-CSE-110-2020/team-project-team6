@@ -5,6 +5,10 @@ import android.content.SharedPreferences;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.team_project_team6.model.Features;
+import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.SaveData;
+import com.example.team_project_team6.model.Walk;
 import com.google.gson.Gson;
 
 import junit.framework.Assert;
