@@ -18,6 +18,7 @@ import com.example.team_project_team6.fitness.FitnessService;
 import com.example.team_project_team6.fitness.FitnessServiceFactory;
 import com.example.team_project_team6.fitness.GoogleFitAdapter;
 import com.example.team_project_team6.fitness.TestAdapter;
+import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.StopWatch;
 import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String FITNESS_SERVICE_KEY = "FITNESS_SERVICE_KEY";
     private static final String TAG = "MainActivity";
     private static final String GOOGLE_FITNESS_KEY = "GOOGLE_FIT";
-    private static final String MOCK_FITNESS_KEY = "TEST_FIT";
+    public static final String MOCK_FITNESS_KEY = "TEST_FIT";
     private String fitnessServiceKey = GOOGLE_FITNESS_KEY;
 
     private FitnessService fitnessService;
@@ -41,19 +42,24 @@ public class MainActivity extends AppCompatActivity {
     private boolean isWalking;
 
     private AppBarConfiguration appBarConfiguration;
+    private boolean isWalkFromRouteDetails = false;
+    private boolean createRouteFromWalk = false;
+
+    private AsyncTaskRunner runner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sw = new StopWatch();
-
         // launch height/permission activity if user height hasn't been saved (first-time user)
         SharedPreferences spfs = this.getSharedPreferences("user_data", MODE_PRIVATE);
         if (!spfs.contains("user_height")) {
             launchPermissionActivity();
         }
+
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        walkViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -79,16 +85,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //setFitnessServiceKey(getIntent().getStringExtra(FITNESS_SERVICE_KEY));
-        setFitnessServiceKey(GOOGLE_FITNESS_KEY);
+        if (getIntent().getStringExtra(FITNESS_SERVICE_KEY) != null) {
+            setFitnessServiceKey(getIntent().getStringExtra(FITNESS_SERVICE_KEY));
+        } else {
+            setFitnessServiceKey(GOOGLE_FITNESS_KEY);
+        }
+
         fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
         fitnessService.setup();
 
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        walkViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
-
-        AsyncTaskRunner runner = new AsyncTaskRunner();
+        runner = new AsyncTaskRunner();
         runner.execute(1000); // update once a second
+    }
+
+    public void stopAsyncTaskRunner() {
+        runner.cancel(true);
     }
 
     @Override
@@ -115,10 +126,11 @@ public class MainActivity extends AppCompatActivity {
         homeViewModel.updateDailySteps(stepCount); // update step count on home screen
 
         // update steps moved just on current walk if the user is currently on a walk
-        if (isWalking) {
+        if (walkViewModel.isWalking()) {
             if (walkStartingStep == null) {
                 walkStartingStep = stepCount;
             }
+
             walkViewModel.updateWalkSteps(stepCount - walkStartingStep);
         } else {
             walkStartingStep = null;
@@ -144,22 +156,6 @@ public class MainActivity extends AppCompatActivity {
 
             return null;
         }
-    }
-
-    /**
-     * start the walk stopwatch and set walk mode for step-tracking to on
-     */
-    public void runStopWatch (){
-        sw.runStopWatch(walkViewModel);
-        isWalking = true;
-    }
-
-    /**
-     * stop the stopwatch and set walk mode for step tracking to off
-     */
-    public void stopWatch(){
-        sw.stopWatch();
-        isWalking = false;
     }
 
     @Override

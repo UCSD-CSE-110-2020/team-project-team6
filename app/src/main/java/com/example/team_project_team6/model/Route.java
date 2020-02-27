@@ -17,16 +17,18 @@ public class Route {
 
 
     public Route() {
+        Log.i("empty Route constructor", "Initializing all values");
         this.walk = null;
         this.startPoint = "";
         this.lastStartDate = null;
         this.notes = "";
-        this.features = null;
+        this.features = new Features();
         this.name = "";
     }
 
     // If never walked, set lastStartDate to null
     public Route(Walk walk, String startPoint, Calendar lastStartDate, String notes, Features features, String name) {
+        Log.i("Route constructor with all features", "Initializing all values");
         this.walk = walk;
         this.startPoint = startPoint;
         this.lastStartDate = lastStartDate;
@@ -36,7 +38,12 @@ public class Route {
     }
 
     public String getName() {
-        Log.i("getName from Route", "return: " + name);
+        if(name != null) {
+            Log.i("getName from Route", "return: " + name);
+        } else {
+            Log.e("getName from Route", "value: null");
+        }
+
         return name;
     }
 
@@ -46,17 +53,31 @@ public class Route {
     }
 
     public Walk getWalk() {
-        Log.i("getWalk from Route", "return: " + walk.toString());
+        if(walk != null) {
+            Log.i("getWalk from Route", "return: " + walk.toString());
+        } else {
+            Log.e("getWalk from Route", "value: null");
+        }
+
         return walk;
     }
 
     public void setWalk(Walk walk) {
-        Log.i("setWalk from Route", "value: " + walk.toString());
+        if(walk != null) {
+            Log.i("setWalk from Route", "value: " + walk.toString());
+        } else {
+            Log.i("setWalk from Route", "value: null");
+        }
         this.walk = walk;
     }
 
     public String getStartPoint() {
-        Log.i("getStartPoint from Route", "return: " + startPoint);
+        if(startPoint != null) {
+            Log.i("getStartPoint from Route", "return: " + startPoint);
+        } else {
+            Log.e("getStartPoint from Route", "value: null");
+        }
+
         return startPoint;
     }
 
@@ -86,7 +107,12 @@ public class Route {
     }
 
     public String getNotes() {
-        Log.i("getNotes from Route", "return: " + notes);
+        if(notes != null) {
+            Log.i("getNotes from Route", "return: " + notes);
+        } else {
+            Log.i("getNotes from Route", "value: null");
+        }
+
         return notes;
     }
 
@@ -96,12 +122,21 @@ public class Route {
     }
 
     public Features getFeatures() {
-        Log.i("getFeatures from Route", "return: " + features.toString());
+        if(lastStartDate != null) {
+            Log.i("getFeatures from Route", "return: " + features.toString());
+        } else {
+            Log.i("getFeatures from Route", "value: null");
+        }
+
         return features;
     }
 
     public void setFeatures(Features features) {
-        Log.i("setFeatures from Route", "value: " + features.toString());
+        if(features != null) {
+            Log.i("setFeatures from Route", "value: " + features.toString());
+        } else {
+            Log.i("setFeatures from Route", "value: null");
+        }
         this.features = features;
     }
 

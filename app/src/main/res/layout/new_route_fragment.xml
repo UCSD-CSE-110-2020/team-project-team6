@@ -27,10 +27,10 @@
 
         <EditText
             android:id="@+id/txtRouteName"
-            android:layout_width="215dp"
-            android:layout_height="36dp"
+            android:layout_width="213dp"
+            android:layout_height="45dp"
             android:layout_marginStart="44dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="20dp"
             android:ems="10"
             android:inputType="textPersonName"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,12 +50,14 @@
 
         <EditText
             android:id="@+id/txtStartingPoint"
-            android:layout_width="215dp"
-            android:layout_height="37dp"
+            android:layout_width="220dp"
+            android:layout_height="45dp"
             android:layout_marginStart="44dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="20dp"
             android:ems="10"
             android:inputType="textPersonName"
+            android:textColorHighlight="@android:color/black"
+            android:textColorLink="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -181,12 +183,38 @@
 
         </RadioGroup>
 
+        <RadioGroup
+            android:id="@+id/radioGroup5"
+            android:layout_width="240dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="19dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup4">
+
+            <RadioButton
+                android:id="@+id/rdLoop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/details_features_loop" />
+
+            <RadioButton
+                android:id="@+id/rdOutBack"
+                android:layout_width="162dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/details_features_outandback" />
+
+        </RadioGroup>
+
         <EditText
             android:id="@+id/txtNotes"
             android:layout_width="274dp"
             android:layout_height="139dp"
             android:layout_marginStart="44dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="24dp"
             android:background="#B3CFCFCF"
             android:gravity="top|left"
             android:hint="@string/lb_route_note"
@@ -199,14 +227,14 @@
             android:scrollHorizontally="false"
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup4" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup5" />
 
         <Button
             android:id="@+id/btDone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="128dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="24dp"
             android:backgroundTint="#2196F3"
             android:text="@string/bt_done"
             android:textColor="#F5F1F1"

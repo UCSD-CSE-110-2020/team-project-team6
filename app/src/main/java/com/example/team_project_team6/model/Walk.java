@@ -2,6 +2,8 @@ package com.example.team_project_team6.model;
 
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -15,7 +17,7 @@ public class Walk {
     public Walk () {
         Log.i("Walk constructor Walk() ", "creating new Walk object");
         startTime = Calendar.getInstance();
-        duration = "";
+        duration = "--:--:--";
         dist = 0;
         step = 0;
     }

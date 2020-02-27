@@ -3,8 +3,13 @@ package com.example.team_project_team6.ui.route_details;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +27,7 @@ import android.widget.TextView;
 
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -31,7 +37,8 @@ import java.util.Locale;
 
 public class RouteDetailsFragment extends Fragment {
 
-    private RouteDetailsViewModel mViewModel;
+    public RouteDetailsViewModel mViewModel;
+    private WalkViewModel walkViewModel;
     private AppCompatActivity mActivity;
     private Route route;
     private boolean is_favorite;
@@ -39,7 +46,9 @@ public class RouteDetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mViewModel = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
+
+        mViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
+        walkViewModel = new ViewModelProvider(requireActivity()).get(WalkViewModel.class);
         final View root = inflater.inflate(R.layout.fragment_route_details, container, false);
 
         mActivity = (AppCompatActivity) requireActivity();
@@ -107,7 +116,7 @@ public class RouteDetailsFragment extends Fragment {
 
         // street/trail
         final TextView street = (TextView)root.findViewById(R.id.detail_features_street);
-        switch (route.getFeatures().getTerrain()) {
+        switch (route.getFeatures().getType()) {
             case 1:
                 street.setText(R.string.details_features_street);
                 break;
@@ -120,7 +129,7 @@ public class RouteDetailsFragment extends Fragment {
 
         // even/not even
         final TextView evenness = (TextView)root.findViewById(R.id.detail_features_eveness);
-        switch (route.getFeatures().getTerrain()) {
+        switch (route.getFeatures().getSurface()) {
             case 1:
                 evenness.setText(R.string.details_features_even);
                 break;
@@ -147,13 +156,24 @@ public class RouteDetailsFragment extends Fragment {
         // navigate to walk screen and start a walk
         final NavController controller = NavHostFragment.findNavController(this);
         final FloatingActionButton btnDetailsStartWalk = root.findViewById(R.id.details_btn_start_walk);
+
+        if(walkViewModel.isWalking()) {
+            btnDetailsStartWalk.setEnabled(false);
+            btnDetailsStartWalk.setSupportBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+        }
+
         btnDetailsStartWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int destinationId = (walkViewModel.getIsMockWalk()) ?
+                        R.id.action_routeDetailsFragment_to_mockWalkFragment :
+                        R.id.action_routeDetailsFragment_to_navigation_walk;
 
                 if (controller.getCurrentDestination().getId() == R.id.routeDetailsFragment) {
-                    controller.navigate(R.id.action_routeDetailsFragment_to_navigation_walk);
+                    controller.navigate(destinationId);
+
                     mViewModel.setIsWalkFromRouteDetails(true);
+                    mViewModel.setRoute(route);
                 }
 
             }
@@ -180,6 +200,8 @@ public class RouteDetailsFragment extends Fragment {
         }
     }
 
+    // Bug in Google's support library (theoretically)
+    @SuppressLint("RestrictedApi")
     private void refresh_options_menu() {
         ActionBar supportActionBar = mActivity.getSupportActionBar();
         if (supportActionBar != null) {

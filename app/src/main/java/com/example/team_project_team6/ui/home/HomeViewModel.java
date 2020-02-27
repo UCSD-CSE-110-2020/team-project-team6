@@ -28,4 +28,10 @@ public class HomeViewModel extends ViewModel {
     public void updateDailySteps(long stepCount) {
         mDailySteps.postValue(stepCount);
     }
+
+    /**
+     * returns daily step count
+     * @return the daily step count
+     */
+    public Long getDailyStepCount() { return mDailySteps.getValue(); }
 }
