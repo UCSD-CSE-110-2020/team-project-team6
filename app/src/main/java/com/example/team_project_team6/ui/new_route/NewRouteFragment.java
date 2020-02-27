@@ -32,7 +32,7 @@ public class NewRouteFragment extends Fragment {
 
     private NewRouteViewModel mNewRouteModel;
     @VisibleForTesting
-    RouteDetailsViewModel routeDetailsViewModel = null;
+    static RouteDetailsViewModel routeDetailsViewModel = null;
 
     private RadioButton radDiff;
     private RadioButton radHilly;
@@ -168,8 +168,10 @@ public class NewRouteFragment extends Fragment {
                     // the walk's data to save inside the route
                     if (!routeDetailsViewModel.getIsWalkFromRouteDetails()) {
                         Walk walk = saveData.getWalk();
-                        route.setWalk(walk);
-                        route.setLastStartDate(walk.getStartTime());
+                        if (walk != null) {
+                            route.setWalk(walk);
+                            route.setLastStartDate(walk.getStartTime());
+                        }
 
                     // otherwise, create a new walk object and save that inside route along with an unset
                     // last start date

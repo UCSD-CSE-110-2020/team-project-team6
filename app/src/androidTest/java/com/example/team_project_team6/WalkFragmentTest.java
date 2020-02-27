@@ -1,5 +1,6 @@
 package com.example.team_project_team6;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,6 +20,7 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.ui.new_route.NewRouteFragment;
@@ -30,6 +32,8 @@ import com.example.team_project_team6.ui.routes.RoutesViewModel;
 import com.example.team_project_team6.ui.walk.WalkFragment;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
