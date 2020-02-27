@@ -27,7 +27,10 @@ import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
-
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 public class NewRouteFragment extends Fragment {
 
     private NewRouteViewModel mNewRouteModel;
@@ -39,7 +42,7 @@ public class NewRouteFragment extends Fragment {
     private RadioButton radStreet;
     private RadioButton radEven;
     private RadioButton radLoop;
-
+    private static final String TAG = FirebaseFirestore.class.getSimpleName();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -186,6 +189,22 @@ public class NewRouteFragment extends Fragment {
 
                     saveData.saveRoute(route); // save route to SharedPreferences
 
+                    //save to database
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("routes")
+                            .add(route.data())
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error adding document", e);
+                                }
+                            });
                     //come back to route
                     NavController controller = Navigation.findNavController(requireView());
                     if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
