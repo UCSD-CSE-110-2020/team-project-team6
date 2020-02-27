@@ -16,6 +16,7 @@ public class Route {
     private String notes;
     private Features features;
     private String name;
+    private Map<String, Object> routeDB;
 
     public Route() {
         Log.i("empty Route constructor", "Initializing all values");
@@ -152,5 +153,12 @@ public class Route {
         }
     }
 
-
+    public Map<String, Object> getRouteDB() {
+        routeDB = new HashMap<>();
+        routeDB.put("start_point", this.startPoint);
+        routeDB.put("route_name", this.name);
+        routeDB.put("notes", this.notes);
+        routeDB.put("last_start_date", this.lastStartDate.toString());
+        return routeDB;
+    }
 }

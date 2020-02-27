@@ -3,10 +3,14 @@ package com.example.team_project_team6;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -22,7 +26,19 @@ import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.StopWatch;
 import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,13 +53,14 @@ public class MainActivity extends AppCompatActivity {
 
     private HomeViewModel homeViewModel;
     private WalkViewModel walkViewModel;
-    private StopWatch sw;
     private Long walkStartingStep;
-    private boolean isWalking;
+
 
     private AppBarConfiguration appBarConfiguration;
-    private boolean isWalkFromRouteDetails = false;
-    private boolean createRouteFromWalk = false;
+    private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mAuth;
+    FirebaseUser user;
+    private int RC_SIGN_IN = 1;
 
     private AsyncTaskRunner runner;
 
@@ -51,6 +68,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("938194259142-o9jomc2dtov11vmhk46pak225dk5gq1k.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        if(user !=  null){
+            Log.i("user id: ", user.getUid());
+            Log.i("user email: ", user.getEmail());
+        }else{
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        }
 
         // launch height/permission activity if user height hasn't been saved (first-time user)
         SharedPreferences spfs = this.getSharedPreferences("user_data", MODE_PRIVATE);
@@ -90,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
         fitnessService.setup();
 
+
         runner = new AsyncTaskRunner();
         runner.execute(1000); // update once a second
     }
@@ -110,8 +144,68 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "ERROR, google fit result code: " + resultCode);
         }
+        if(requestCode == RC_SIGN_IN){
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
     }
 
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask){
+        try{
+
+            GoogleSignInAccount acc = completedTask.getResult(ApiException.class);
+            Toast.makeText(MainActivity.this,"Signed In Successfully",Toast.LENGTH_SHORT).show();
+            FirebaseGoogleAuth(acc);
+        }
+        catch (ApiException e){
+            Toast.makeText(MainActivity.this,"Sign In Failed",Toast.LENGTH_SHORT).show();
+            FirebaseGoogleAuth(null);
+        }
+    }
+
+    private void FirebaseGoogleAuth(GoogleSignInAccount acct) {
+        //check if the account is null
+        if (acct != null) {
+            AuthCredential authCredential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+            mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+
+                        user = mAuth.getCurrentUser();
+                        Toast.makeText(MainActivity.this, "Current User: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                        updateUI(user);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                        updateUI(null);
+                    }
+                }
+            });
+        }
+        else{
+            Toast.makeText(MainActivity.this, "acc failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
+    }
+
+    private void updateUI(FirebaseUser fUser){
+        if(fUser !=  null){
+
+            String personEmail = fUser.getEmail();
+            String personId = fUser.getUid();
+
+
+            Toast.makeText(MainActivity.this,personId + personEmail ,Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
     public void launchPermissionActivity(){
         Intent intent = new Intent(this, PermissionActivity.class);

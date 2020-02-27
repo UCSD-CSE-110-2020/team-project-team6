@@ -1,5 +1,7 @@
 package com.example.team_project_team6.ui.new_route;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +24,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.fitness.FitnessService;
+import com.example.team_project_team6.fitness.GoogleFitAdapter;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
@@ -29,6 +33,9 @@ import com.example.team_project_team6.model.Walk;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 public class NewRouteFragment extends Fragment {
@@ -191,20 +198,27 @@ public class NewRouteFragment extends Fragment {
 
                     //save to database
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("routes")
-                            .add(route.data())
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error adding document", e);
-                                }
-                            });
+
+                   FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    DocumentReference uidRef = db.collection("users").document(user.getEmail());
+//                    if(user != null) {
+                        uidRef.collection("routes")
+                                .add(route.getRouteDB())
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error adding document", e);
+                                    }
+                                });
+//                    }else {
+//                        Log.i(TAG, "Please login!!");
+//                    }
                     //come back to route
                     NavController controller = Navigation.findNavController(requireView());
                     if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
