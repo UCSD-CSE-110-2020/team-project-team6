@@ -129,4 +129,9 @@
         android:name="com.example.team_project_team6.ui.team.ProposedWalkFragment"
         android:label="@string/title_proposed_walk"
         tools:layout="@layout/fragment_proposed_walk" />
+    <fragment
+        android:id="@+id/sendTeamRequestFragment"
+        android:name="com.example.team_project_team6.ui.team.SendTeamRequestFragment"
+        android:label="fragment_send_team_request"
+        tools:layout="@layout/fragment_send_team_request" />
 </navigation>
