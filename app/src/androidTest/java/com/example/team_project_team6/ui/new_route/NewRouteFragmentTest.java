@@ -1,38 +1,29 @@
 package com.example.team_project_team6.ui.new_route;
 
-import android.util.Log;
-import android.view.KeyEvent;
-
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.testing.FragmentScenario;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.action.KeyEventAction;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.team_project_team6.R;
-import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
-import com.example.team_project_team6.ui.routes.RoutesViewModel;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
-
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.pressKey;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -44,28 +35,37 @@ public class NewRouteFragmentTest {
         navController.setGraph(R.navigation.mobile_navigation);
         navController.setCurrentDestination(R.id.newRouteFragment);
 
-        FragmentFactory factory = new FragmentFactory();
-        FragmentScenario<NewRouteFragment> scenario =
-                FragmentScenario.launchInContainer(NewRouteFragment.class, null, R.style.Theme_AppCompat, factory);
+        FragmentScenario<NewRouteFragment> scenario = FragmentScenario.launchInContainer(NewRouteFragment.class, null, R.style.Theme_AppCompat, new FragmentFactory() {
+            @NonNull
+            @Override
+            public Fragment instantiate(@NonNull ClassLoader classLoader,
+                                        @NonNull String className) {
+                NewRouteFragment fragment = new NewRouteFragment();
+
+                fragment.getViewLifecycleOwnerLiveData().observeForever(lifecycleOwner -> {
+                    if (lifecycleOwner != null) {
+                        Navigation.setViewNavController(fragment.requireView(), navController);
+                    }
+                });
+
+                return fragment;
+            }
+        });
 
         RouteDetailsViewModel viewModel = mock(RouteDetailsViewModel.class);
         when(viewModel.getIsWalkFromRouteDetails()).thenReturn(false);
 
-        scenario.onFragment(new FragmentScenario.FragmentAction<NewRouteFragment>() {
-            @Override
-            public void perform(@NonNull NewRouteFragment fragment) {
-                Navigation.setViewNavController(fragment.requireView(), navController);
-                fragment.routeDetailsViewModel = viewModel;
-            }
-        });
+        NewRouteFragment.routeDetailsViewModel = viewModel;
+        scenario.onFragment(fragment -> Navigation.setViewNavController(fragment.requireView(), navController));
 
         // verify nothing happens if we click done without filling in the required fields
         onView(ViewMatchers.withId(R.id.btDone)).perform(ViewActions.scrollTo(), ViewActions.click());
         assertEquals(R.id.newRouteFragment, navController.getCurrentDestination().getId());
 
         // Type and then close keyboard
-        onView(ViewMatchers.withId(R.id.txtRouteName)).perform(ViewActions.scrollTo(), ViewActions.typeText("ABC"));
-        Espresso.closeSoftKeyboard();
+        onView(ViewMatchers.withId(R.id.txtRouteName)).perform(ViewActions.scrollTo(), ViewActions.click());
+        onView(ViewMatchers.withId(R.id.txtRouteName)).perform(ViewActions.typeText("ABC"));
+        closeSoftKeyboard();
 
         // click done button and check navigation destination
         onView(ViewMatchers.withId(R.id.btDone)).perform(ViewActions.scrollTo());
@@ -104,7 +104,7 @@ public class NewRouteFragmentTest {
 
         // Type and then close keyboard
         onView(ViewMatchers.withId(R.id.txtRouteName)).perform(ViewActions.scrollTo(), ViewActions.typeText("ABC"));
-        Espresso.closeSoftKeyboard();
+        closeSoftKeyboard();
 
         // Pick all optional features
         onView(ViewMatchers.withId(R.id.rdEasy)).perform(ViewActions.scrollTo(), ViewActions.click());
@@ -145,7 +145,7 @@ public class NewRouteFragmentTest {
             @Override
             public void perform(@NonNull NewRouteFragment fragment) {
                 Navigation.setViewNavController(fragment.requireView(), navController);
-                fragment.routeDetailsViewModel = viewModel;
+                NewRouteFragment.routeDetailsViewModel = viewModel;
             }
         });
 
@@ -154,12 +154,10 @@ public class NewRouteFragmentTest {
         assertEquals(R.id.newRouteFragment, navController.getCurrentDestination().getId());
 
         // Type and then close keyboard
-        onView(ViewMatchers.withId(R.id.txtRouteName)).perform(ViewActions.scrollTo(), ViewActions.typeText("ABC"));
-        Espresso.closeSoftKeyboard();
+        onView(ViewMatchers.withId(R.id.txtNotes)).perform(ViewActions.scrollTo(), ViewActions.typeText("Lorem Ipsum"), ViewActions.closeSoftKeyboard());
 
         // Type and then close keyboard
-        onView(ViewMatchers.withId(R.id.txtNotes)).perform(ViewActions.scrollTo(), ViewActions.typeText("Lorem Ipsum"));
-        Espresso.closeSoftKeyboard();
+        onView(ViewMatchers.withId(R.id.txtRouteName)).perform(ViewActions.scrollTo(), ViewActions.click(), ViewActions.scrollTo(), ViewActions.typeText("ABC")).perform(ViewActions.closeSoftKeyboard());
 
         // click done button and check navigation destination
         onView(ViewMatchers.withId(R.id.btDone)).perform(ViewActions.scrollTo());

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -199,6 +200,8 @@ public class RouteDetailsFragment extends Fragment {
         }
     }
 
+    // Bug in Google's support library (theoretically)
+    @SuppressLint("RestrictedApi")
     private void refresh_options_menu() {
         ActionBar supportActionBar = mActivity.getSupportActionBar();
         if (supportActionBar != null) {

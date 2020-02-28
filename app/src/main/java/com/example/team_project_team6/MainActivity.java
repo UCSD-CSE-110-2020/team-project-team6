@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String FITNESS_SERVICE_KEY = "FITNESS_SERVICE_KEY";
     private static final String TAG = "MainActivity";
     private static final String GOOGLE_FITNESS_KEY = "GOOGLE_FIT";
-    private static final String MOCK_FITNESS_KEY = "TEST_FIT";
+    public static final String MOCK_FITNESS_KEY = "TEST_FIT";
     private String fitnessServiceKey = GOOGLE_FITNESS_KEY;
 
     private FitnessService fitnessService;
@@ -114,12 +114,16 @@ public class MainActivity extends AppCompatActivity {
         FitnessServiceFactory.put(MOCK_FITNESS_KEY, new FitnessServiceFactory.BluePrint() {
             @Override
             public FitnessService create(MainActivity mainActivity) {
-                return new GoogleFitAdapter(mainActivity);
+                return new TestAdapter(mainActivity);
             }
         });
 
-        //setFitnessServiceKey(getIntent().getStringExtra(FITNESS_SERVICE_KEY));
-        setFitnessServiceKey(MOCK_FITNESS_KEY);
+        if (getIntent().getStringExtra(FITNESS_SERVICE_KEY) != null) {
+            setFitnessServiceKey(getIntent().getStringExtra(FITNESS_SERVICE_KEY));
+        } else {
+            setFitnessServiceKey(GOOGLE_FITNESS_KEY);
+        }
+
         fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
         fitnessService.setup();
 
