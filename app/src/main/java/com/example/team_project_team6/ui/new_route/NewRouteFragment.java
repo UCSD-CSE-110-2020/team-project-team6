@@ -196,29 +196,6 @@ public class NewRouteFragment extends Fragment {
 
                     saveData.saveRoute(route); // save route to SharedPreferences
 
-                    //save to database
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-                   FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    DocumentReference uidRef = db.collection("users").document(user.getEmail());
-//                    if(user != null) {
-                        uidRef.collection("routes")
-                                .add(route.getRouteDB())
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error adding document", e);
-                                    }
-                                });
-//                    }else {
-//                        Log.i(TAG, "Please login!!");
-//                    }
                     //come back to route
                     NavController controller = Navigation.findNavController(requireView());
                     if (controller.getCurrentDestination().getId() == R.id.newRouteFragment) {
