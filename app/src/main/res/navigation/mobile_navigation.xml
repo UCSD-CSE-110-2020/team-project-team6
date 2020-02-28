@@ -118,20 +118,39 @@
         android:id="@+id/navigation_team"
         android:name="com.example.team_project_team6.ui.team.TeamFragment"
         android:label="@string/title_team"
-        tools:layout="@layout/fragment_team" />
+        tools:layout="@layout/fragment_team" >
+        <action
+            android:id="@+id/action_teamFragment_to_SendTeamRequestFragment"
+            app:destination="@id/sendTeamRequestFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
+    </fragment>
+
     <fragment
         android:id="@+id/memberFragment"
         android:name="com.example.team_project_team6.ui.team.MemberFragment"
         android:label="@string/title_members"
-        tools:layout="@layout/fragment_members" />
+        tools:layout="@layout/fragment_members"/>
+
+
+
     <fragment
         android:id="@+id/proposedWalkFragment"
         android:name="com.example.team_project_team6.ui.team.ProposedWalkFragment"
         android:label="@string/title_proposed_walk"
         tools:layout="@layout/fragment_proposed_walk" />
+
     <fragment
         android:id="@+id/sendTeamRequestFragment"
         android:name="com.example.team_project_team6.ui.team.SendTeamRequestFragment"
-        android:label="fragment_send_team_request"
-        tools:layout="@layout/fragment_send_team_request" />
+        android:label="Invite"
+        tools:layout="@layout/fragment_send_team_request" >
+        <action
+            android:id="@+id/R.id.SendTeamRequestFragment_to_action_teamFragment_"
+            app:destination="@id/navigation_team"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
+    </fragment>
 </navigation>

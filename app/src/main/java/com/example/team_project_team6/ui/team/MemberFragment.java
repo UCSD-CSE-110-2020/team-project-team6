@@ -3,7 +3,10 @@ package com.example.team_project_team6.ui.team;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.team_project_team6.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 /**
@@ -70,6 +74,23 @@ public class MemberFragment extends Fragment {
 //        ListView listView = (ListView) root.findViewById(R.id.list_team_members);
 //        listView.setAdapter(adapter);
 
+
+        final FloatingActionButton btNewInvite = root.findViewById(R.id.bt_invite_member);
+
+        // navigate to send_tem_request when '+' button is pressed
+        btNewInvite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("send_team_request", "Clicked on '+' button");
+                NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                if (controller.getCurrentDestination().getId() == R.id.navigation_team) {
+                    Log.i("member","we are in the member fragment");
+                    controller.navigate(R.id.action_teamFragment_to_SendTeamRequestFragment);
+                }
+            }
+        });
         return root;
     }
+
+
 }
