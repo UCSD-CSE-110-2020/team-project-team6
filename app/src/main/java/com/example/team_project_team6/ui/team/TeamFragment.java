@@ -39,7 +39,7 @@ public class TeamFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("Members"));
         tabLayout.addTab(tabLayout.newTab().setText("Proposed Walk"));
 
-        final TabAdapter adapter = new TabAdapter(getActivity(), getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
+        final TabAdapter adapter = new TabAdapter(getActivity(), getChildFragmentManager(), tabLayout.getTabCount());
 
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

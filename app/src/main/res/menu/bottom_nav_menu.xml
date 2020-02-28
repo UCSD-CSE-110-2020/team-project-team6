@@ -12,12 +12,12 @@
         android:title="@string/title_walk" />
 
     <item
-    android:id="@+id/navigation_routes"
-    android:icon="@drawable/ic_notifications_black_24dp"
-    android:title="@string/title_routes" />
+        android:id="@+id/navigation_routes"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/title_routes" />
 
     <item
         android:id="@+id/navigation_team"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_team_black_24dp"
         android:title="@string/title_team" />
 </menu>

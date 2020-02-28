@@ -71,6 +71,9 @@
     <string name="title_team_member_list">Team Member List</string>
     <string name="title_invitation">Invitations</string>
     <string name="title_team">Team</string>
+    <string name="title_members">Members</string>
+    <string name="title_proposed_walk">Proposed Walk</string>
+    <string name="team_inviter_name">No one has invited you to join a team yet.</string>
 
     <string name="firstname_invitation">First Name</string>
     <string name="lastname_invitation">Last Name</string>
