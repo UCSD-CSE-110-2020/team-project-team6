@@ -36,6 +36,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 public class NewRouteFragment extends Fragment {
@@ -197,6 +199,9 @@ public class NewRouteFragment extends Fragment {
                     route.setFeatures(features);
 
                     saveData.saveRoute(route); // save route to SharedPreferences
+
+                    //save to firebase
+                    mNewRouteModel.getAdapter().uploadRouteData(route);
 
                     //come back to route
                     NavController controller = Navigation.findNavController(requireView());

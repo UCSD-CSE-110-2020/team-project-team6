@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.model.Route;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
@@ -14,7 +15,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -24,34 +28,30 @@ public class FirebaseGoogleAdapter implements IFirebase {
     private FirebaseUser user;
     private FirebaseAuth auth;
 
-    private final int RC_SIGN_IN = 1;
-
     public FirebaseGoogleAdapter() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = null;
+
     }
 
     @Override
-    public boolean authenticateWithGoogle(@NonNull Activity activity, @NonNull GoogleSignInAccount account) {
+    public void authenticateWithGoogle(@NonNull Activity activity, @NonNull GoogleSignInAccount account) {
         AuthCredential authCredential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
 
-        AtomicBoolean success = new AtomicBoolean(true);
-        try {
-            auth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
+        auth.signInWithCredential(authCredential).addOnCompleteListener(activity, task -> {
                 if (task.isSuccessful()) {
                     Log.d("TAG", "Signed in with Google to Firebase");
                     user = auth.getCurrentUser();
                 } else {
                     Log.d(TAG, "Failed to sign in to Firebase");
-                    success.set(false);
                 }
-            }).wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        };
+            });
+    }
 
-        return success.get();
+    @Override
+    public FirebaseAuth getSignedIn() {
+        return auth;
     }
 
     @Override
@@ -82,9 +82,17 @@ public class FirebaseGoogleAdapter implements IFirebase {
         }
 
         Gson gson = new Gson();
+//        Map<String, String> data = new HashMap<>();
+//        data.put(route.getName(), gson.toJson(route));
+
+        //convert json to Map
+        Map<String, Object> jsonToMap = gson.fromJson(
+                gson.toJson(route), new TypeToken<HashMap<String, Object>>() {}.getType()
+        );
+
         DocumentReference uidRef = db.collection("users").document(getEmail());
         uidRef.collection("routes")
-                .add(gson.toJson(route))
+                .add(jsonToMap)
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                 })
