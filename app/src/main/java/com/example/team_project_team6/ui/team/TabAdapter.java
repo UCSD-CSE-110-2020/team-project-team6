@@ -14,17 +14,21 @@ class TabAdapter extends FragmentPagerAdapter {
         context = c;
         this.totalTabs = totalTabs;
     }
+
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
                 MemberFragment memberFragment = new MemberFragment();
+                return memberFragment;
             case 1:
                 ProposedWalkFragment proposedWalkFragment = new ProposedWalkFragment();
+                return proposedWalkFragment;
             default:
                 return null;
         }
     }
+
     @Override
     public int getCount() {
         return totalTabs;

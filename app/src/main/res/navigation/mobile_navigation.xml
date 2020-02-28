@@ -117,16 +117,16 @@
     <fragment
         android:id="@+id/navigation_team"
         android:name="com.example.team_project_team6.ui.team.TeamFragment"
-        android:label="fragment_team"
+        android:label="@string/title_team"
         tools:layout="@layout/fragment_team" />
     <fragment
         android:id="@+id/memberFragment"
         android:name="com.example.team_project_team6.ui.team.MemberFragment"
-        android:label="fragment_member"
-        tools:layout="@layout/fragment_member" />
+        android:label="@string/title_members"
+        tools:layout="@layout/fragment_members" />
     <fragment
         android:id="@+id/proposedWalkFragment"
         android:name="com.example.team_project_team6.ui.team.ProposedWalkFragment"
-        android:label="fragment_proposed_walk"
+        android:label="@string/title_proposed_walk"
         tools:layout="@layout/fragment_proposed_walk" />
 </navigation>
