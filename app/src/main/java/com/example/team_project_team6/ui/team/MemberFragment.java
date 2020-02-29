@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
@@ -22,16 +24,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MemberFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MemberFragment extends Fragment {
     private TeamViewModel teamViewModel;
     private ArrayAdapter mfAdapter;
     private String[] teamMemberArray;
+    private Button btnAcceptInvite;
+    private Button btnDeclineInvite;
+    private TextView txtInviterName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +46,12 @@ public class MemberFragment extends Fragment {
         ListView listView = (ListView) root.findViewById(R.id.list_team_members);
         listView.setAdapter(mfAdapter);
 
+        btnAcceptInvite = root.findViewById(R.id.btn_accept_invite);
+        btnDeclineInvite = root.findViewById(R.id.btn_decline_invite);
+        txtInviterName = root.findViewById(R.id.txt_team_inviter_name);
+
+        btnAcceptInvite.setVisibility(View.INVISIBLE);
+        btnDeclineInvite.setVisibility(View.INVISIBLE);
 
         final FloatingActionButton btNewInvite = root.findViewById(R.id.bt_invite_member);
 
@@ -60,6 +65,16 @@ public class MemberFragment extends Fragment {
                     Log.i("member","we are in the member fragment");
                     controller.navigate(R.id.action_teamFragment_to_SendTeamRequestFragment);
                 }
+            }
+        });
+
+        btnAcceptInvite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("member fragment", "accepted invite");
+                txtInviterName.setText(R.string.default_inviter_name_none);
+                btnAcceptInvite.setVisibility(View.INVISIBLE);
+                btnDeclineInvite.setVisibility(View.INVISIBLE);
             }
         });
         return root;
