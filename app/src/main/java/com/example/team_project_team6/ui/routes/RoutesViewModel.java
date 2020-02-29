@@ -47,7 +47,7 @@ public class RoutesViewModel extends AndroidViewModel {
     // Routes are displayed in the same order they are present in
     public LiveData<ArrayList<Route>> getRouteData() {
         // populate list of routes tiles
-        MutableLiveData<ArrayList<Route>> mRoutes = new MutableLiveData<ArrayList<Route>>();
+
         Set<String> routeNameSet = saveData.getRouteNames();
         List<String> routeNameList = new ArrayList<>(routeNameSet);
         Collections.sort(routeNameList);
