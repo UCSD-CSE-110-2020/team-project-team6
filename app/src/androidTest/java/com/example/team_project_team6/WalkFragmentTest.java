@@ -172,7 +172,7 @@ public class WalkFragmentTest {
         when(wViewModel.isWalking()).thenReturn(true);
 
         RouteDetailsViewModel rViewModel = mock(RouteDetailsViewModel.class);
-        when(rViewModel.getRoute()).thenReturn(new Route(null, "University of California, San Diego, EBU3B", null, "Test Walk Notes", null, "Wild Area"));
+        when(rViewModel.getRoute()).thenReturn(new Route(null, "University of California, San Diego, EBU3B", null, "Test Walk Notes", null, "Wild Area", "wsh"));
         doNothing().when(rViewModel).setRoute(any());
         when(rViewModel.getIsWalkFromRouteDetails()).thenReturn(true);
         doNothing().when(rViewModel).setIsWalkFromRouteDetails(anyBoolean());
