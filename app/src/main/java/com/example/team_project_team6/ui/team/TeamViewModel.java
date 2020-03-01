@@ -15,12 +15,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class TeamViewModel extends AndroidViewModel {
+public class TeamViewModel extends ViewModel {
     private MutableLiveData<ArrayList<String>> mTeamMemberNames;
-    private Context context;
 
-    public TeamViewModel(Application application) {
-        super(application);
+    public TeamViewModel() {
         ArrayList<String> data = new ArrayList<String>();
 
         // Mock names
@@ -30,7 +28,6 @@ public class TeamViewModel extends AndroidViewModel {
         Collections.sort(data);
 
         mTeamMemberNames = new MutableLiveData<>(data);
-        this.context = application;
     }
 
     public ArrayList<String> getTeamMemberNameList() {
