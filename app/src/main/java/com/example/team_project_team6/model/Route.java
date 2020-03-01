@@ -14,7 +14,7 @@ public class Route {
     private String notes;
     private Features features;
     private String name;
-
+    private String initials;
 
     public Route() {
         Log.i("empty Route constructor", "Initializing all values");
@@ -24,10 +24,11 @@ public class Route {
         this.notes = "";
         this.features = new Features();
         this.name = "";
+        this.initials = "";
     }
 
     // If never walked, set lastStartDate to null
-    public Route(Walk walk, String startPoint, Calendar lastStartDate, String notes, Features features, String name) {
+    public Route(Walk walk, String startPoint, Calendar lastStartDate, String notes, Features features, String name, String initials) {
         Log.i("Route constructor with all features", "Initializing all values");
         this.walk = walk;
         this.startPoint = startPoint;
@@ -35,6 +36,7 @@ public class Route {
         this.notes = notes;
         this.features = features;
         this.name = name;
+        this.initials = initials;
     }
 
     public String getName() {
@@ -149,5 +151,13 @@ public class Route {
             return String.format(Locale.ENGLISH, "Name: %s, Walk: (%s), Starting Point: %s, Last Start Date: null, Notes: %s,  Features: %s",
                     name, walk.toString(), startPoint, notes, features.toString());
         }
+    }
+
+    public String getInitials() {
+        return initials;
+    }
+
+    public void setInitials(String initials) {
+        this.initials = initials;
     }
 }

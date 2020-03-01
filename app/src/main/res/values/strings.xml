@@ -67,6 +67,8 @@
     <string name="lb_route_even">Even</string>
     <string name="lb_route_uneven">Uneven</string>
     <string name="bt_done">DONE</string>
+    <string name="teammates_routes">Teammates\' Routes</string>
+    <string name="your_routes">Your Routes</string>
 </resources>
 
 

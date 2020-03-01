@@ -1,6 +1,5 @@
 package com.example.team_project_team6.ui.routes;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,8 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -22,20 +19,16 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
-public class RoutesFragment extends Fragment {
+public class RoutesFragment extends Fragment implements TabLayout.OnTabSelectedListener {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public RoutesViewModel routesViewModel = null;
     public RouteDetailsViewModel routeDetailsViewModel = null;
@@ -43,7 +36,7 @@ public class RoutesFragment extends Fragment {
     private RecyclerView recyclerView;
     private RouteViewAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
+    private TabLayout mTabLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -123,6 +116,9 @@ public class RoutesFragment extends Fragment {
             }
         });
 
+        mTabLayout = root.findViewById(R.id.routeTabLayout);
+        mTabLayout.addOnTabSelectedListener(this);
+
         return root;
     }
 
@@ -134,5 +130,26 @@ public class RoutesFragment extends Fragment {
                 mAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        /* Really the best way to do this would be to have the route details page in
+         *  a separate view. Then we can just bind each tab to its own view instead of
+         *  checking the tab position like this. But this is good enough for now.
+         */
+        mAdapter.setTeamView(tab.getPosition() != 0);
+        mAdapter.notifyDataSetChanged();
+        routesViewModel.setTeamView(tab.getPosition() != 0);
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+        // Do nothing
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+        // Do nothing
     }
 }
