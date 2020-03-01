@@ -24,6 +24,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.firebase.FirebaseGoogleAdapter;
+import com.example.team_project_team6.firebase.IFirebase;
 import com.example.team_project_team6.fitness.FitnessService;
 import com.example.team_project_team6.fitness.GoogleFitAdapter;
 import com.example.team_project_team6.model.Features;
@@ -201,7 +203,12 @@ public class NewRouteFragment extends Fragment {
                     saveData.saveRoute(route); // save route to SharedPreferences
 
                     //save to firebase
-                    mNewRouteModel.getAdapter().uploadRouteData(route);
+                    IFirebase adapter = mNewRouteModel.getAdapter();
+                    if (adapter != null) {
+                        adapter.uploadRouteData(route);
+                    } else {
+                        Log.w(TAG, "IFirebase adapter is null. If this is not a unit test, something bad happened");
+                    }
 
                     //come back to route
                     NavController controller = Navigation.findNavController(requireView());
