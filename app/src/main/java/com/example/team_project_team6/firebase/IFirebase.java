@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public interface IFirebase {
     void authenticateWithGoogle(@NonNull Activity activity, @NonNull GoogleSignInAccount account);
 
-    FirebaseAuth getSignedIn();
+    Boolean getSignedIn();
     String getEmail();
     String getId();
 

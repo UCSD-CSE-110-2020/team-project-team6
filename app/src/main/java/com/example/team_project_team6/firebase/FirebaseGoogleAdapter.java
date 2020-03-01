@@ -2,6 +2,7 @@ package com.example.team_project_team6.firebase;
 
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -32,7 +33,6 @@ public class FirebaseGoogleAdapter implements IFirebase {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = null;
-
     }
 
     @Override
@@ -43,15 +43,19 @@ public class FirebaseGoogleAdapter implements IFirebase {
                 if (task.isSuccessful()) {
                     Log.d("TAG", "Signed in with Google to Firebase");
                     user = auth.getCurrentUser();
+
+                    Toast.makeText(activity, "Signed into Firebase successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Logged in with email: " + getEmail(), Toast.LENGTH_LONG).show();
                 } else {
                     Log.d(TAG, "Failed to sign in to Firebase");
+                    Toast.makeText(activity, "ERROR: Failed to sign into Firebase", Toast.LENGTH_LONG).show();
                 }
             });
     }
 
     @Override
-    public FirebaseAuth getSignedIn() {
-        return auth;
+    public Boolean getSignedIn() {
+        return auth.getCurrentUser() != null;
     }
 
     @Override
@@ -82,8 +86,6 @@ public class FirebaseGoogleAdapter implements IFirebase {
         }
 
         Gson gson = new Gson();
-//        Map<String, String> data = new HashMap<>();
-//        data.put(route.getName(), gson.toJson(route));
 
         //convert json to Map
         Map<String, Object> jsonToMap = gson.fromJson(

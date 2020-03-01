@@ -3,14 +3,11 @@ package com.example.team_project_team6;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -23,8 +20,6 @@ import com.example.team_project_team6.fitness.FitnessService;
 import com.example.team_project_team6.fitness.FitnessServiceFactory;
 import com.example.team_project_team6.fitness.GoogleFitAdapter;
 import com.example.team_project_team6.fitness.TestAdapter;
-import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.model.StopWatch;
 import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.new_route.NewRouteViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
@@ -32,15 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -58,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private WalkViewModel walkViewModel;
     private Long walkStartingStep;
 
-
     private AppBarConfiguration appBarConfiguration;
-    private GoogleSignInClient mGoogleSignInClient;
+
+    GoogleSignInClient mGoogleSignInClient;
     private int RC_SIGN_IN = 1;
 
     private AsyncTaskRunner runner;
@@ -69,25 +56,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        fgadapter = new FirebaseGoogleAdapter();
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        //if user hasn't logged in, showing up Google Sign In
-//        FirebaseUser user = fgadapter.getSignedIn().getCurrentUser();
-//        if(user == null) {
-            signInwithGoogle();
-        //}
-
-        NewRouteViewModel newRouteViewModel = new ViewModelProvider(this).get(NewRouteViewModel.class);
-        newRouteViewModel.setAdapter(fgadapter);
-
 
         // launch height/permission activity if user height hasn't been saved (first-time user)
         SharedPreferences spfs = this.getSharedPreferences("user_data", MODE_PRIVATE);
@@ -131,9 +99,26 @@ public class MainActivity extends AppCompatActivity {
         fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
         fitnessService.setup();
 
-
         runner = new AsyncTaskRunner();
         runner.execute(1000); // update once a second
+
+        // Create a firebase adapter and inject it into anything that requires it
+        fgadapter = new FirebaseGoogleAdapter();
+        NewRouteViewModel newRouteViewModel = new ViewModelProvider(this).get(NewRouteViewModel.class);
+        newRouteViewModel.setAdapter(fgadapter);
+
+        // Request username and ID tokens for Firebase auth when signing in
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        // Build the google sign in client with the specified options
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // Sign into Firebase with a Google account. If already signed in, then log into firebase directly.
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     public void stopAsyncTaskRunner() {
@@ -152,56 +137,18 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "ERROR, google fit result code: " + resultCode);
         }
+
+        // Signed with with Google for Firebase
         if(requestCode == RC_SIGN_IN){
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
-    }
+            GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(task -> {
+                GoogleSignInAccount account = task.getResult();
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask){
-        try{
-
-            GoogleSignInAccount acc = completedTask.getResult(ApiException.class);
-            Toast.makeText(MainActivity.this,"Signed In Successfully",Toast.LENGTH_LONG).show();
-            FirebaseGoogleAuth(acc);
-        }
-        catch (ApiException e){
-            Toast.makeText(MainActivity.this,"Sign In Failed",Toast.LENGTH_LONG).show();
-            FirebaseGoogleAuth(null);
-        }
-    }
-
-    private void FirebaseGoogleAuth(GoogleSignInAccount acct) {
-        //check if the account is null
-        if (acct != null) {
-            fgadapter.authenticateWithGoogle(this, acct);
-            updateUI(fgadapter.getSignedIn().getCurrentUser());
-        }
-        else{
-            Toast.makeText(MainActivity.this, "Account failed", Toast.LENGTH_SHORT).show();
-            updateUI(null);
-        }
-    }
-
-    public void signInwithGoogle(){
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = fgadapter.getSignedIn().getCurrentUser();
-        updateUI(currentUser);
-    }
-
-    private void updateUI(FirebaseUser user) {
-        GoogleSignInAccount lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if (lastSignedInAccount != null){
-            String personEmail = user.getEmail();
-            //String personId = fgadapter.getId();
-            Toast.makeText(MainActivity.this, "Logged in with: " + personEmail, Toast.LENGTH_LONG).show();
+                if (account != null) {
+                    fgadapter.authenticateWithGoogle(this, account);
+                }
+            }).addOnFailureListener(e -> {
+                Toast.makeText(MainActivity.this, "ERROR: Failed to log into Google", Toast.LENGTH_LONG).show();
+            });
         }
     }
 
@@ -230,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class AsyncTaskRunner extends AsyncTask<Integer, Integer, Integer> {
-
         @Override
         protected Integer doInBackground(Integer... params) {
             try {
