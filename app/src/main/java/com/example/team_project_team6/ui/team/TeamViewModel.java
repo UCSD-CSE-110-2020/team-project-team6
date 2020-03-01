@@ -15,7 +15,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class TeamViewModel extends AndroidViewModel {
+public class TeamViewModel extends ViewModel {
     private MutableLiveData<ArrayList<String>> mTeamMemberNames;
 
     public TeamViewModel() {
