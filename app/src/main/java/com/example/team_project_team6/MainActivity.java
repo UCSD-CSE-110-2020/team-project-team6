@@ -27,6 +27,7 @@ import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.StopWatch;
 import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.new_route.NewRouteViewModel;
+import com.example.team_project_team6.ui.routes.RoutesViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private GoogleSignInClient mGoogleSignInClient;
     private int RC_SIGN_IN = 1;
+    private NewRouteViewModel newRouteViewModel;
+    private RoutesViewModel routesViewModel;
 
     private AsyncTaskRunner runner;
 
@@ -79,15 +82,20 @@ public class MainActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+
         //if user hasn't logged in, showing up Google Sign In
-//        FirebaseUser user = fgadapter.getSignedIn().getCurrentUser();
-//        if(user == null) {
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//        if(account == null) {
             signInwithGoogle();
-        //}
+//        }else {
+//            fgadapter.authenticateWithGoogle(this, account);
+//        }
 
-        NewRouteViewModel newRouteViewModel = new ViewModelProvider(this).get(NewRouteViewModel.class);
+        //send FirebaseGoogleAdapter to fragments model
+        newRouteViewModel = new ViewModelProvider(this).get(NewRouteViewModel.class);
         newRouteViewModel.setAdapter(fgadapter);
-
+        routesViewModel = new ViewModelProvider(this).get(RoutesViewModel.class);
+        routesViewModel.setAdapter(fgadapter);
 
         // launch height/permission activity if user height hasn't been saved (first-time user)
         SharedPreferences spfs = this.getSharedPreferences("user_data", MODE_PRIVATE);
@@ -188,13 +196,13 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = fgadapter.getSignedIn().getCurrentUser();
-        updateUI(currentUser);
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = fgadapter.getSignedIn().getCurrentUser();
+//        updateUI(currentUser);
+//    }
 
     private void updateUI(FirebaseUser user) {
         GoogleSignInAccount lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());

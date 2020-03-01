@@ -14,4 +14,5 @@ public class NewRouteViewModel extends ViewModel {
     public IFirebase getAdapter() {
         return adapter;
     }
+
 }
