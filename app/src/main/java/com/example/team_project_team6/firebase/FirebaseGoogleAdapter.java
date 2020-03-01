@@ -41,13 +41,13 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
         auth.signInWithCredential(authCredential).addOnCompleteListener(activity, task -> {
                 if (task.isSuccessful()) {
-                    Log.d("TAG", "Signed in with Google to Firebase");
+                    Log.d(TAG, "Signed in with Google to Firebase");
                     user = auth.getCurrentUser();
 
                     Toast.makeText(activity, "Signed into Firebase successfully", Toast.LENGTH_LONG).show();
                     Toast.makeText(activity, "Logged in with email: " + getEmail(), Toast.LENGTH_LONG).show();
                 } else {
-                    Log.d(TAG, "Failed to sign in to Firebase");
+                    Log.e(TAG, "Failed to sign in to Firebase");
                     Toast.makeText(activity, "ERROR: Failed to sign into Firebase", Toast.LENGTH_LONG).show();
                 }
             });
@@ -61,7 +61,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
     @Override
     public String getEmail() {
         if (user == null) {
-            Log.d(TAG, "You must sign in before calling this method");
+            Log.e(TAG, "You must sign in before calling this method");
             return "ERR_NOT_SIGNED_IN";
         } else {
             return user.getEmail();
@@ -71,7 +71,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
     @Override
     public String getId() {
         if (user == null) {
-            Log.d(TAG, "You must sign in before calling this method");
+            Log.e(TAG, "You must sign in before calling this method");
             return "ERR_NOT_SIGNED_IN";
         } else {
             return user.getUid();
@@ -81,7 +81,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
     @Override
     public void uploadRouteData(Route route) {
         if (user == null) {
-            Log.d(TAG, "Could not upload route data without signing in");
+            Log.e(TAG, "Could not upload route data without signing in");
             return;
         }
 
@@ -99,7 +99,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                 })
                 .addOnFailureListener(e -> {
-                    Log.d(TAG, "Error adding document", e);
+                    Log.e(TAG, "Error adding document", e);
                 });
     }
 }
