@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,14 +15,18 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.team_project_team6.firebase.FirebaseGoogleAdapter;
 import com.example.team_project_team6.fitness.FitnessService;
 import com.example.team_project_team6.fitness.FitnessServiceFactory;
 import com.example.team_project_team6.fitness.GoogleFitAdapter;
 import com.example.team_project_team6.fitness.TestAdapter;
-import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.model.StopWatch;
 import com.example.team_project_team6.ui.home.HomeViewModel;
+import com.example.team_project_team6.ui.new_route.NewRouteViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -34,16 +39,16 @@ public class MainActivity extends AppCompatActivity {
     private String fitnessServiceKey = GOOGLE_FITNESS_KEY;
 
     private FitnessService fitnessService;
+    private FirebaseGoogleAdapter fgadapter;
 
     private HomeViewModel homeViewModel;
     private WalkViewModel walkViewModel;
-    private StopWatch sw;
     private Long walkStartingStep;
-    private boolean isWalking;
 
     private AppBarConfiguration appBarConfiguration;
-    private boolean isWalkFromRouteDetails = false;
-    private boolean createRouteFromWalk = false;
+
+    GoogleSignInClient mGoogleSignInClient;
+    private int RC_SIGN_IN = 1;
 
     private AsyncTaskRunner runner;
 
@@ -96,6 +101,24 @@ public class MainActivity extends AppCompatActivity {
 
         runner = new AsyncTaskRunner();
         runner.execute(1000); // update once a second
+
+        // Create a firebase adapter and inject it into anything that requires it
+        fgadapter = new FirebaseGoogleAdapter();
+        NewRouteViewModel newRouteViewModel = new ViewModelProvider(this).get(NewRouteViewModel.class);
+        newRouteViewModel.setAdapter(fgadapter);
+
+        // Request username and ID tokens for Firebase auth when signing in
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        // Build the google sign in client with the specified options
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // Sign into Firebase with a Google account. If already signed in, then log into firebase directly.
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     public void stopAsyncTaskRunner() {
@@ -114,8 +137,20 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "ERROR, google fit result code: " + resultCode);
         }
-    }
 
+        // Signed with with Google for Firebase
+        if(requestCode == RC_SIGN_IN){
+            GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(task -> {
+                GoogleSignInAccount account = task.getResult();
+
+                if (account != null) {
+                    fgadapter.authenticateWithGoogle(this, account);
+                }
+            }).addOnFailureListener(e -> {
+                Toast.makeText(MainActivity.this, "ERROR: Failed to log into Google", Toast.LENGTH_LONG).show();
+            });
+        }
+    }
 
     public void launchPermissionActivity(){
         Intent intent = new Intent(this, PermissionActivity.class);
@@ -142,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class AsyncTaskRunner extends AsyncTask<Integer, Integer, Integer> {
-
         @Override
         protected Integer doInBackground(Integer... params) {
             try {

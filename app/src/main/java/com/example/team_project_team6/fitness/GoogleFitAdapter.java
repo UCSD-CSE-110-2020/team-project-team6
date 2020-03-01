@@ -5,6 +5,8 @@ import android.util.Log;
 import com.example.team_project_team6.MainActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.DataSet;
@@ -27,7 +29,9 @@ public class GoogleFitAdapter implements FitnessService {
     }
 
 
+
     public void setup() {
+
         FitnessOptions fitnessOptions = FitnessOptions.builder()
                 .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
@@ -35,19 +39,25 @@ public class GoogleFitAdapter implements FitnessService {
 
 
         account = GoogleSignIn.getAccountForExtension(activity, fitnessOptions);
+
         if (!GoogleSignIn.hasPermissions(account, fitnessOptions)) {
             GoogleSignIn.requestPermissions(
                     activity, // your activity
                     GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
                     account,
                     fitnessOptions);
+
         } else {
             updateStepCount();
             startRecording();
+
         }
+
+
     }
 
     private void startRecording() {
+
         if (account == null) {
             return;
         }
@@ -57,7 +67,7 @@ public class GoogleFitAdapter implements FitnessService {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.i(TAG, "Successfully subscribed!");
+                        Log.i(TAG, "Successfully subscribed! ");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -107,4 +117,5 @@ public class GoogleFitAdapter implements FitnessService {
     public int getRequestCode() {
         return GOOGLE_FIT_PERMISSIONS_REQUEST_CODE;
     }
+
 }
