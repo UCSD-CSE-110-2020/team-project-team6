@@ -143,10 +143,8 @@ public class FirebaseGoogleAdapter implements IFirebase {
                     @NonNull
                     @Override
                     public Route parseSnapshot(@NonNull DocumentSnapshot snapshot) {
-                        Log.i("FirestoreRecyclerOptions", snapshot.getId());
                         Gson gson_route = new Gson();
                         Route tmp = gson_route.fromJson(gson_route.toJson(snapshot.getData()), Route.class);
-                        Log.i("FirestoreRecyclerOptions", tmp.getName() + snapshot.getId());
                         return tmp;
                     }
                 }).build();
