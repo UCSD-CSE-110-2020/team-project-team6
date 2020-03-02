@@ -97,9 +97,11 @@ public class RoutesFragment extends Fragment {
         mAdapter.setOnFavoriteClickListener(new RouteViewAdapter.ClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                boolean isFavorite = documentSnapshot.getBoolean("features.isFavorite");
                 if(documentSnapshot.exists()){
+                    boolean isFavorite = documentSnapshot.getBoolean("features.isFavorite");
                     routesViewModel.getAdapter().updateFavorite(documentSnapshot.getId(), !isFavorite);
+                }else {
+                    Log.i("Route", "The route's favorite doesn't exist!");
                 }
             }
         });
@@ -108,22 +110,27 @@ public class RoutesFragment extends Fragment {
         mAdapter.setOnItemClickListener(new RouteViewAdapter.ClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                Gson gson_route = new Gson();
-                Route tmp = gson_route.fromJson(gson_route.toJson(documentSnapshot.getData()), Route.class);
-                String id = documentSnapshot.getId();
-                Toast.makeText(getActivity(),
-                        "Position: " + position + " ID: " + id + " " + tmp.getName(), Toast.LENGTH_SHORT).show();
-//                Route route = routesViewModel.getRouteAt(position);
-//                if (route != null) {
-//                    NavController controller = Navigation.findNavController(requireView());
-//                    Log.d("Routes", "Clicked on route: " + route.getName());
-//                    if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
-//                        RouteDetailsViewModel route_details_view_model = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
-//                        route_details_view_model.setRoute(route);
-//
-//                        controller.navigate(R.id.action_navigation_routes_to_routeDetailsFragment);
-//                    }
-//                }
+                if(documentSnapshot.exists()) {
+                    Gson gson_route = new Gson();
+                    Route route = gson_route.fromJson(gson_route.toJson(documentSnapshot.getData()), Route.class);
+
+                    String id = documentSnapshot.getId();
+                    Toast.makeText(getActivity(),
+                            "Position: " + position + " ID: " + id, Toast.LENGTH_SHORT).show();
+
+                    if (route != null) {
+                        NavController controller = Navigation.findNavController(requireView());
+                        Log.d("Routes", "Clicked on route: " + route.getName());
+                        if (controller.getCurrentDestination().getId() == R.id.navigation_routes) {
+                            RouteDetailsViewModel route_details_view_model = ViewModelProviders.of(requireActivity()).get(RouteDetailsViewModel.class);
+                            route_details_view_model.setRoute(route);
+
+                            controller.navigate(R.id.action_navigation_routes_to_routeDetailsFragment);
+                        }
+                    }
+                }else {
+                    Log.i("Route", "The route doesn't exist!");
+                }
             }
         });
 
@@ -144,5 +151,11 @@ public class RoutesFragment extends Fragment {
     public void onStart() {
         super.onStart();
         mAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAdapter.stopListening();
     }
 }

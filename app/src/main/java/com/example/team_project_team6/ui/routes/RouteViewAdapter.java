@@ -81,9 +81,6 @@ public class RouteViewAdapter extends FirestoreRecyclerAdapter<Route, RouteViewA
         this.items = new ArrayList<>();
     }
 
-//    public RouteViewAdapter(ArrayList<Route> items) {
-//        this.items = items;
-//    }
 
     @NonNull
     @Override
@@ -131,10 +128,6 @@ public class RouteViewAdapter extends FirestoreRecyclerAdapter<Route, RouteViewA
         }
     }
 
-//    @Override
-//    public int getItemCount() {
-//        return items.size();
-//    }
 
     public void updateData(ArrayList<Route> data) {
         this.items = data;
