@@ -22,12 +22,14 @@ import com.example.team_project_team6.fitness.GoogleFitAdapter;
 import com.example.team_project_team6.fitness.TestAdapter;
 import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.new_route.NewRouteViewModel;
+import com.example.team_project_team6.ui.routes.RoutesViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private HomeViewModel homeViewModel;
     private WalkViewModel walkViewModel;
     private Long walkStartingStep;
+    private RoutesViewModel routesViewModel;
 
     private AppBarConfiguration appBarConfiguration;
 
@@ -106,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
         fgadapter = new FirebaseGoogleAdapter();
         NewRouteViewModel newRouteViewModel = new ViewModelProvider(this).get(NewRouteViewModel.class);
         newRouteViewModel.setAdapter(fgadapter);
+        routesViewModel = new ViewModelProvider(this).get(RoutesViewModel.class);
+        routesViewModel.setAdapter(fgadapter);
+
 
         // Request username and ID tokens for Firebase auth when signing in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -117,8 +123,7 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Sign into Firebase with a Google account. If already signed in, then log into firebase directly.
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        signInWithGoogle();
     }
 
     public void stopAsyncTaskRunner() {
@@ -150,6 +155,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "ERROR: Failed to log into Google", Toast.LENGTH_LONG).show();
             });
         }
+    }
+
+    public void signInWithGoogle(){
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     public void launchPermissionActivity(){

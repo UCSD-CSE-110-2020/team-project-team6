@@ -4,10 +4,13 @@ import android.app.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 
 import com.example.team_project_team6.model.Route;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 public interface IFirebase {
     void authenticateWithGoogle(@NonNull Activity activity, @NonNull GoogleSignInAccount account);
@@ -17,5 +20,5 @@ public interface IFirebase {
     String getId();
 
     void uploadRouteData(Route route);
-
+    LiveData<ArrayList<Route>> retrieveRouteDoc();
 }

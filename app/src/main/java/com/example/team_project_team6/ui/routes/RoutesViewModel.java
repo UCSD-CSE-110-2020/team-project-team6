@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.team_project_team6.MainActivity;
+import com.example.team_project_team6.firebase.IFirebase;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
@@ -29,6 +30,7 @@ public class RoutesViewModel extends AndroidViewModel {
     private MutableLiveData<ArrayList<Route>> mRoutes;
     private Context context;
     private SaveData saveData;
+    private IFirebase adapter;
 
     public RoutesViewModel(Application application) {
         super(application);
@@ -36,6 +38,13 @@ public class RoutesViewModel extends AndroidViewModel {
         mRoutes = new MutableLiveData<>(data);
         this.context = application;
         saveData = new SaveData(context);
+
+    }
+    public void setAdapter(IFirebase adapter) {
+        this.adapter = adapter;
+    }
+    public IFirebase getAdapter() {
+        return adapter;
     }
 
     // mRoutes stores a list of all the routes in sharedpreferences
@@ -57,9 +66,12 @@ public class RoutesViewModel extends AndroidViewModel {
             Route route = saveData.getRoute(routeName);
             routeList.add(route);
         }
+
         mRoutes.postValue(routeList);
         setRouteData(mRoutes);
-        return mRoutes;
+
+        //return a livedata from FirestoreLivedata class
+        return adapter.retrieveRouteDoc();
     }
 
     Route getRouteAt(int index) {

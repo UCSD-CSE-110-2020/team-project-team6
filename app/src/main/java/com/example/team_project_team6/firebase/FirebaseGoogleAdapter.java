@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.model.Route;
@@ -13,11 +14,14 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -28,6 +32,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private FirebaseAuth auth;
+    private String TIMESTAMP_KEY = "timestamp";
 
     public FirebaseGoogleAdapter() {
         db = FirebaseFirestore.getInstance();
@@ -81,17 +86,22 @@ public class FirebaseGoogleAdapter implements IFirebase {
     @Override
     public void uploadRouteData(Route route) {
         if (user == null) {
-            Log.e(TAG, "Could not upload route data without signing in");
+            Log.d(TAG, "Could not upload route data without signing in");
             return;
         }
 
         Gson gson = new Gson();
+        Map<String, String> updates = new HashMap<>();
 
         //convert json to Map
         Map<String, Object> jsonToMap = gson.fromJson(
                 gson.toJson(route), new TypeToken<HashMap<String, Object>>() {}.getType()
         );
 
+        //put timestamp to order by date
+        jsonToMap.put(TIMESTAMP_KEY, FieldValue.serverTimestamp());
+
+        Log.d(TAG, "save with: " + getEmail());
         DocumentReference uidRef = db.collection("users").document(getEmail());
         uidRef.collection("routes")
                 .add(jsonToMap)
@@ -99,7 +109,21 @@ public class FirebaseGoogleAdapter implements IFirebase {
                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error adding document", e);
+                    Log.d(TAG, "Error adding document", e);
                 });
+
+    }
+
+    @Override
+    public LiveData<ArrayList<Route>> retrieveRouteDoc() {
+        if (user == null) {
+            Log.d(TAG, "Could not upload route data without signing in");
+            return null;
+        }
+
+        CollectionReference uidRef = db.collection("users").document(getEmail()).collection("routes");
+
+        return new FirestoreLiveData<>(uidRef, Route.class, TIMESTAMP_KEY);
+
     }
 }
