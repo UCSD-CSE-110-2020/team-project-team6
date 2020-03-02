@@ -45,7 +45,7 @@ public class MemberFragment extends Fragment {
                 R.layout.single_item_list_view, teamMemberArray);
         ListView listView = (ListView) root.findViewById(R.id.list_team_members);
         listView.setAdapter(mfAdapter);
-
+      
         btnAcceptInvite = root.findViewById(R.id.btn_accept_invite);
         btnDeclineInvite = root.findViewById(R.id.btn_decline_invite);
         txtInviterName = root.findViewById(R.id.txt_team_inviter_name);
