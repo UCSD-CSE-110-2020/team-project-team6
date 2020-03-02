@@ -13,18 +13,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.Walk;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.RouteViewHolder> {
+public class RouteViewAdapter extends FirestoreRecyclerAdapter<Route, RouteViewAdapter.RouteViewHolder> {
     private ArrayList<Route> items;
     private static ClickListener favoriteClickListener;
     private static ClickListener itemClickListener;
 
-    static class RouteViewHolder extends RecyclerView.ViewHolder {
+    class RouteViewHolder extends RecyclerView.ViewHolder {
         TextView trailName, steps, distance, lastCompleted, textFeatures;
         ImageButton favoriteButton;
 
@@ -42,8 +45,9 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
             favoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (favoriteClickListener != null) {
-                        favoriteClickListener.onItemClick(getAdapterPosition(), v);
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && favoriteClickListener != null) {
+                        favoriteClickListener.onItemClick(getSnapshots().getSnapshot(position), position);
                     }
                 }
             });
@@ -51,8 +55,9 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (itemClickListener != null) {
-                        itemClickListener.onItemClick(getAdapterPosition(), v);
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && itemClickListener != null) {
+                        itemClickListener.onItemClick(getSnapshots().getSnapshot(position), position);
                     }
                 }
             });
@@ -60,7 +65,7 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
     }
 
     public interface ClickListener {
-        void onItemClick(int position, View v);
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     void setOnFavoriteClickListener(ClickListener listener) {
@@ -71,13 +76,14 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
         RouteViewAdapter.itemClickListener = listener;
     }
 
-    public RouteViewAdapter() {
+    public RouteViewAdapter(@NonNull FirestoreRecyclerOptions<Route> options) {
+        super(options);
         this.items = new ArrayList<>();
     }
 
-    public RouteViewAdapter(ArrayList<Route> items) {
-        this.items = items;
-    }
+//    public RouteViewAdapter(ArrayList<Route> items) {
+//        this.items = items;
+//    }
 
     @NonNull
     @Override
@@ -87,20 +93,21 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RouteViewHolder holder, int position) {
-        if (items.get(position).getFeatures().isFavorite() && items.get(position).getFeatures() != null) {
+    public void onBindViewHolder(@NonNull RouteViewHolder holder, int position, @NonNull Route model) {
+
+        if (model.getFeatures().isFavorite() && model.getFeatures() != null) {
             holder.favoriteButton.setBackgroundResource(R.drawable.ic_filled_star);
         } else {
             holder.favoriteButton.setBackgroundResource(R.drawable.ic_empty_star);
         }
 
-        String features = getFeaturesString(items.get(position));
+        String features = getFeaturesString(model);
         holder.textFeatures.setText(features);
 
-        holder.trailName.setText(items.get(position).getName());
+        holder.trailName.setText(model.getName());
 
-        Route currRoute = items.get(position);
-        Walk walkInCurrRoute = items.get(position).getWalk();
+        Route currRoute = model;
+        Walk walkInCurrRoute = model.getWalk();
 
         Log.i("RouteViewAdapter onBindViewHolder", "route name: " + currRoute.getName());
         if(currRoute == null) {
@@ -115,8 +122,8 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
         String dist = String.format(Locale.ENGLISH, "%.2f mi", walkInCurrRoute.getDist());
         holder.distance.setText(dist);
 
-        if (items.get(position).getLastStartDate() != null) {
-            Date dateLastWalked = items.get(position).getLastStartDate().getTime();
+        if (model.getLastStartDate() != null) {
+            Date dateLastWalked = model.getLastStartDate().getTime();
             SimpleDateFormat format = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
             holder.lastCompleted.setText(format.format(dateLastWalked));
         } else {
@@ -124,10 +131,10 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
+//    @Override
+//    public int getItemCount() {
+//        return items.size();
+//    }
 
     public void updateData(ArrayList<Route> data) {
         this.items = data;
