@@ -94,13 +94,13 @@ public class GoogleFitAdapter implements FitnessService {
                         new OnSuccessListener<DataSet>() {
                             @Override
                             public void onSuccess(DataSet dataSet) {
-                                Log.d(TAG, dataSet.toString());
+                                //Log.d(TAG, dataSet.toString());
                                 long total =
                                         dataSet.isEmpty()
                                                 ? 0
                                                 : dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
                                 activity.setStepCount(total);
-                                Log.d(TAG, "Total steps: " + total);
+                                //Log.d(TAG, "Total steps: " + total);
                             }
                         })
                 .addOnFailureListener(

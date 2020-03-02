@@ -5,19 +5,26 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.model.Route;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.SnapshotParser;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -126,4 +133,43 @@ public class FirebaseGoogleAdapter implements IFirebase {
         return new FirestoreLiveData<>(uidRef, Route.class, TIMESTAMP_KEY);
 
     }
+
+    @Override
+    public FirestoreRecyclerOptions<Route> fbaseRclOptRoute(){
+        CollectionReference uidRef = db.collection("users").document(getEmail()).collection("routes");
+        Query query = uidRef.orderBy(TIMESTAMP_KEY, Query.Direction.ASCENDING);
+        FirestoreRecyclerOptions<Route> options = new FirestoreRecyclerOptions.Builder<Route>()
+                .setQuery(query, new SnapshotParser<Route>() {
+                    @NonNull
+                    @Override
+                    public Route parseSnapshot(@NonNull DocumentSnapshot snapshot) {
+                        Log.i("FirestoreRecyclerOptions", snapshot.getId());
+                        Gson gson_route = new Gson();
+                        Route tmp = gson_route.fromJson(gson_route.toJson(snapshot.getData()), Route.class);
+                        Log.i("FirestoreRecyclerOptions", tmp.getName() + snapshot.getId());
+                        return tmp;
+                    }
+                }).build();
+        return options;
+    }
+
+    @Override
+    public void updateFavorite(String id, boolean isFavorite){
+        CollectionReference uidRef = db.collection("users").document(getEmail()).collection("routes");
+        uidRef.document(id).
+                update("features.isFavorite", isFavorite)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Favorite successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating Favorite", e);
+                    }
+                });
+    }
+
 }

@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 import com.example.team_project_team6.model.Route;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -21,4 +22,6 @@ public interface IFirebase {
 
     void uploadRouteData(Route route);
     LiveData<ArrayList<Route>> retrieveRouteDoc();
+    FirestoreRecyclerOptions<Route> fbaseRclOptRoute();
+    void updateFavorite(String id, boolean isFavorite);
 }
