@@ -8,15 +8,27 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
 
 public class RouteDetailsViewModel extends ViewModel {
     private Route mRoute;
     private boolean fromRouteDetails;
 
+    public SaveData getSaveData() {
+        return saveData;
+    }
+
+    public void setSaveData(SaveData saveData) {
+        this.saveData = saveData;
+    }
+
+    private SaveData saveData;
+
     public RouteDetailsViewModel() {
         fromRouteDetails = false;
     }
+
 
     public Route getRoute() {
         return mRoute;

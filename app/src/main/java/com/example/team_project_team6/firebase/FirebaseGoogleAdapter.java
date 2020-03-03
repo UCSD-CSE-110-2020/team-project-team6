@@ -5,33 +5,27 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
-import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.model.Route;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.firebase.ui.firestore.SnapshotParser;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Objects;
+import java.util.UUID;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -58,6 +52,41 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
                     Toast.makeText(activity, "Signed into Firebase successfully", Toast.LENGTH_LONG).show();
                     Toast.makeText(activity, "Logged in with email: " + getEmail(), Toast.LENGTH_LONG).show();
+
+                    // Create the user document if it does not exist (first time user?)
+                    // Adds the user to a random team by default
+                    db.collection("users")
+                            .document(getEmail())
+                            .get()
+                            .addOnCompleteListener(createTask -> {
+                        if (createTask.isSuccessful()) {
+                            DocumentSnapshot document = createTask.getResult();
+                            if (!Objects.requireNonNull(document).exists()) {
+                                Map<String, String> team = new HashMap<>();
+                                String uuid = UUID.randomUUID().toString();
+                                team.put("team", uuid);
+
+                                Log.d(TAG, "No team found, assuming new user. Creating team " + uuid + " for user " + getEmail());
+
+                                Log.d(TAG, "Creating user " + getEmail());
+                                db.collection("users")
+                                        .document(getEmail())
+                                        .set(team);
+
+                                Map<String, List<String>> uuidTeam = new HashMap<>();
+                                List<String> members = new ArrayList<>();
+                                members.add(getEmail());
+                                uuidTeam.put(uuid, members);
+
+                                Log.d(TAG, "Creating team " + uuid);
+                                db.collection("teams")
+                                        .document(uuid)
+                                        .set(uuidTeam);
+                            } else {
+                                Log.d(TAG, "Found user " + getEmail());
+                            }
+                        }
+                    });
                 } else {
                     Log.e(TAG, "Failed to sign in to Firebase");
                     Toast.makeText(activity, "ERROR: Failed to sign into Firebase", Toast.LENGTH_LONG).show();
@@ -98,76 +127,57 @@ public class FirebaseGoogleAdapter implements IFirebase {
         }
 
         Gson gson = new Gson();
-        Map<String, String> updates = new HashMap<>();
-
-        //convert json to Map
-        Map<String, Object> jsonToMap = gson.fromJson(
+        Map<String, String> jsonToMap = gson.fromJson(
                 gson.toJson(route), new TypeToken<HashMap<String, Object>>() {}.getType()
         );
-
-        //put timestamp to order by date
-        jsonToMap.put(TIMESTAMP_KEY, FieldValue.serverTimestamp());
 
         Log.d(TAG, "save with: " + getEmail());
         DocumentReference uidRef = db.collection("users").document(getEmail());
         uidRef.collection("routes")
-                .add(jsonToMap)
+                .document(route.getName())
+                .set(jsonToMap)
                 .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    Log.d(TAG, "Route saved to routes/" + route.getName() + "/");
                 })
                 .addOnFailureListener(e -> {
                     Log.d(TAG, "Error adding document", e);
                 });
-
     }
 
     @Override
-    public LiveData<ArrayList<Route>> retrieveRouteDoc() {
+    public synchronized LiveData<ArrayList<Route>> downloadRouteData() {
+        MutableLiveData<ArrayList<Route>> data = new MutableLiveData<>();
+
         if (user == null) {
-            Log.d(TAG, "Could not upload route data without signing in");
-            return null;
+            Log.d(TAG, "Could not download route data without signing in");
+            return data;
         }
 
-        CollectionReference uidRef = db.collection("users").document(getEmail()).collection("routes");
+        Gson gson = new Gson();
+        db.collection("users")
+                .document(getEmail())
+                .collection("routes")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        Log.d(TAG, "Successfully read data but data was empty");
+                    } else {
+                        ArrayList<Route> list = new ArrayList<>();
 
-        return new FirestoreLiveData<>(uidRef, Route.class, TIMESTAMP_KEY);
+                        List<DocumentSnapshot> snapshots = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot snapshot : snapshots) {
+                            Map<String, Object> map = snapshot.getData();
+                            Route route = gson.fromJson(gson.toJson(map), Route.class);
+                            list.add(route);
+                        }
 
-    }
+                        Log.i(TAG, "Successfully read route data");
 
-    @Override
-    public FirestoreRecyclerOptions<Route> fbaseRclOptRoute(){
-        CollectionReference uidRef = db.collection("users").document(getEmail()).collection("routes");
-        Query query = uidRef.orderBy(TIMESTAMP_KEY, Query.Direction.ASCENDING);
-        FirestoreRecyclerOptions<Route> options = new FirestoreRecyclerOptions.Builder<Route>()
-                .setQuery(query, new SnapshotParser<Route>() {
-                    @NonNull
-                    @Override
-                    public Route parseSnapshot(@NonNull DocumentSnapshot snapshot) {
-                        Gson gson_route = new Gson();
-                        Route tmp = gson_route.fromJson(gson_route.toJson(snapshot.getData()), Route.class);
-                        return tmp;
-                    }
-                }).build();
-        return options;
-    }
-
-    @Override
-    public void updateFavorite(String id, boolean isFavorite){
-        CollectionReference uidRef = db.collection("users").document(getEmail()).collection("routes");
-        uidRef.document(id).
-                update("features.isFavorite", isFavorite)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Favorite successfully updated!");
+                        data.postValue(list);
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating Favorite", e);
-                    }
-                });
-    }
+                .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
 
+        return data;
+    }
 }

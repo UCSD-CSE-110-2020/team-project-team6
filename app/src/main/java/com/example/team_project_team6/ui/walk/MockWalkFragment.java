@@ -61,7 +61,6 @@ public class MockWalkFragment extends Fragment {
         final TextView mock_walkTime = root.findViewById(R.id.mock_lbTime);
 
         final Walk walk = new Walk(); // create walk object to store walk info
-        final SaveData saveData = new SaveData(getActivity());
 
         updateDisplay(mock_btStart, mock_btAddSteps, mock_walkDist, mock_walkSteps, mock_walkTime);
 
@@ -72,7 +71,7 @@ public class MockWalkFragment extends Fragment {
 
         SharedPreferences spfs = this.requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
         // get height from SharedPreferences and calculate stride distance
-        final int heightInInches = saveData.getHeight();
+        final int heightInInches = walkViewModel.getHeight();
         mock_btAddSteps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +104,7 @@ public class MockWalkFragment extends Fragment {
 
                     // show data when the walk is done!
                     // Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %.2f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
-                    navigateFromWalkFragment(walk, saveData);
+                    navigateFromWalkFragment(walk);
                     routeDetailsViewModel.setIsWalkFromRouteDetails(false);
                     walkViewModel.resetToZero();
                 }
@@ -163,20 +162,20 @@ public class MockWalkFragment extends Fragment {
         Log.e("Setting homeViewModel step count in mockWalk","step count: " + (homeViewModel.getDailyStepCount() + stepCount));
     }
 
-    public void navigateFromWalkFragment(Walk walk, SaveData saveData) {
+    public void navigateFromWalkFragment(Walk walk) {
         Log.i("MockWalkFragment", "navigation");
         NavController controller = Navigation.findNavController(requireView());
         if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
             Route route = routeDetailsViewModel.getRoute();
             route.setWalk(walk);
             route.setLastStartDate(walk.getStartTime());
-            saveData.saveRoute(route);
+            walkViewModel.saveRoute(route);
             // go to Routes screen
             if (controller.getCurrentDestination().getId() == R.id.mockWalkFragment) {
                 controller.navigate(R.id.action_mockWalkFragment_to_navigation_routes);
             }
         } else {
-            saveData.saveWalk(walk); // save walk into SharedPreferences
+            walkViewModel.saveWalk(walk); // save walk into SharedPreferences
             // go to newRouteFragment to save Walk in a Route object
             if (controller.getCurrentDestination().getId() == R.id.mockWalkFragment) {
                 controller.navigate(R.id.action_mockWalkFragment_to_newRouteFragment);

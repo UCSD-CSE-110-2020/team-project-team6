@@ -2,16 +2,15 @@ package com.example.team_project_team6.ui.walk;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
-import android.widget.TextView;
 
-import com.example.team_project_team6.R;
+import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.StopWatch;
+import com.example.team_project_team6.model.Walk;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 public class WalkViewModel extends AndroidViewModel {
 
@@ -23,6 +22,7 @@ public class WalkViewModel extends AndroidViewModel {
     private StopWatch sw;
     private boolean isWalking;
     private Context context;
+    private SaveData saveData;
 
     public WalkViewModel(Application application) {
         super(application);
@@ -36,6 +36,18 @@ public class WalkViewModel extends AndroidViewModel {
         sw = new StopWatch();
     }
 
+    public void setSaveData(SaveData saveData) {
+        this.saveData = saveData;
+    }
+
+    public int getHeight() {
+        if (saveData == null) {
+            return 0;
+        }
+
+        return saveData.getHeight();
+    }
+
     /**
      * informs observers that walk is underway by updating to the stream
      */
@@ -47,6 +59,13 @@ public class WalkViewModel extends AndroidViewModel {
         }
     }
 
+    public void saveRoute(Route route) {
+        saveData.saveRoute(route);
+    }
+
+    public void saveWalk(Walk walk) {
+        saveData.saveWalk(walk);
+    }
     /**
      * informs observers that walk is not underway by updating to the stream
      */
