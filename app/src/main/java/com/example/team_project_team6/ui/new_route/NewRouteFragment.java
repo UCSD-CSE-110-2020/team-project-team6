@@ -1,7 +1,5 @@
 package com.example.team_project_team6.ui.new_route;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,10 +22,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.team_project_team6.R;
-import com.example.team_project_team6.firebase.IFirebase;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 
