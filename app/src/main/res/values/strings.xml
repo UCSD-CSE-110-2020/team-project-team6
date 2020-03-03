@@ -73,7 +73,15 @@
     <string name="title_team">Team</string>
     <string name="title_members">Members</string>
     <string name="title_proposed_walk">Proposed Walk</string>
-    <string name="team_inviter_name">No one has invited you to join a team yet.</string>
+    <string name="default_inviter_name_none">No one has invited you to join a team yet.</string>
+    <string name="btn_accept_string">Accept</string>
+    <string name="btn_decline_string">Decline</string>
+
+    <string name="firstname_invitation">First Name</string>
+    <string name="lastname_invitation">Last Name</string>
+    <string name="gmail_invitation">Gmail</string>
+    <string name="gmail_invitation_edit">example@gmail.com</string>
+    <string name="bt_invite">Send Invite</string>
 
     <string name="firstname_invitation">First Name</string>
     <string name="lastname_invitation">Last Name</string>
