@@ -41,6 +41,10 @@ public class WalkViewModel extends AndroidViewModel {
     }
 
     public int getHeight() {
+        if (saveData == null) {
+            return 0;
+        }
+
         return saveData.getHeight();
     }
 
