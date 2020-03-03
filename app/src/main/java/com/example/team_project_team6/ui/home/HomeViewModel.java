@@ -10,19 +10,21 @@ import androidx.lifecycle.ViewModel;
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<Long> mDailySteps;
+
+    public SaveData getSaveData() {
+        return saveData;
+    }
+
+    public void setSaveData(SaveData saveData) {
+        this.saveData = saveData;
+    }
+
     private SaveData saveData;
 
     public HomeViewModel() {
         mDailySteps = new MutableLiveData<>();
     }
 
-    public void setSaveData() {
-        this.saveData = saveData;
-    }
-
-    public SaveData getSaveData(SaveData saveData) {
-        return this.saveData;
-    }
 
     /**
      * returns daily steps stream to subscribe to
