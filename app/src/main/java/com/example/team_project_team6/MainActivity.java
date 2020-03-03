@@ -160,10 +160,14 @@ public class MainActivity extends AppCompatActivity {
         // Signed with with Google for Firebase
         if(requestCode == RC_SIGN_IN){
             GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(task -> {
-                GoogleSignInAccount account = task.getResult();
+                if (task.isSuccessful()) {
+                    GoogleSignInAccount account = task.getResult();
 
-                if (account != null) {
-                    fgadapter.authenticateWithGoogle(this, account);
+                    if (account != null) {
+                        fgadapter.authenticateWithGoogle(this, account);
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "ERROR: Signing in failed, try again", Toast.LENGTH_LONG).show();
                 }
             }).addOnFailureListener(e -> {
                 Toast.makeText(MainActivity.this, "ERROR: Failed to log into Google", Toast.LENGTH_LONG).show();

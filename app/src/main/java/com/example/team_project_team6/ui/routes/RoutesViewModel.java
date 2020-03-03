@@ -8,9 +8,6 @@ import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 public class RoutesViewModel extends ViewModel {
     private MutableLiveData<ArrayList<Route>> mRoutes;
@@ -19,6 +16,10 @@ public class RoutesViewModel extends ViewModel {
     public RoutesViewModel() {
         ArrayList<Route> data = new ArrayList<Route>();
         mRoutes = new MutableLiveData<>(data);
+    }
+
+    public void updateMRoutes(ArrayList<Route> routes) {
+        mRoutes.postValue(routes);
     }
 
     public void setSaveData(SaveData saveData) {
@@ -34,15 +35,9 @@ public class RoutesViewModel extends ViewModel {
         this.mRoutes = mRoutes;
     }
 
-
     // Routes are displayed in the same order they are present in
     public LiveData<ArrayList<Route>> getRouteData() {
-        updateRouteData();
-        return mRoutes;
-    }
-
-    public void updateRouteData() {
-        mRoutes.postValue(saveData.getAllRoutes());
+        return saveData.getAllRoutes();
     }
 
     Route getRouteAt(int index) {

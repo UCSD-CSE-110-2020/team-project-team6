@@ -93,6 +93,7 @@ public class RoutesFragment extends Fragment {
                     route.setFeatures(feature);
 
                     routesViewModel.updateRouteAt(position, route);
+                    bind_views();
                 }
             }
         });
@@ -122,6 +123,7 @@ public class RoutesFragment extends Fragment {
         routesViewModel.getRouteData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Route>>() {
             @Override
             public void onChanged(ArrayList<Route> routes) {
+                routesViewModel.updateMRoutes(routes);
                 mAdapter.updateData(routes);
                 mAdapter.notifyDataSetChanged();
             }

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+
 import com.example.team_project_team6.firebase.IFirebase;
 import com.google.gson.Gson;
 
@@ -61,7 +64,7 @@ public class SaveData {
         Log.i("Saving Route " + route.getName() + " in SaveData", json);
     }
 
-    public ArrayList<Route> getAllRoutes() {
+    public LiveData<ArrayList<Route>> getAllRoutes() {
         return firebaseAdapter.downloadRouteData();
     }
 

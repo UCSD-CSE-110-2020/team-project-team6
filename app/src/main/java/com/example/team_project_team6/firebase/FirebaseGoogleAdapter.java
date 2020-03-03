@@ -5,6 +5,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.team_project_team6.model.Route;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -13,11 +15,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -44,6 +52,41 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
                     Toast.makeText(activity, "Signed into Firebase successfully", Toast.LENGTH_LONG).show();
                     Toast.makeText(activity, "Logged in with email: " + getEmail(), Toast.LENGTH_LONG).show();
+
+                    // Create the user document if it does not exist (first time user?)
+                    // Adds the user to a random team by default
+                    db.collection("users")
+                            .document(getEmail())
+                            .get()
+                            .addOnCompleteListener(createTask -> {
+                        if (createTask.isSuccessful()) {
+                            DocumentSnapshot document = createTask.getResult();
+                            if (!Objects.requireNonNull(document).exists()) {
+                                Map<String, String> team = new HashMap<>();
+                                String uuid = UUID.randomUUID().toString();
+                                team.put("team", uuid);
+
+                                Log.d(TAG, "No team found, assuming new user. Creating team " + uuid + " for user " + getEmail());
+
+                                Log.d(TAG, "Creating user " + getEmail());
+                                db.collection("users")
+                                        .document(getEmail())
+                                        .set(team);
+
+                                Map<String, List<String>> uuidTeam = new HashMap<>();
+                                List<String> members = new ArrayList<>();
+                                members.add(getEmail());
+                                uuidTeam.put(uuid, members);
+
+                                Log.d(TAG, "Creating team " + uuid);
+                                db.collection("teams")
+                                        .document(uuid)
+                                        .set(uuidTeam);
+                            } else {
+                                Log.d(TAG, "Found user " + getEmail());
+                            }
+                        }
+                    });
                 } else {
                     Log.e(TAG, "Failed to sign in to Firebase");
                     Toast.makeText(activity, "ERROR: Failed to sign into Firebase", Toast.LENGTH_LONG).show();
@@ -83,29 +126,34 @@ public class FirebaseGoogleAdapter implements IFirebase {
             return;
         }
 
+        Gson gson = new Gson();
+        Map<String, String> jsonToMap = gson.fromJson(
+                gson.toJson(route), new TypeToken<HashMap<String, Object>>() {}.getType()
+        );
+
         Log.d(TAG, "save with: " + getEmail());
         DocumentReference uidRef = db.collection("users").document(getEmail());
         uidRef.collection("routes")
                 .document(route.getName())
-                .set(route)
+                .set(jsonToMap)
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "Route saved to routes/" + route.getName() + "/");
                 })
                 .addOnFailureListener(e -> {
                     Log.d(TAG, "Error adding document", e);
                 });
-
     }
 
     @Override
-    public ArrayList<Route> downloadRouteData() {
+    public synchronized LiveData<ArrayList<Route>> downloadRouteData() {
+        MutableLiveData<ArrayList<Route>> data = new MutableLiveData<>();
+
         if (user == null) {
             Log.d(TAG, "Could not download route data without signing in");
-            return new ArrayList<>();
+            return data;
         }
 
-        AtomicReference<Boolean> complete = new AtomicReference<>(false);
-        ArrayList<Route> routes = new ArrayList<>();
+        Gson gson = new Gson();
         db.collection("users")
                 .document(getEmail())
                 .collection("routes")
@@ -114,25 +162,22 @@ public class FirebaseGoogleAdapter implements IFirebase {
                     if (queryDocumentSnapshots.isEmpty()) {
                         Log.d(TAG, "Successfully read data but data was empty");
                     } else {
-                        List<Route> data = queryDocumentSnapshots.toObjects(Route.class);
-                        routes.addAll(data);
+                        ArrayList<Route> list = new ArrayList<>();
+
+                        List<DocumentSnapshot> snapshots = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot snapshot : snapshots) {
+                            Map<String, Object> map = snapshot.getData();
+                            Route route = gson.fromJson(gson.toJson(map), Route.class);
+                            list.add(route);
+                        }
 
                         Log.i(TAG, "Successfully read route data");
-                    }
 
-                    complete.set(true);
+                        data.postValue(list);
+                    }
                 })
                 .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
 
-        // Keep waiting every 100 ms to load data from firebase
-        while (!complete.get()) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return routes;
+        return data;
     }
 }
