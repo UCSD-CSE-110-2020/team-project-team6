@@ -37,7 +37,11 @@ public class RoutesViewModel extends ViewModel {
 
     // Routes are displayed in the same order they are present in
     public LiveData<ArrayList<Route>> getRouteData() {
-        return saveData.getAllRoutes();
+        if (saveData != null) {
+            return saveData.getAllRoutes();
+        } else {
+            return new MutableLiveData<>();
+        }
     }
 
     Route getRouteAt(int index) {
