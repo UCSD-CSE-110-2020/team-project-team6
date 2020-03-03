@@ -68,6 +68,7 @@ public class MemberFragment extends Fragment {
             }
         });
 
+
         btnAcceptInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,4 +81,6 @@ public class MemberFragment extends Fragment {
         });
         return root;
     }
+
+
 }
