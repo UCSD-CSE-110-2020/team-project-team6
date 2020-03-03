@@ -168,6 +168,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                         for (DocumentSnapshot snapshot : snapshots) {
                             Map<String, Object> map = snapshot.getData();
                             Route route = gson.fromJson(gson.toJson(map), Route.class);
+
                             list.add(route);
                         }
 

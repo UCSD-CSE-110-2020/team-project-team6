@@ -1,18 +1,17 @@
 package com.example.team_project_team6.model;
 
 import android.util.Log;
-import com.google.gson.Gson;
+
 import androidx.annotation.Nullable;
 
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 
 public class Route {
     private Walk walk;
     private String startPoint;
-    private Calendar lastStartDate;
+    private Date lastStartDate;
     private String notes;
     private Features features;
     private String name;
@@ -30,7 +29,7 @@ public class Route {
     }
 
     // If never walked, set lastStartDate to null
-    public Route(Walk walk, String startPoint, Calendar lastStartDate, String notes, Features features, String name, String initials) {
+    public Route(Walk walk, String startPoint, Date lastStartDate, String notes, Features features, String name, String initials) {
         Log.i("Route constructor with all features", "Initializing all values");
         this.walk = walk;
         this.startPoint = startPoint;
@@ -90,7 +89,7 @@ public class Route {
         this.startPoint = startPoint;
     }
 
-    public Calendar getLastStartDate() {
+    public Date getLastStartDate() {
         if (lastStartDate == null) {
             Log.i("getLastStartDate from Route", "return: null");
         } else {
@@ -100,7 +99,7 @@ public class Route {
         return lastStartDate;
     }
 
-    public void setLastStartDate(@Nullable Calendar lastStartDate) {
+    public void setLastStartDate(Date lastStartDate) {
         if (lastStartDate != null) {
             Log.i("setLastStartDate from Route", "value: " + lastStartDate.toString());
         } else {

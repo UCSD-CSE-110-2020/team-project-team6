@@ -120,7 +120,7 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
         }
 
         if (items.get(position).getLastStartDate() != null) {
-            Date dateLastWalked = items.get(position).getLastStartDate().getTime();
+            Date dateLastWalked = items.get(position).getLastStartDate();
             SimpleDateFormat format = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
             holder.lastCompleted.setText(format.format(dateLastWalked));
         } else {

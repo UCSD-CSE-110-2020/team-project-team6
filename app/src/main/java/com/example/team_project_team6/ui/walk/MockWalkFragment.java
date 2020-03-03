@@ -168,7 +168,7 @@ public class MockWalkFragment extends Fragment {
         if(routeDetailsViewModel.getIsWalkFromRouteDetails()) {
             Route route = routeDetailsViewModel.getRoute();
             route.setWalk(walk);
-            route.setLastStartDate(walk.getStartTime());
+            route.setLastStartDate(walk.getStartTime().getTime());
             walkViewModel.saveRoute(route);
             // go to Routes screen
             if (controller.getCurrentDestination().getId() == R.id.mockWalkFragment) {

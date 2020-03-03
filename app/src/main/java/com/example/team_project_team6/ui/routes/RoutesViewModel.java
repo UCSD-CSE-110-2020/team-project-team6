@@ -1,19 +1,13 @@
 package com.example.team_project_team6.ui.routes;
 
-import android.app.Application;
-import android.content.Context;
-
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 public class RoutesViewModel extends ViewModel {
     private MutableLiveData<ArrayList<Route>> mRoutes;
