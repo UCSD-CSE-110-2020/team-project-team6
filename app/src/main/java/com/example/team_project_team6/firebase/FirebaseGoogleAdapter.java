@@ -98,22 +98,14 @@ public class FirebaseGoogleAdapter implements IFirebase {
         }
 
         Gson gson = new Gson();
-        Map<String, String> updates = new HashMap<>();
-
-        //convert json to Map
-        Map<String, Object> jsonToMap = gson.fromJson(
-                gson.toJson(route), new TypeToken<HashMap<String, Object>>() {}.getType()
-        );
-
-        //put timestamp to order by date
-        jsonToMap.put(TIMESTAMP_KEY, FieldValue.serverTimestamp());
 
         Log.d(TAG, "save with: " + getEmail());
         DocumentReference uidRef = db.collection("users").document(getEmail());
         uidRef.collection("routes")
-                .add(jsonToMap)
+                .document(route.getName())
+                .set(gson.toJson(route))
                 .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    Log.d(TAG, "Route saved to routes/" + route.getName() + "/");
                 })
                 .addOnFailureListener(e -> {
                     Log.d(TAG, "Error adding document", e);
