@@ -49,6 +49,10 @@ public class HomeViewModel extends ViewModel {
     public Long getDailyStepCount() { return mDailySteps.getValue(); }
 
     public int getHeight() {
+        if (saveData == null) {
+            return 0;
+        }
+
         // get the height from SharedPreferences and calculate stride distance
         return saveData.getHeight();
     }

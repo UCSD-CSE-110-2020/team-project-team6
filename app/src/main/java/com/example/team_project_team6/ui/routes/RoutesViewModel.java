@@ -1,30 +1,16 @@
 package com.example.team_project_team6.ui.routes;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.team_project_team6.MainActivity;
-import com.example.team_project_team6.firebase.IFirebase;
-import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
-import com.example.team_project_team6.model.Walk;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
-import java.util.TimeZone;
 
 public class RoutesViewModel extends ViewModel {
     private MutableLiveData<ArrayList<Route>> mRoutes;
