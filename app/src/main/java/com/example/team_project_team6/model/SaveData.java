@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.team_project_team6.firebase.IFirebase;
 import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -58,11 +59,12 @@ public class SaveData {
         // convert walk into a json object
         String json = gson.toJson(route);
 
-        // save the walk information into SharedPreferences to be retrieved when the Route is saved/updated
-        SharedPreferences.Editor editor = spfsRoute.edit();
-        editor.putString(route.getName(), json);
-        editor.apply();
+//        // save the walk information into SharedPreferences to be retrieved when the Route is saved/updated
+//        SharedPreferences.Editor editor = spfsRoute.edit();
+//        editor.putString(route.getName(), json);
+//        editor.apply();
 
+        firebaseAdapter.uploadRouteData(route);
         Log.i("Saving Route " + route.getName() + " in SaveData", json);
 
         return json;
@@ -73,10 +75,16 @@ public class SaveData {
         return spfsRoute.getAll().keySet();
     }
 
-    public Route getRoute(String name) {
-        String routeJson = spfsRoute.getString(name, "");
-        Log.i("Retrieving Route from SaveData", routeJson);
+    public List<Route> getAllRoutes() {
+        return firebaseAdapter.downloadAllRoutes(); // TODO
+    }
 
-        return gson.fromJson(routeJson, Route.class);
+    public Route getRoute(String name) {
+//        String routeJson = spfsRoute.getString(name, "");
+//        Log.i("Retrieving Route from SaveData", routeJson);
+//
+//        return gson.fromJson(routeJson, Route.class);
+
+        return firebaseAdapter.downloadRoute(); // TODO
     }
 }
