@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -19,11 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.team_project_team6.R;
-import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.ui.routes.RoutesViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
 
 public class MemberFragment extends Fragment {
     @VisibleForTesting

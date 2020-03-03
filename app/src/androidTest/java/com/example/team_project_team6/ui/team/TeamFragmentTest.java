@@ -2,25 +2,11 @@ package com.example.team_project_team6.ui.team;
 
 
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
-import com.example.team_project_team6.ui.new_route.NewRouteFragment;
-import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
-
-import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.matcher.VisibilityMatcher;
-
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
-import org.hamcrest.TypeSafeMatcher;
-import org.junit.Assert;
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -30,47 +16,40 @@ import androidx.fragment.app.testing.FragmentScenario;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.ViewAssertion;
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class TeamFragmentTest {
+    private TestNavHostController navController = null;
+    private TeamViewModel viewModel = null;
+
+    @Before
+    public void setup() {
+        navController = new TestNavHostController(ApplicationProvider.getApplicationContext());
+        navController.setGraph(R.navigation.mobile_navigation);
+        navController.setCurrentDestination(R.id.navigation_team);
+        viewModel = mock(TeamViewModel.class);
+    }
 
     @Test
     public void TestOnAcceptDenyButtonClickButtonsDisappear() {
-        final TestNavHostController navController = new TestNavHostController(ApplicationProvider.getApplicationContext());
-        navController.setGraph(R.navigation.mobile_navigation);
-        navController.setCurrentDestination(R.id.navigation_team);
-
         FragmentFactory factory = new FragmentFactory();
         FragmentScenario<MemberFragment> scenario =
                 FragmentScenario.launchInContainer(MemberFragment.class, null, R.style.Theme_AppCompat, factory);
 
-        TeamViewModel viewModel = mock(TeamViewModel.class);
         // when(viewModel.getHasPendingTeamInvite()).thenReturn(true);
         scenario.onFragment(new FragmentScenario.FragmentAction<MemberFragment>() {
             @Override
@@ -97,13 +76,22 @@ public class TeamFragmentTest {
 
     @Test
     public void TestTransitionToInviteForm() {
-        // TODO: Test that '+' button takes you to invite form
-    }
+        FragmentFactory factory = new FragmentFactory();
+        FragmentScenario<TeamFragment> scenario =
+                FragmentScenario.launchInContainer(TeamFragment.class, null, R.style.Theme_AppCompat, factory);
 
-    @Test
-    public void TestInviteFormFieldsMandatory() {
-        // TODO: Test that 'Invite' button takes you back to Team screen if all mandatory fields are filled out
-        // TODO: Test otherwise that you stay on the Team screen if there are missing mandatory fields
+        scenario.onFragment(new FragmentScenario.FragmentAction<TeamFragment>() {
+            @Override
+            public void perform(@NonNull TeamFragment fragment) {
+                Navigation.setViewNavController(fragment.requireView(), navController);
+                fragment.teamViewModel = viewModel;
+            }
+        });
+
+        // click '+' button
+        onView(ViewMatchers.withId(R.id.bt_invite_member)).perform(ViewActions.click());
+        // check that we transition to invite form
+        assertEquals(R.id.sendTeamRequestFragment, navController.getCurrentDestination().getId());
     }
 
     private static ViewAction setButtonVisibility(final boolean value) {
