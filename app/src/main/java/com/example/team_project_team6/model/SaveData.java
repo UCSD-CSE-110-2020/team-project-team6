@@ -3,8 +3,15 @@ package com.example.team_project_team6.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+
+import com.example.team_project_team6.firebase.IFirebase;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -12,15 +19,14 @@ import static android.content.Context.MODE_PRIVATE;
 public class SaveData {
     private Gson gson;
     private SharedPreferences spfsUser;
-    private SharedPreferences spfsRoute;
+    private IFirebase firebaseAdapter;
 
-    public SaveData(Context mainActivity) {
+    public SaveData(Context mainActivity, IFirebase firebaseAdapter) {
         Log.i("Creating new SaveData", "new SaveData with context: " + mainActivity.toString());
         gson = new Gson();
         spfsUser = mainActivity.getSharedPreferences("user_data", MODE_PRIVATE);
-        spfsRoute = mainActivity.getSharedPreferences("route_data", MODE_PRIVATE);
+        this.firebaseAdapter = firebaseAdapter;
     }
-
 
     public int getHeight() {
         int height = spfsUser.getInt("user_height", -1);
@@ -50,29 +56,16 @@ public class SaveData {
         return gson.fromJson(walkJson, Walk.class);
     }
 
-    public String saveRoute(Route route) {
+    public void saveRoute(Route route) {
         // convert walk into a json object
         String json = gson.toJson(route);
 
-        // save the walk information into SharedPreferences to be retrieved when the Route is saved/updated
-        SharedPreferences.Editor editor = spfsRoute.edit();
-        editor.putString(route.getName(), json);
-        editor.apply();
-
+        firebaseAdapter.uploadRouteData(route);
         Log.i("Saving Route " + route.getName() + " in SaveData", json);
-
-        return json;
     }
 
-    public Set<String> getRouteNames() {
-        Log.i("Retrieving All Routes from SaveData", "Getting all Route names...");
-        return spfsRoute.getAll().keySet();
+    public LiveData<ArrayList<Route>> getAllRoutes() {
+        return firebaseAdapter.downloadRouteData();
     }
 
-    public Route getRoute(String name) {
-        String routeJson = spfsRoute.getString(name, "");
-        Log.i("Retrieving Route from SaveData", routeJson);
-
-        return gson.fromJson(routeJson, Route.class);
-    }
 }

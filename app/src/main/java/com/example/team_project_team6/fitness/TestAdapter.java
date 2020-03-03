@@ -44,4 +44,9 @@ public class TestAdapter implements FitnessService {
     public int getRequestCode() {
         return GOOGLE_FIT_PERMISSIONS_REQUEST_CODE;
     }
+
+//    @Override
+//    public String getUserEmail() {
+//        return null;
+//    }
 }

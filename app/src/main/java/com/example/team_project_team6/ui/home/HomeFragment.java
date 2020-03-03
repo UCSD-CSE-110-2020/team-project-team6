@@ -81,9 +81,8 @@ public class HomeFragment extends Fragment {
 
     int getHeight() {
         // save reference to MainActivity and create object to handle SharedPreferences calls
-        final SaveData saveData = new SaveData(requireActivity());
 
         // get the height from SharedPreferences and calculate stride distance
-        return saveData.getHeight();
+        return homeViewModel.getHeight();
     }
 }
