@@ -3,6 +3,8 @@ package com.example.team_project_team6.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import com.example.team_project_team6.firebase.IFirebase;
 import com.google.gson.Gson;
 
 import java.util.Set;
@@ -13,12 +15,14 @@ public class SaveData {
     private Gson gson;
     private SharedPreferences spfsUser;
     private SharedPreferences spfsRoute;
+    private IFirebase firebaseAdapter;
 
-    public SaveData(Context mainActivity) {
+    public SaveData(Context mainActivity, IFirebase firebaseAdapter) {
         Log.i("Creating new SaveData", "new SaveData with context: " + mainActivity.toString());
         gson = new Gson();
         spfsUser = mainActivity.getSharedPreferences("user_data", MODE_PRIVATE);
         spfsRoute = mainActivity.getSharedPreferences("route_data", MODE_PRIVATE);
+        this.firebaseAdapter = firebaseAdapter;
     }
 
 

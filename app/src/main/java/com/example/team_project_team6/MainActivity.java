@@ -20,8 +20,10 @@ import com.example.team_project_team6.fitness.FitnessService;
 import com.example.team_project_team6.fitness.FitnessServiceFactory;
 import com.example.team_project_team6.fitness.GoogleFitAdapter;
 import com.example.team_project_team6.fitness.TestAdapter;
+import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.new_route.NewRouteViewModel;
+import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.example.team_project_team6.ui.routes.RoutesViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,7 +31,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private HomeViewModel homeViewModel;
     private WalkViewModel walkViewModel;
     private Long walkStartingStep;
-    private RoutesViewModel routesViewModel;
 
     private AppBarConfiguration appBarConfiguration;
 
@@ -107,11 +107,25 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a firebase adapter and inject it into anything that requires it
         fgadapter = new FirebaseGoogleAdapter();
-        NewRouteViewModel newRouteViewModel = new ViewModelProvider(this).get(NewRouteViewModel.class);
-        newRouteViewModel.setAdapter(fgadapter);
-        routesViewModel = new ViewModelProvider(this).get(RoutesViewModel.class);
-        routesViewModel.setAdapter(fgadapter);
+        SaveData saveData = new SaveData(getApplicationContext(), fgadapter);
 
+        // Inject into walkViewModel
+        walkViewModel.setSaveData(saveData);
+
+        // Inject into NewRouteViewModel
+        NewRouteViewModel newRouteViewModel = new ViewModelProvider(this).get(NewRouteViewModel.class);
+        newRouteViewModel.setSaveData(saveData);
+
+        // Inject into RoutesViewModel
+        RoutesViewModel routesViewModel = new ViewModelProvider(this).get(RoutesViewModel.class);
+        routesViewModel.setSaveData(saveData);
+
+        // Inject into homeViewModel
+        homeViewModel.setSaveData(saveData);
+
+        // Inject into RouteDetailsViewModel
+        RouteDetailsViewModel routeDetailsViewModel = new ViewModelProvider(this).get(RouteDetailsViewModel.class);
+        routeDetailsViewModel.setSaveData(saveData);
 
         // Request username and ID tokens for Firebase auth when signing in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -122,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         // Build the google sign in client with the specified options
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Sign into Firebase with a Google account. If already signed in, then log into firebase directly.
+        // Sign into Firebase with a Google account. If already signed in, then logs into firebase directly.
         signInWithGoogle();
     }
 
