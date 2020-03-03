@@ -1,11 +1,13 @@
 package com.example.team_project_team6.model;
 
 import android.util.Log;
-
+import com.google.gson.Gson;
 import androidx.annotation.Nullable;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Route {
     private Walk walk;
@@ -14,7 +16,7 @@ public class Route {
     private String notes;
     private Features features;
     private String name;
-
+    private Map<String, Object> routeDB;
 
     public Route() {
         Log.i("empty Route constructor", "Initializing all values");
@@ -149,5 +151,14 @@ public class Route {
             return String.format(Locale.ENGLISH, "Name: %s, Walk: (%s), Starting Point: %s, Last Start Date: null, Notes: %s,  Features: %s",
                     name, walk.toString(), startPoint, notes, features.toString());
         }
+    }
+
+    public Map<String, Object> getRouteDB() {
+        routeDB = new HashMap<>();
+        routeDB.put("start_point", this.startPoint);
+        routeDB.put("route_name", this.name);
+        routeDB.put("notes", this.notes);
+        routeDB.put("last_start_date", this.lastStartDate.toString());
+        return routeDB;
     }
 }

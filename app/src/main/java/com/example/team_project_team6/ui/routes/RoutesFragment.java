@@ -1,6 +1,5 @@
 package com.example.team_project_team6.ui.routes;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,8 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -22,18 +19,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 public class RoutesFragment extends Fragment {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -101,6 +93,7 @@ public class RoutesFragment extends Fragment {
                     route.setFeatures(feature);
 
                     routesViewModel.updateRouteAt(position, route);
+                    bind_views();
                 }
             }
         });
@@ -130,6 +123,7 @@ public class RoutesFragment extends Fragment {
         routesViewModel.getRouteData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Route>>() {
             @Override
             public void onChanged(ArrayList<Route> routes) {
+                routesViewModel.updateMRoutes(routes);
                 mAdapter.updateData(routes);
                 mAdapter.notifyDataSetChanged();
             }

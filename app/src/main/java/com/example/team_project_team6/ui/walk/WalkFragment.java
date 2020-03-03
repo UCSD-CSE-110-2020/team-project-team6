@@ -1,6 +1,5 @@
 package com.example.team_project_team6.ui.walk;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,15 +19,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
-import com.example.team_project_team6.ui.routes.RoutesViewModel;
-
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -53,7 +47,6 @@ public class WalkFragment extends Fragment {
         final TextView walkDist = root.findViewById(R.id.lbDistance);
 
         final Walk walk = new Walk(); // create walk object to store walk info
-        final SaveData saveData = new SaveData(getActivity());
 
         updateDisplay(btStart, walkDist, walkSteps, walkTime);
 
@@ -79,7 +72,7 @@ public class WalkFragment extends Fragment {
 
                     // show data when the walk is done!
                     // Toast.makeText(getActivity(), String.format(Locale.ENGLISH, "Steps: %d, Distance: %f,\nTime: %s", stepCount, distance, duration), Toast.LENGTH_LONG).show();
-                    navigateFromWalkFragment(walk, saveData);
+                    navigateFromWalkFragment(walk);
                     routeDetailsViewModel.setIsWalkFromRouteDetails(false);
                     walkViewModel.resetToZero();
                 }
@@ -87,7 +80,7 @@ public class WalkFragment extends Fragment {
         });
 
         // get height from SharedPreferences and calculate stride distance
-        final int heightInInches = saveData.getHeight();
+        final int heightInInches = walkViewModel.getHeight();
 
         // update the current step count and distance walked on the screen
         walkViewModel.getWalkSteps().observe(getViewLifecycleOwner(), new Observer<Long>() {
@@ -159,7 +152,7 @@ public class WalkFragment extends Fragment {
         walk.setDist(distance);
     }
 
-    public void navigateFromWalkFragment(Walk walk, SaveData saveData) {
+    public void navigateFromWalkFragment(Walk walk) {
         Log.i("WalkFragment", "navigation");
         NavController controller = NavHostFragment.findNavController(requireParentFragment());
         // previous screen was route details screen
@@ -167,13 +160,13 @@ public class WalkFragment extends Fragment {
             Route route = routeDetailsViewModel.getRoute();
             route.setWalk(walk);
             route.setLastStartDate(walk.getStartTime());
-            saveData.saveRoute(route);
+            walkViewModel.saveRoute(route);
             // go to Routes screen
             if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
                 controller.navigate(R.id.action_navigation_walk_to_navigation_routes);
             }
         } else {
-            saveData.saveWalk(walk); // save walk into SharedPreferences
+            walkViewModel.saveWalk(walk); // save walk into SharedPreferences
             // go to newRouteFragment to save Walk in a Route object
             if (controller.getCurrentDestination().getId() == R.id.navigation_walk) {
                 controller.navigate(R.id.action_navigation_walk_to_newRouteFragment);
