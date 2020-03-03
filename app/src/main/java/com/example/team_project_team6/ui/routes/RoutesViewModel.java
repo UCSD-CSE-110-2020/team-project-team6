@@ -51,20 +51,12 @@ public class RoutesViewModel extends ViewModel {
 
     // Routes are displayed in the same order they are present in
     public LiveData<ArrayList<Route>> getRouteData() {
-        // populate list of routes tiles
-        Set<String> routeNameSet = saveData.getRouteNames();
-        List<String> routeNameList = new ArrayList<>(routeNameSet);
-        Collections.sort(routeNameList);
-
-        ArrayList<Route> routeList = new ArrayList<>();
-        for(String routeName : routeNameList) {
-            Route route = saveData.getRoute(routeName);
-            routeList.add(route);
-        }
-
-        mRoutes.postValue(routeList);
-
+        updateRouteData();
         return mRoutes;
+    }
+
+    public void updateRouteData() {
+        mRoutes.postValue(saveData.getAllRoutes());
     }
 
     Route getRouteAt(int index) {
