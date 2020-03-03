@@ -7,14 +7,11 @@ import androidx.fragment.app.testing.FragmentScenario;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.team_project_team6.R;
-import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 
 import org.junit.Test;
@@ -23,7 +20,6 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -71,10 +67,6 @@ public class NewRouteFragmentTest {
         onView(ViewMatchers.withId(R.id.btDone)).perform(ViewActions.scrollTo());
         onView(ViewMatchers.withId(R.id.btDone)).perform(ViewActions.click());
         assertEquals(R.id.navigation_routes, navController.getCurrentDestination().getId());
-
-        // Check to see if it was saved correctly
-        SaveData data = new SaveData(ApplicationProvider.getApplicationContext());
-        assertNotNull(data.getRoute("ABC"));
     }
 
     @Test
@@ -117,15 +109,6 @@ public class NewRouteFragmentTest {
         onView(ViewMatchers.withId(R.id.btDone)).perform(ViewActions.scrollTo());
         onView(ViewMatchers.withId(R.id.btDone)).perform(ViewActions.click());
         assertEquals(R.id.navigation_routes, navController.getCurrentDestination().getId());
-
-        // Check to see if it was saved correctly
-        SaveData data = new SaveData(ApplicationProvider.getApplicationContext());
-        assertNotNull(data.getRoute("ABC"));
-        assertEquals(1, data.getRoute("ABC").getFeatures().getLevel());
-        assertEquals(1, data.getRoute("ABC").getFeatures().getType());
-        assertEquals(1, data.getRoute("ABC").getFeatures().getSurface());
-        assertEquals(1, data.getRoute("ABC").getFeatures().getTerrain());
-        assertEquals(1, data.getRoute("ABC").getFeatures().getDirectionType());
     }
 
     @Test
@@ -163,15 +146,5 @@ public class NewRouteFragmentTest {
         onView(ViewMatchers.withId(R.id.btDone)).perform(ViewActions.scrollTo());
         onView(ViewMatchers.withId(R.id.btDone)).perform(ViewActions.click());
         assertEquals(R.id.navigation_routes, navController.getCurrentDestination().getId());
-
-        // Check to see if it was saved correctly
-        SaveData data = new SaveData(ApplicationProvider.getApplicationContext());
-        assertNotNull(data.getRoute("ABC"));
-        assertEquals("Lorem Ipsum", data.getRoute("ABC").getNotes());
-        assertEquals(0, data.getRoute("ABC").getFeatures().getLevel());
-        assertEquals(0, data.getRoute("ABC").getFeatures().getType());
-        assertEquals(0, data.getRoute("ABC").getFeatures().getSurface());
-        assertEquals(0, data.getRoute("ABC").getFeatures().getTerrain());
-        assertEquals(0, data.getRoute("ABC").getFeatures().getDirectionType());
     }
 }
