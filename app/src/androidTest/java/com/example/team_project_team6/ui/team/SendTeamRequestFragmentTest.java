@@ -33,12 +33,12 @@ public class SendTeamRequestFragmentTest {
     public void setup() {
         navController = new TestNavHostController(ApplicationProvider.getApplicationContext());
         navController.setGraph(R.navigation.mobile_navigation);
-        navController.setCurrentDestination(R.id.navigation_team);
+        navController.setCurrentDestination(R.id.sendTeamRequestFragment);
         viewModel = mock(TeamViewModel.class);
     }
 
     @Test
-    public void TestInviteFormFieldsMandatory() {
+    public void TestInviteFormFieldsCompeleted() {
         FragmentFactory factory = new FragmentFactory();
         FragmentScenario<SendTeamRequestFragment> scenario =
                 FragmentScenario.launchInContainer(SendTeamRequestFragment.class, null, R.style.Theme_AppCompat, factory);
@@ -51,13 +51,37 @@ public class SendTeamRequestFragmentTest {
             }
         });
         // TODO: Test that 'Invite' button takes you back to Team screen if all mandatory fields are filled out
+        // Type and then close keyboard
+        onView(ViewMatchers.withId(R.id.firstname_invitation_edit)).perform(ViewActions.typeText("mary"), ViewActions.closeSoftKeyboard());
+        // Type and then close keyboard
+        onView(ViewMatchers.withId(R.id.lastname_invitation_edit)).perform(ViewActions.typeText("ABC")).perform(ViewActions.closeSoftKeyboard());
+        // Type and then close keyboard
+        onView(ViewMatchers.withId(R.id.gmail_invitation_edit)).perform(ViewActions.typeText("abc@gmail.com"), ViewActions.closeSoftKeyboard());
+
+        // click on invite button without filling in any fields
+        onView(ViewMatchers.withId(R.id.bt_invite)).perform(ViewActions.click());
+        // check that we go to team
+        assertEquals(R.id.navigation_team, navController.getCurrentDestination().getId());
+    }
 
 
-        // TODO: Test otherwise that you stay on the Team screen if there are missing mandatory fields
+    @Test
+    public void TestInviteFormFieldsEmpty() {
+        FragmentFactory factory = new FragmentFactory();
+        FragmentScenario<SendTeamRequestFragment> scenario =
+                FragmentScenario.launchInContainer(SendTeamRequestFragment.class, null, R.style.Theme_AppCompat, factory);
+
+        scenario.onFragment(new FragmentScenario.FragmentAction<SendTeamRequestFragment>() {
+            @Override
+            public void perform(@NonNull SendTeamRequestFragment fragment) {
+                Navigation.setViewNavController(fragment.requireView(), navController);
+                fragment.teamViewModel = viewModel;
+            }
+        });
+
         // click on invite button without filling in any fields
         onView(ViewMatchers.withId(R.id.bt_invite)).perform(ViewActions.click());
         // check that we stay on the invite form
         assertEquals(R.id.sendTeamRequestFragment, navController.getCurrentDestination().getId());
-
     }
 }
