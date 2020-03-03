@@ -2,6 +2,7 @@ package com.example.team_project_team6.ui.team;
 
 import android.os.Bundle;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,7 +26,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class MemberFragment extends Fragment {
-    private TeamViewModel teamViewModel;
+    @VisibleForTesting
+    static TeamViewModel teamViewModel = null;
+
     private ArrayAdapter mfAdapter;
     private String[] teamMemberArray;
     private Button btnAcceptInvite;
@@ -50,8 +53,10 @@ public class MemberFragment extends Fragment {
         btnDeclineInvite = root.findViewById(R.id.btn_decline_invite);
         txtInviterName = root.findViewById(R.id.txt_team_inviter_name);
 
-        btnAcceptInvite.setVisibility(View.INVISIBLE);
-        btnDeclineInvite.setVisibility(View.INVISIBLE);
+        if(!teamViewModel.getHasPendingTeamInvite()) {
+            btnAcceptInvite.setVisibility(View.INVISIBLE);
+            btnDeclineInvite.setVisibility(View.INVISIBLE);
+        }
 
         final FloatingActionButton btNewInvite = root.findViewById(R.id.bt_invite_member);
 
@@ -75,6 +80,7 @@ public class MemberFragment extends Fragment {
                 txtInviterName.setText(R.string.default_inviter_name_none);
                 btnAcceptInvite.setVisibility(View.INVISIBLE);
                 btnDeclineInvite.setVisibility(View.INVISIBLE);
+                teamViewModel.setHasPendingTeamInvite(false);
             }
         });
         return root;
