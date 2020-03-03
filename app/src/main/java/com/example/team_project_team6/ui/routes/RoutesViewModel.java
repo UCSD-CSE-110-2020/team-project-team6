@@ -26,28 +26,24 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
 
-public class RoutesViewModel extends AndroidViewModel {
+public class RoutesViewModel extends ViewModel {
     private MutableLiveData<ArrayList<Route>> mRoutes;
-    private Context context;
     private SaveData saveData;
-    private IFirebase adapter;
 
-    public RoutesViewModel(Application application) {
-        super(application);
+    public RoutesViewModel() {
         ArrayList<Route> data = new ArrayList<Route>();
         mRoutes = new MutableLiveData<>(data);
-        this.context = application;
-        saveData = new SaveData(context);
-
-    }
-    public void setAdapter(IFirebase adapter) {
-        this.adapter = adapter;
-    }
-    public IFirebase getAdapter() {
-        return adapter;
     }
 
-    // mRoutes stores a list of all the routes in sharedpreferences
+    public void setSaveData(SaveData saveData) {
+        this.saveData = saveData;
+    }
+
+    public SaveData getSaveData(SaveData saveData) {
+        return this.saveData;
+    }
+
+    // mRoutes stores a list of all the routes in firebase
     public void setRouteData(MutableLiveData<ArrayList<Route>> mRoutes) {
         this.mRoutes = mRoutes;
     }
@@ -70,8 +66,7 @@ public class RoutesViewModel extends AndroidViewModel {
         mRoutes.postValue(routeList);
         setRouteData(mRoutes);
 
-        //return a livedata from FirestoreLivedata class
-        return adapter.retrieveRouteDoc();
+        return mRoutes;
     }
 
     Route getRouteAt(int index) {

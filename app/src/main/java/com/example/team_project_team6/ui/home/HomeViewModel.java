@@ -1,5 +1,7 @@
 package com.example.team_project_team6.ui.home;
 
+import com.example.team_project_team6.model.SaveData;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,9 +10,18 @@ import androidx.lifecycle.ViewModel;
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<Long> mDailySteps;
+    private SaveData saveData;
 
     public HomeViewModel() {
         mDailySteps = new MutableLiveData<>();
+    }
+
+    public void setSaveData() {
+        this.saveData = saveData;
+    }
+
+    public SaveData getSaveData(SaveData saveData) {
+        return this.saveData;
     }
 
     /**
@@ -34,4 +45,9 @@ public class HomeViewModel extends ViewModel {
      * @return the daily step count
      */
     public Long getDailyStepCount() { return mDailySteps.getValue(); }
+
+    public int getHeight() {
+        // get the height from SharedPreferences and calculate stride distance
+        return saveData.getHeight();
+    }
 }
