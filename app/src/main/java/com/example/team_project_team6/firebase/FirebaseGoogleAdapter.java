@@ -5,33 +5,19 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 
-import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.model.Route;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.firebase.ui.firestore.SnapshotParser;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -97,13 +83,11 @@ public class FirebaseGoogleAdapter implements IFirebase {
             return;
         }
 
-        Gson gson = new Gson();
-
         Log.d(TAG, "save with: " + getEmail());
         DocumentReference uidRef = db.collection("users").document(getEmail());
         uidRef.collection("routes")
                 .document(route.getName())
-                .set(gson.toJson(route))
+                .set(route)
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "Route saved to routes/" + route.getName() + "/");
                 })
@@ -114,52 +98,41 @@ public class FirebaseGoogleAdapter implements IFirebase {
     }
 
     @Override
-    public LiveData<ArrayList<Route>> retrieveRouteDoc() {
+    public ArrayList<Route> downloadRouteData() {
         if (user == null) {
-            Log.d(TAG, "Could not upload route data without signing in");
-            return null;
+            Log.d(TAG, "Could not download route data without signing in");
+            return new ArrayList<>();
         }
 
-        CollectionReference uidRef = db.collection("users").document(getEmail()).collection("routes");
+        AtomicReference<Boolean> complete = new AtomicReference<>(false);
+        ArrayList<Route> routes = new ArrayList<>();
+        db.collection("users")
+                .document(getEmail())
+                .collection("routes")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        Log.d(TAG, "Successfully read data but data was empty");
+                    } else {
+                        List<Route> data = queryDocumentSnapshots.toObjects(Route.class);
+                        routes.addAll(data);
 
-        return new FirestoreLiveData<>(uidRef, Route.class, TIMESTAMP_KEY);
-
-    }
-
-    @Override
-    public FirestoreRecyclerOptions<Route> fbaseRclOptRoute(){
-        CollectionReference uidRef = db.collection("users").document(getEmail()).collection("routes");
-        Query query = uidRef.orderBy(TIMESTAMP_KEY, Query.Direction.ASCENDING);
-        FirestoreRecyclerOptions<Route> options = new FirestoreRecyclerOptions.Builder<Route>()
-                .setQuery(query, new SnapshotParser<Route>() {
-                    @NonNull
-                    @Override
-                    public Route parseSnapshot(@NonNull DocumentSnapshot snapshot) {
-                        Gson gson_route = new Gson();
-                        Route tmp = gson_route.fromJson(gson_route.toJson(snapshot.getData()), Route.class);
-                        return tmp;
+                        Log.i(TAG, "Successfully read route data");
                     }
-                }).build();
-        return options;
-    }
 
-    @Override
-    public void updateFavorite(String id, boolean isFavorite){
-        CollectionReference uidRef = db.collection("users").document(getEmail()).collection("routes");
-        uidRef.document(id).
-                update("features.isFavorite", isFavorite)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Favorite successfully updated!");
-                    }
+                    complete.set(true);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating Favorite", e);
-                    }
-                });
-    }
+                .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
 
+        // Keep waiting every 100 ms to load data from firebase
+        while (!complete.get()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return routes;
+    }
 }
