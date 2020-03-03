@@ -24,17 +24,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.team_project_team6.R;
-import com.example.team_project_team6.firebase.FirebaseGoogleAdapter;
 import com.example.team_project_team6.firebase.IFirebase;
-import com.example.team_project_team6.fitness.FitnessService;
-import com.example.team_project_team6.fitness.GoogleFitAdapter;
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,7 +39,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 public class NewRouteFragment extends Fragment {
 
-    private NewRouteViewModel mNewRouteModel;
+    private NewRouteViewModel mNewRouteViewModel;
     @VisibleForTesting
     static RouteDetailsViewModel routeDetailsViewModel = null;
 
@@ -58,10 +53,8 @@ public class NewRouteFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mNewRouteModel = new ViewModelProvider(requireActivity()).get(NewRouteViewModel.class);
+        mNewRouteViewModel = new ViewModelProvider(requireActivity()).get(NewRouteViewModel.class);
         final View root =  inflater.inflate(R.layout.new_route_fragment, container, false);
-
-        final SaveData saveData = new SaveData(requireActivity());
 
         //hide bottom navigation bar
         View bottom_bar = requireActivity().findViewById(R.id.nav_view);
@@ -200,15 +193,7 @@ public class NewRouteFragment extends Fragment {
                     route.setNotes(txtNotes.getText().toString());
                     route.setFeatures(features);
 
-                    saveData.saveRoute(route); // save route to SharedPreferences
-
-                    //save to firebase
-                    IFirebase adapter = mNewRouteModel.getAdapter();
-                    if (adapter != null) {
-                        adapter.uploadRouteData(route);
-                    } else {
-                        Log.w(TAG, "IFirebase adapter is null. If this is not a unit test, something bad happened");
-                    }
+                    mNewRouteViewModel.saveRoute(route); // save route to SharedPreferences
 
                     //come back to route
                     NavController controller = Navigation.findNavController(requireView());
