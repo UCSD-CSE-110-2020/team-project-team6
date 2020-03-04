@@ -25,6 +25,7 @@ import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.new_route.NewRouteViewModel;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.example.team_project_team6.ui.routes.RoutesViewModel;
+import com.example.team_project_team6.ui.team.TeamViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_walk, R.id.navigation_routes)
+                R.id.navigation_home, R.id.navigation_walk, R.id.navigation_routes, R.id.navigation_team)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -119,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
         // Inject into RoutesViewModel
         RoutesViewModel routesViewModel = new ViewModelProvider(this).get(RoutesViewModel.class);
         routesViewModel.setSaveData(saveData);
+
+        // Inject into TeamViewModel
+        TeamViewModel teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
+        teamViewModel.setSaveData(saveData);
 
         // Inject into homeViewModel
         homeViewModel.setSaveData(saveData);

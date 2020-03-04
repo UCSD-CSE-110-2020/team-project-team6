@@ -54,6 +54,9 @@
     <string name="lb_route_name"><font color="#e74c3c">*</font>Route Name</string>
     <string name="lb_starting_point">Starting Point</string>
     <string name="alert_route_name">Please Enter The Route Name!</string>
+    <string name="alert_firstname">Please Enter Firstname!</string>
+    <string name="alert_lastname">Please Enter Lastname!</string>
+    <string name="alert_gmail">Please Enter Gmail!</string>
     <string name="alert_starting_point">Please Enter The Starting Point!</string>
     <string name="lb_route_fea">Route Features</string>
     <string name="lb_route_note">Notes</string>
@@ -67,6 +70,25 @@
     <string name="lb_route_even">Even</string>
     <string name="lb_route_uneven">Uneven</string>
     <string name="bt_done">DONE</string>
+
+    <string name="title_team_member_list">Team Member List</string>
+    <string name="title_invitation">Invitations</string>
+    <string name="title_team">Team</string>
+    <string name="title_members">Members</string>
+    <string name="title_proposed_walk">Proposed Walk</string>
+    <string name="default_inviter_name_none">No one has invited you to join a team yet.</string>
+    <string name="btn_accept_string">Accept</string>
+    <string name="btn_decline_string">Decline</string>
+
+    <string name="firstname_invitation">First Name</string>
+    <string name="lastname_invitation">Last Name</string>
+    <string name="gmail_invitation">Gmail</string>
+    <string name="gmail_invitation_edit">example@gmail.com</string>
+    <string name="bt_invite">Send Invite</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
 
 
