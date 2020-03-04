@@ -5,7 +5,8 @@ public class TeamInvite {
     private String inviter;
 
     public TeamInvite() {
-
+        teamUUID = "";
+        inviter = "";
     }
 
     public TeamInvite(String teamUUID, String inviter) {
