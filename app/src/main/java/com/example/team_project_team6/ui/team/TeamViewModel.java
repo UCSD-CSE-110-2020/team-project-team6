@@ -82,7 +82,7 @@ public class TeamViewModel extends ViewModel {
         return hasPendingTeamInvite;
     }
 
-    public LiveData<TeamMember> getTeamInviterData() {
+    public LiveData<String> getTeamInviterData() {
         if(saveData != null) {
             return saveData.getTeamInviter();
         } else {

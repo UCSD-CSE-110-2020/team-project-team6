@@ -24,5 +24,6 @@ public interface IFirebase {
     LiveData<ArrayList<Route>> downloadRouteData();
 
     void uploadTeamRequest(String member);
+    LiveData<String> downloadTeamRequest();
     LiveData<ArrayList<TeamMember>> downloadTeamData();
 }

@@ -230,13 +230,50 @@ public class FirebaseGoogleAdapter implements IFirebase {
         }
 
         Map<String, Object> requestFrom = new HashMap<>();
-        requestFrom.put("invitationFrom", user.getEmail());
+        requestFrom.put("invitationFrom", getEmail());
 
         db.collection("users")
                 .document(email)
                 .update(requestFrom)
-                .addOnSuccessListener(documentReference -> Log.d(TAG, "Team request sent to user with email: " + email))
+                .addOnSuccessListener(documentReference -> {
+
+                    Map<String, Object> requestTo = new HashMap<>();
+                    requestTo.put("invitationTo", email);
+
+                    Log.d(TAG, "Team request sent to user with email: " + email);
+                    db.collection("users")
+                            .document(getEmail())
+                            .update(requestTo)
+                            .addOnSuccessListener(d -> Log.d(TAG, "Pending invite info sent to user with email: " + getEmail()))
+                            .addOnFailureListener(e -> Log.e(TAG, "Error sending pending invite info to user with email: " + getEmail(), e));
+                })
                 .addOnFailureListener(e -> Log.e(TAG, "Error sending invite to user with email: " + email, e));
+    }
+
+    public synchronized LiveData<String> downloadTeamRequest() {
+        MutableLiveData<String> data = new MutableLiveData<>();
+
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(getInviteTask -> {
+                    if (getInviteTask.isSuccessful()) {
+                        DocumentSnapshot inviteDoc = getInviteTask.getResult();
+
+                        if (inviteDoc != null && inviteDoc.exists()) {
+                            String inviteFrom = (String) inviteDoc.get("invitationFrom");
+                            data.postValue(inviteFrom);
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.e(TAG, "Failed to retrieve team invitations");
+                    }
+                })
+                .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));;
+
+        return data;
     }
 
     public synchronized LiveData<ArrayList<TeamMember>> downloadTeamData() {
