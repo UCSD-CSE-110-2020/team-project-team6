@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -250,8 +251,8 @@ public class FirebaseGoogleAdapter implements IFirebase {
                 .addOnFailureListener(e -> Log.e(TAG, "Error sending invite to user with email: " + email, e));
     }
 
-    public synchronized LiveData<String> downloadTeamRequest() {
-        MutableLiveData<String> data = new MutableLiveData<>();
+    public synchronized LiveData<HashMap<String, String>> downloadTeamRequest() {
+        MutableLiveData<HashMap<String, String>> data = new MutableLiveData<>();
 
         db.collection("users")
                 .document(getEmail())
@@ -261,9 +262,22 @@ public class FirebaseGoogleAdapter implements IFirebase {
                         DocumentSnapshot inviteDoc = getInviteTask.getResult();
 
                         if (inviteDoc != null && inviteDoc.exists()) {
-                            String inviteFrom = (String) inviteDoc.get("invitationFrom");
-                            data.postValue(inviteFrom);
+                            if (inviteDoc.contains("invitationFrom")) {
+                                String inviteFrom = (String) inviteDoc.get("invitationFrom");
+                                HashMap<String, String> res = new HashMap<>();
+                                res.put("type", "invitationFrom");
+                                res.put("email", inviteFrom);
 
+                                data.postValue(res);
+
+                            } else if (inviteDoc.contains("invitationTo")) {
+                                String inviteTo = (String) inviteDoc.get("invitationTo");
+                                HashMap<String, String> res = new HashMap<>();
+                                res.put("type", "invitationTo");
+                                res.put("email", inviteTo);
+
+                                data.postValue(res);
+                            }
                         } else {
                             Log.d(TAG, "No such document");
                         }

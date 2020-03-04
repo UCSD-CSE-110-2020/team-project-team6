@@ -23,6 +23,7 @@ import com.example.team_project_team6.model.TeamMember;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MemberFragment extends Fragment {
     private TeamArrayAdapter mfAdapter;
@@ -104,11 +105,11 @@ public class MemberFragment extends Fragment {
             }
         });
 
-        teamViewModel.getTeamInviterData().observe(getViewLifecycleOwner(), new Observer<String>() {
+        teamViewModel.getTeamInviterData().observe(getViewLifecycleOwner(), new Observer<HashMap<String, String>>() {
             @Override
-            public void onChanged(String member) {
+            public void onChanged(HashMap<String, String> member) {
                 teamViewModel.setHasPendingTeamInvite(true);
-                txtInviterName.setText(member);
+                txtInviterName.setText(member.get("email"));
                 txtInviterName.setTypeface(txtInviterName.getTypeface(), Typeface.BOLD_ITALIC);
             }
         });

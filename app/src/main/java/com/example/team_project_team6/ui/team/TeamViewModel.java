@@ -4,6 +4,8 @@ import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -82,7 +84,7 @@ public class TeamViewModel extends ViewModel {
         return hasPendingTeamInvite;
     }
 
-    public LiveData<String> getTeamInviterData() {
+    public LiveData<HashMap<String, String>> getTeamInviterData() {
         if(saveData != null) {
             return saveData.getTeamInviter();
         } else {

@@ -10,6 +10,7 @@ import com.example.team_project_team6.firebase.IFirebase;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -82,7 +83,7 @@ public class SaveData {
         firebaseAdapter.uploadTeamRequest(email);
     }
 
-    public LiveData<String> getTeamInviter() {
+    public LiveData<HashMap<String, String>> getTeamInviter() {
         return firebaseAdapter.downloadTeamRequest();
     }
 
