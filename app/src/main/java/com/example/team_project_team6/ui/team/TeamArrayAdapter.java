@@ -4,21 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.team_project_team6.R;
-import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.model.TeamMember;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import androidx.lifecycle.LiveData;
-
-import static androidx.test.InstrumentationRegistry.getContext;
 
 public class TeamArrayAdapter extends BaseAdapter {
     private Context context;
