@@ -44,8 +44,6 @@ public class MemberFragment extends Fragment {
 
         listView = (ListView) root.findViewById(R.id.list_team_members);
 
-
-
         btnAcceptInvite = root.findViewById(R.id.btn_accept_invite);
         btnDeclineInvite = root.findViewById(R.id.btn_decline_invite);
         txtInviterName = root.findViewById(R.id.txt_team_inviter_name);
@@ -86,8 +84,7 @@ public class MemberFragment extends Fragment {
             public void onChanged(ArrayList<TeamMember> teamMembers) {
                 teamViewModel.updateMTeamMembers(teamMembers);
 
-                mfAdapter = new TeamArrayAdapter(getActivity(),
-                        R.layout.single_item_list_view, teamViewModel.getTeamMemberData());
+                mfAdapter = new TeamArrayAdapter(getActivity(), teamMembers);
                 listView.setAdapter(mfAdapter);
                 mfAdapter.updateData(teamMembers);
                 mfAdapter.notifyDataSetChanged();
