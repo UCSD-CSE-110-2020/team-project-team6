@@ -1,5 +1,6 @@
 package com.example.team_project_team6.ui.team;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.VisibleForTesting;
@@ -49,9 +50,10 @@ public class MemberFragment extends Fragment {
         btnDeclineInvite = root.findViewById(R.id.btn_decline_invite);
         txtInviterName = root.findViewById(R.id.txt_team_inviter_name);
 
+        // if there is no pending team invite, buttons are not visible
+        // and set to default string saying there is no invitation
         if(!teamViewModel.getHasPendingTeamInvite()) {
-            btnAcceptInvite.setVisibility(View.INVISIBLE);
-            btnDeclineInvite.setVisibility(View.INVISIBLE);
+            resetInviteSection();
         }
 
         final FloatingActionButton btNewInvite = root.findViewById(R.id.bt_invite_member);
@@ -74,10 +76,17 @@ public class MemberFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("member fragment", "accepted invite");
-                txtInviterName.setText(R.string.default_inviter_name_none);
-                btnAcceptInvite.setVisibility(View.INVISIBLE);
-                btnDeclineInvite.setVisibility(View.INVISIBLE);
-                teamViewModel.setHasPendingTeamInvite(false);
+                resetInviteSection();
+                teamViewModel.setInviteIsAccepted(true);
+            }
+        });
+
+        btnDeclineInvite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("member fragment", "declined invite");
+                resetInviteSection();
+                teamViewModel.setInviteIsAccepted(false);
             }
         });
         return root;
@@ -94,12 +103,22 @@ public class MemberFragment extends Fragment {
                 mfAdapter.notifyDataSetChanged();
             }
         });
-/*
-        teamViewModel.getTeamInviterData().observe(getViewLifecycleOwner(), new Observer<TeamMember>()) {
-            @Override
-            public void onChanged(TeamMember inviter) {
-            }
-        }
- */
+
+//        teamViewModel.getTeamInviterData().observe(getViewLifecycleOwner(), new Observer<TeamMember>() {
+//            @Override
+//            public void onChanged(TeamMember teamMember) {
+//                teamViewModel.setHasPendingTeamInvite(true);
+//                txtInviterName.setText(teamMember.getFirstName() + " " + teamMember.getLastName().charAt(0) + ".");
+//                txtInviterName.setTypeface(txtInviterName.getTypeface(), Typeface.BOLD_ITALIC);
+//            }
+//        });
+    }
+
+    private void resetInviteSection() {
+        txtInviterName.setText(R.string.default_inviter_name_none);
+        txtInviterName.setTypeface(txtInviterName.getTypeface(), Typeface.NORMAL);
+        btnAcceptInvite.setVisibility(View.INVISIBLE);
+        btnDeclineInvite.setVisibility(View.INVISIBLE);
+        teamViewModel.setHasPendingTeamInvite(false);
     }
 }

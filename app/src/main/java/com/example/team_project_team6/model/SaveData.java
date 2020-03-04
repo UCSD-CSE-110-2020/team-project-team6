@@ -82,8 +82,13 @@ public class SaveData {
         return team;
     }
 
-    public void saveTeamMember(TeamMember teamMember) {
+    public void saveTeamMember(String email) {
         // TODO save team member onto firebase
+    }
+
+    public LiveData<TeamMember> getTeamInviter() {
+        // TODO return TeamMember who is TeamInviter
+        return null;
     }
 
     public void setTeam() {
