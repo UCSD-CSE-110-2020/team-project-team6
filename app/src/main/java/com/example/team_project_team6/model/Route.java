@@ -2,9 +2,6 @@ package com.example.team_project_team6.model;
 
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -147,10 +144,10 @@ public class Route {
     public String toString() {
         if (lastStartDate != null) {
             return String.format(Locale.ENGLISH, "Name: %s, Walk: (%s), Starting Point: %s, Last Start Date: %s, Notes: %s,  Features: %s",
-                    name, walk.toString(), startPoint, lastStartDate.toString(), notes, features.toString());
+                    name, walk, startPoint, lastStartDate.toString(), notes, features.toString());
         } else {
             return String.format(Locale.ENGLISH, "Name: %s, Walk: (%s), Starting Point: %s, Last Start Date: null, Notes: %s,  Features: %s",
-                    name, walk.toString(), startPoint, notes, features.toString());
+                    name, walk, startPoint, notes, features.toString());
         }
     }
 

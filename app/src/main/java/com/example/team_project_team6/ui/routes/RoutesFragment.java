@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -124,13 +123,10 @@ public class RoutesFragment extends Fragment implements TabLayout.OnTabSelectedL
     }
 
     public void bind_views() {
-        routesViewModel.getRouteData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Route>>() {
-            @Override
-            public void onChanged(ArrayList<Route> routes) {
-                routesViewModel.updateMRoutes(routes);
-                mAdapter.updateData(routes);
-                mAdapter.notifyDataSetChanged();
-            }
+        routesViewModel.getRouteData().observe(getViewLifecycleOwner(), routes -> {
+            routesViewModel.updateMRoutes(routes);
+            mAdapter.updateData(routes);
+            mAdapter.notifyDataSetChanged();
         });
     }
 
@@ -140,9 +136,16 @@ public class RoutesFragment extends Fragment implements TabLayout.OnTabSelectedL
          *  a separate view. Then we can just bind each tab to its own view instead of
          *  checking the tab position like this. But this is good enough for now.
          */
-        mAdapter.setTeamView(tab.getPosition() != 0);
+
+        // Clear list of routes
+        routesViewModel.updateMRoutes(new ArrayList<>());
+        mAdapter.updateData(new ArrayList<>());
         mAdapter.notifyDataSetChanged();
+
+        // Set to initial mode and load team/individual routes
+        mAdapter.setTeamView(tab.getPosition() != 0);
         routesViewModel.setTeamView(tab.getPosition() != 0);
+        bind_views();
     }
 
     @Override
