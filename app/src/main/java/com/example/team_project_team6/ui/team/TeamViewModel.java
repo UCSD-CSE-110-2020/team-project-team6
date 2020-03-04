@@ -31,7 +31,6 @@ public class TeamViewModel extends ViewModel {
         data.add(new TeamMember("sarap.soapbar@gmail.com", "Sarah", "the Soap Bar"));
         data.add(new TeamMember("ellen.elephant@gmail.com", "Ellen", "Elephant"));
 */
-        mTeamMembers = new MutableLiveData<>(data);
     }
 
     public void updateMTeamMembers(ArrayList<TeamMember> teamMembers) {
@@ -73,6 +72,18 @@ public class TeamViewModel extends ViewModel {
                 mTeamMembers.postValue(data);
             }
         }
+    }
+
+    public ArrayList<String> getTeamMemberNames() {
+        ArrayList<TeamMember> members = mTeamMembers.getValue();
+        ArrayList<String> names = new ArrayList<>();
+
+        assert members != null;
+        for (TeamMember m : members) {
+            names.add(m.getFirstName() + " " + m.getLastName());
+        }
+
+        return names;
     }
 
     public LiveData<ArrayList<TeamMember>> getTeamMemberData() {
