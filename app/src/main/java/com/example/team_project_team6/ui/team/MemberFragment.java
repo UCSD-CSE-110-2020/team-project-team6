@@ -2,8 +2,8 @@ package com.example.team_project_team6.ui.team;
 
 import android.os.Bundle;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -18,16 +18,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.team_project_team6.R;
-import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.TeamMember;
-import com.example.team_project_team6.ui.routes.RoutesViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-
 public class MemberFragment extends Fragment {
-    private TeamViewModel teamViewModel;
     private TeamArrayAdapter mfAdapter;
+
+    @VisibleForTesting
+    static TeamViewModel teamViewModel = null;
+
     private Button btnAcceptInvite;
     private Button btnDeclineInvite;
     private TextView txtInviterName;
@@ -48,8 +47,10 @@ public class MemberFragment extends Fragment {
         btnDeclineInvite = root.findViewById(R.id.btn_decline_invite);
         txtInviterName = root.findViewById(R.id.txt_team_inviter_name);
 
-        btnAcceptInvite.setVisibility(View.INVISIBLE);
-        btnDeclineInvite.setVisibility(View.INVISIBLE);
+        if(!teamViewModel.getHasPendingTeamInvite()) {
+            btnAcceptInvite.setVisibility(View.INVISIBLE);
+            btnDeclineInvite.setVisibility(View.INVISIBLE);
+        }
 
         final FloatingActionButton btNewInvite = root.findViewById(R.id.bt_invite_member);
 
@@ -66,6 +67,7 @@ public class MemberFragment extends Fragment {
             }
         });
 
+
         btnAcceptInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +75,7 @@ public class MemberFragment extends Fragment {
                 txtInviterName.setText(R.string.default_inviter_name_none);
                 btnAcceptInvite.setVisibility(View.INVISIBLE);
                 btnDeclineInvite.setVisibility(View.INVISIBLE);
+                teamViewModel.setHasPendingTeamInvite(false);
             }
         });
         return root;

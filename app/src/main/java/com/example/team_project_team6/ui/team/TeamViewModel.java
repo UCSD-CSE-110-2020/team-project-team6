@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,6 +22,7 @@ import androidx.lifecycle.ViewModel;
 public class TeamViewModel extends ViewModel {
     private MutableLiveData<ArrayList<TeamMember>> mTeamMembers;
     private SaveData saveData;
+    private boolean hasPendingTeamInvite; // records if another user has sent this user a team invite
 
     public TeamViewModel() {
         ArrayList<TeamMember> data = new ArrayList<TeamMember>();
@@ -92,6 +94,14 @@ public class TeamViewModel extends ViewModel {
         } else {
             return new MutableLiveData<>();
         }
+    }
+
+    public void setHasPendingTeamInvite(boolean hasPendingTeamInvite) {
+        this.hasPendingTeamInvite = hasPendingTeamInvite;
+    }
+
+    public boolean getHasPendingTeamInvite() {
+        return hasPendingTeamInvite;
     }
 
     public LiveData<TeamMember> getTeamInviterData() {
