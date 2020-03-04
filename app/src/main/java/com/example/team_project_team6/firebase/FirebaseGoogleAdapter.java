@@ -34,12 +34,15 @@ public class FirebaseGoogleAdapter implements IFirebase {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private FirebaseAuth auth;
+    private Gson gson;
+
     private String TIMESTAMP_KEY = "timestamp";
 
     public FirebaseGoogleAdapter() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = null;
+        gson = new Gson();
     }
 
     @Override
@@ -167,7 +170,6 @@ public class FirebaseGoogleAdapter implements IFirebase {
             return;
         }
 
-        Gson gson = new Gson();
         Map<String, String> jsonToMap = gson.fromJson(
                 gson.toJson(route), new TypeToken<HashMap<String, Object>>() {}.getType()
         );
@@ -194,7 +196,6 @@ public class FirebaseGoogleAdapter implements IFirebase {
             return data;
         }
 
-        Gson gson = new Gson();
         db.collection("users")
                 .document(getEmail())
                 .collection("routes")
@@ -222,12 +223,22 @@ public class FirebaseGoogleAdapter implements IFirebase {
         return data;
     }
 
-    // TODO send TeamInvite to a given user
-    public void uploadTeamRequest(TeamMember member) {
+    public void uploadTeamRequest(String email) {
+        if (user == null) {
+            Log.d(TAG, "Could not send team request without signing in");
+            return;
+        }
 
+        Map<String, Object> requestFrom = new HashMap<>();
+        requestFrom.put("invitationFrom", user.getEmail());
+
+        db.collection("users")
+                .document(email)
+                .update(requestFrom)
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "Team request sent to user with email: " + email))
+                .addOnFailureListener(e -> Log.e(TAG, "Error sending invite to user with email: " + email, e));
     }
 
-    // TODO implement usage of TeamMember class
     public synchronized LiveData<ArrayList<TeamMember>> downloadTeamData() {
         MutableLiveData<ArrayList<TeamMember>> data = new MutableLiveData<>();
 
@@ -281,6 +292,3 @@ public class FirebaseGoogleAdapter implements IFirebase {
         return data;
     }
 }
-    /*
-
-        */

@@ -23,6 +23,6 @@ public interface IFirebase {
     void uploadRouteData(Route route);
     LiveData<ArrayList<Route>> downloadRouteData();
 
-    void uploadTeamRequest(TeamMember member);
+    void uploadTeamRequest(String member);
     LiveData<ArrayList<TeamMember>> downloadTeamData();
 }

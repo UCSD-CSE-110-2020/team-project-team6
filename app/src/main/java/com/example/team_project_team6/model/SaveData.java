@@ -66,10 +66,6 @@ public class SaveData {
         return firebaseAdapter.downloadRouteData();
     }
 
-    public void addTeamMember(TeamMember member) {
-        firebaseAdapter.uploadTeamRequest(member);
-    }
-
     public LiveData<ArrayList<TeamMember>> getAllMembers() {
         LiveData<ArrayList<TeamMember>> asd = firebaseAdapter.downloadTeamData();
         return asd;
@@ -82,8 +78,8 @@ public class SaveData {
         return team;
     }
 
-    public void saveTeamMember(TeamMember teamMember) {
-        // TODO save team member onto firebase
+    public void addTeamMember(String email) {
+        firebaseAdapter.uploadTeamRequest(email);
     }
 
     public void setTeam() {

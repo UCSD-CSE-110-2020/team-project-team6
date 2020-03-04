@@ -53,17 +53,17 @@ public class TeamViewModel extends ViewModel {
         return null;
     }
 
-    public void updateTeamMemberAt(int index, TeamMember newTeamMember) {
-        ArrayList<TeamMember> data = mTeamMembers.getValue();
-
-        if (data != null) {
-            if (index < data.size() && index >= 0) {
-                data.set(index, newTeamMember);
-                saveData.saveTeamMember(newTeamMember);
-                mTeamMembers.postValue(data);
-            }
-        }
-    }
+//    public void updateTeamMemberAt(int index, TeamMember newTeamMember) {
+//        ArrayList<TeamMember> data = mTeamMembers.getValue();
+//
+//        if (data != null) {
+//            if (index < data.size() && index >= 0) {
+//                data.set(index, newTeamMember);
+//                saveData.addTeamMember(newTeamMember);
+//                mTeamMembers.postValue(data);
+//            }
+//        }
+//    }
 
     public ArrayList<String> getTeamMemberNames(ArrayList<TeamMember> members) {
         ArrayList<String> names = new ArrayList<>();
@@ -75,6 +75,10 @@ public class TeamViewModel extends ViewModel {
         }
 
         return names;
+    }
+
+    public void sendTeamRequest(String email) {
+        saveData.addTeamMember(email);
     }
 
     public LiveData<ArrayList<TeamMember>> getTeamMemberData() {
