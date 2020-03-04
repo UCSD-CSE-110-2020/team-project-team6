@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.team_project_team6.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -59,6 +60,7 @@ public class MemberFragment extends Fragment {
         btNewInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Log.i("send_team_request", "Clicked on '+' button");
                 NavController controller = NavHostFragment.findNavController(requireParentFragment());
                 if (controller.getCurrentDestination().getId() == R.id.navigation_team) {

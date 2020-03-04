@@ -10,6 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.team_project_team6.model.Route;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,6 +19,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -87,6 +90,24 @@ public class FirebaseGoogleAdapter implements IFirebase {
                             }
                         }
                     });
+
+                    //set token ID when user login or logout
+                    Map<String, Object> token_id = new HashMap<>();
+                    token_id.put("token_id", FirebaseInstanceId.getInstance().getToken());
+                    db.collection("users").document(getEmail()).update(token_id)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "Token ID successfully updated!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error updating Token ID", e);
+                                }
+                            });
+
                 } else {
                     Log.e(TAG, "Failed to sign in to Firebase");
                     Toast.makeText(activity, "ERROR: Failed to sign into Firebase", Toast.LENGTH_LONG).show();
@@ -118,6 +139,17 @@ public class FirebaseGoogleAdapter implements IFirebase {
             return user.getUid();
         }
     }
+
+    @Override
+    public String getUsername(){
+        if (user == null) {
+            Log.e(TAG, "You must sign in before calling this method");
+            return "ERR_NOT_SIGNED_IN";
+        } else {
+            return user.getDisplayName();
+        }
+    }
+
 
     @Override
     public void uploadRouteData(Route route) {
@@ -180,4 +212,40 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
         return data;
     }
+
+    @Override
+    public void updateNotification(String email){
+        if (user == null) {
+            Log.d(TAG, "Could not download route data without signing in");
+            return;
+        }
+
+        String message = "You received an invitation from ";
+        if(getUsername() != null) {
+            message += getUsername();
+        }else{
+            message += email;
+        }
+        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> inv = new HashMap<>();
+        inv.put("from", getEmail());
+        inv.put("message", message);
+        data.put("invitation",  inv);
+
+
+        db.collection("users").document(email).update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "Invitation successfully updated!");
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w(TAG, "Error updating Invitation", e);
+                }
+            });
+
+    }
+
 }

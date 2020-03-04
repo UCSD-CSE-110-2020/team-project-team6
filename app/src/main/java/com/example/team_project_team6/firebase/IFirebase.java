@@ -16,7 +16,12 @@ public interface IFirebase {
     Boolean getSignedIn();
     String getEmail();
     String getId();
+    String getUsername();
+
 
     void uploadRouteData(Route route);
     LiveData<ArrayList<Route>> downloadRouteData();
+
+    void updateNotification(String email);
+
 }

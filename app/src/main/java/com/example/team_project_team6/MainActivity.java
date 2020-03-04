@@ -25,6 +25,7 @@ import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.new_route.NewRouteViewModel;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.example.team_project_team6.ui.routes.RoutesViewModel;
+import com.example.team_project_team6.ui.team.TeamViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -126,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
         // Inject into RouteDetailsViewModel
         RouteDetailsViewModel routeDetailsViewModel = new ViewModelProvider(this).get(RouteDetailsViewModel.class);
         routeDetailsViewModel.setSaveData(saveData);
+
+        // Inject teamViewModel
+        TeamViewModel teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
+        teamViewModel.setFbaseAdapter(fgadapter);
 
         // Request username and ID tokens for Firebase auth when signing in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

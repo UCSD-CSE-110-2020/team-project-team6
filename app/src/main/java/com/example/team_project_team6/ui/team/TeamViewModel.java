@@ -3,6 +3,7 @@ package com.example.team_project_team6.ui.team;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.team_project_team6.firebase.IFirebase;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 
@@ -19,6 +20,7 @@ import androidx.lifecycle.ViewModel;
 public class TeamViewModel extends ViewModel {
     private MutableLiveData<ArrayList<String>> mTeamMemberNames;
     private boolean hasPendingTeamInvite; // records if another user has sent this user a team invite
+    private IFirebase adaper;
 
     public TeamViewModel() {
         ArrayList<String> data = new ArrayList<String>();
@@ -32,6 +34,14 @@ public class TeamViewModel extends ViewModel {
         mTeamMemberNames = new MutableLiveData<>(data);
 
         hasPendingTeamInvite = false;
+    }
+
+    public void setFbaseAdapter(IFirebase adaper){
+        this.adaper = adaper;
+    }
+
+    public IFirebase getFbaseAdaper(){
+        return adaper;
     }
 
     public void setHasPendingTeamInvite(boolean hasPendingTeamInvite) {

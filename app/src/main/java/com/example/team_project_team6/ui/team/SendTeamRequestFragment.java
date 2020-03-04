@@ -65,6 +65,12 @@ public class SendTeamRequestFragment extends Fragment {
                     alert.show();
                 }
                 else{
+                    //save notification to user that's invited
+                    String email = gmail_invitation.getText().toString();
+                    teamViewModel.getFbaseAdaper().updateNotification(email.trim());
+                    Toast.makeText(getActivity(), "Your invitation has sent to " + email, Toast.LENGTH_SHORT).show();
+
+
                     Log.i("go back to team", "Clicked on 'send invite' button");
                     NavController controller = Navigation.findNavController(requireView());
                     if (controller.getCurrentDestination().getId() == R.id.sendTeamRequestFragment) {
