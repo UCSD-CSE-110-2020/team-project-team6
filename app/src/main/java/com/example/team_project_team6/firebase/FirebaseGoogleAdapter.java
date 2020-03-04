@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.TeamMember;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
@@ -73,9 +74,16 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                         .document(getEmail())
                                         .set(team);
 
-                                Map<String, List<String>> uuidTeam = new HashMap<>();
-                                List<String> members = new ArrayList<>();
-                                members.add(getEmail());
+                                Map<String, List<TeamMember>> uuidTeam = new HashMap<>();
+                                List<TeamMember> members = new ArrayList<>();
+
+                                String[] name = getName().split(" ");
+                                TeamMember member = new TeamMember();
+                                member.setEmail(getEmail());
+                                member.setFirstName(name[0]);
+                                member.setLastName(name[1]);
+
+                                members.add(member);
                                 uuidTeam.put(uuid, members);
 
                                 Log.d(TAG, "Creating team " + uuid);
@@ -110,6 +118,16 @@ public class FirebaseGoogleAdapter implements IFirebase {
     }
 
     @Override
+    public String getName() {
+        if (user == null) {
+            Log.e(TAG, "You must sign in before calling this method");
+            return "ERR_NOT_SIGNED_IN";
+        } else {
+            return user.getDisplayName();
+        }
+    }
+
+    @Override
     public String getId() {
         if (user == null) {
             Log.e(TAG, "You must sign in before calling this method");
@@ -117,6 +135,29 @@ public class FirebaseGoogleAdapter implements IFirebase {
         } else {
             return user.getUid();
         }
+    }
+
+    @Override
+    public String getTeam() {
+        String[] teamUUID = new String[1];
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot doc = task.getResult();
+                        if (doc != null && doc.exists()) {
+                            teamUUID[0] = (String) doc.get("team");
+                            Log.d(TAG, "Successfully retrieved team info");
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.e(TAG, "Failed to retrieve team UUID");
+                    }
+                })
+                .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
+        return teamUUID[0];
     }
 
     @Override
@@ -180,4 +221,66 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
         return data;
     }
+
+    // TODO send TeamInvite to a given user
+    public void uploadTeamRequest(TeamMember member) {
+
+    }
+
+    // TODO implement usage of TeamMember class
+    public synchronized LiveData<ArrayList<TeamMember>> downloadTeamData() {
+        MutableLiveData<ArrayList<TeamMember>> data = new MutableLiveData<>();
+
+        if (user == null) {
+            Log.d(TAG, "Could not download route data without signing in");
+            return data;
+        }
+
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(getTeamNameTask -> {
+                    if (getTeamNameTask.isSuccessful()) {
+                        DocumentSnapshot teamNameDoc = getTeamNameTask.getResult();
+                        if (teamNameDoc != null && teamNameDoc.exists()) {
+                            String teamUUID = (String) teamNameDoc.get("team");
+
+                            // go to the teams collection outside of users and get the list of emails
+                            db.collection("teams")
+                                    .document(teamUUID)
+                                    .get()
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot doc = task.getResult();
+                                            if (doc != null && doc.exists()) {
+                                                ArrayList<HashMap<String, String>> memMaps = (ArrayList<HashMap<String, String>>) doc.get(teamUUID);
+                                                ArrayList<TeamMember> members = new ArrayList<>();
+                                                for (HashMap<String, String> m : memMaps) {
+                                                    members.add(new TeamMember(m));
+                                                }
+                                                data.postValue(members);
+                                                Log.d(TAG, "Successfully retrieved team members");
+                                            } else {
+                                                Log.d(TAG, "No such document");
+                                            }
+                                        } else {
+                                            Log.e(TAG, "Failed to retrieve team members");
+                                        }
+                                    })
+                                    .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.e(TAG, "Failed to retrieve team UUID");
+                    }
+                })
+                .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
+
+        return data;
+    }
 }
+    /*
+
+        */

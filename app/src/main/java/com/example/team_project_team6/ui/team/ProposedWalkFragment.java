@@ -10,12 +10,6 @@ import android.view.ViewGroup;
 
 import com.example.team_project_team6.R;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProposedWalkFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ProposedWalkFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

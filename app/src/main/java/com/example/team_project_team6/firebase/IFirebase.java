@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.TeamMember;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
@@ -16,7 +17,12 @@ public interface IFirebase {
     Boolean getSignedIn();
     String getEmail();
     String getId();
+    String getTeam();
+    String getName();
 
     void uploadRouteData(Route route);
     LiveData<ArrayList<Route>> downloadRouteData();
+
+    void uploadTeamRequest(TeamMember member);
+    LiveData<ArrayList<TeamMember>> downloadTeamData();
 }

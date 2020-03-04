@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -12,23 +13,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.model.TeamMember;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
 public class MemberFragment extends Fragment {
+    private TeamArrayAdapter mfAdapter;
+
     @VisibleForTesting
     static TeamViewModel teamViewModel = null;
 
-    private ArrayAdapter mfAdapter;
-    private String[] teamMemberArray;
     private Button btnAcceptInvite;
     private Button btnDeclineInvite;
     private TextView txtInviterName;
+    private ListView listView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,14 +40,11 @@ public class MemberFragment extends Fragment {
         if (teamViewModel == null) {
             teamViewModel = new ViewModelProvider(requireActivity()).get(TeamViewModel.class);
         }
-
-        teamMemberArray = teamViewModel.getTeamMemberNameList().toArray(new String[0]);
+        bind_views();
         View root = inflater.inflate(R.layout.fragment_members, container, false);
-        mfAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.single_item_list_view, teamMemberArray);
-        ListView listView = (ListView) root.findViewById(R.id.list_team_members);
-        listView.setAdapter(mfAdapter);
-      
+
+        listView = (ListView) root.findViewById(R.id.list_team_members);
+
         btnAcceptInvite = root.findViewById(R.id.btn_accept_invite);
         btnDeclineInvite = root.findViewById(R.id.btn_decline_invite);
         txtInviterName = root.findViewById(R.id.txt_team_inviter_name);
@@ -82,5 +83,23 @@ public class MemberFragment extends Fragment {
         return root;
     }
 
+    public void bind_views() {
+        teamViewModel.getTeamMemberData().observe(getViewLifecycleOwner(), new Observer<ArrayList<TeamMember>>() {
+            @Override
+            public void onChanged(ArrayList<TeamMember> teamMembers) {
+                teamViewModel.updateMTeamMembers(teamMembers);
 
+                mfAdapter = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamMemberNames(teamMembers));
+                listView.setAdapter(mfAdapter);
+                mfAdapter.notifyDataSetChanged();
+            }
+        });
+/*
+        teamViewModel.getTeamInviterData().observe(getViewLifecycleOwner(), new Observer<TeamMember>()) {
+            @Override
+            public void onChanged(TeamMember inviter) {
+            }
+        }
+ */
+    }
 }

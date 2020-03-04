@@ -1,7 +1,6 @@
 package com.example.team_project_team6.ui.team;
 
 import android.content.Context;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -9,6 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 class TabAdapter extends FragmentPagerAdapter {
     Context context;
     int totalTabs;
+
     public TabAdapter(Context c, FragmentManager fm, int totalTabs) {
         super(fm);
         context = c;
