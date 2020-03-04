@@ -50,7 +50,7 @@ public class SendTeamRequestFragmentTest {
                 fragment.teamViewModel = viewModel;
             }
         });
-        // TODO: Test that 'Invite' button takes you back to Team screen if all mandatory fields are filled out
+        
         // Type and then close keyboard
         onView(ViewMatchers.withId(R.id.firstname_invitation_edit)).perform(ViewActions.typeText("mary"), ViewActions.closeSoftKeyboard());
         // Type and then close keyboard
