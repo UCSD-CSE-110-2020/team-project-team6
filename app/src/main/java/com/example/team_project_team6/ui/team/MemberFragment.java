@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.TeamMember;
 import com.example.team_project_team6.ui.routes.RoutesViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -78,5 +79,15 @@ public class MemberFragment extends Fragment {
             }
         });
         return root;
+    }
+
+    public void bind_views() {
+        teamViewModel.getTeamMemberData().observe(getViewLifecycleOwner(), new Observer<ArrayList<TeamMember>>() {
+            @Override
+            public void onChanged(ArrayList<TeamMember> teamMembers) {
+                mfAdapter.updateData(routes);
+                mfAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

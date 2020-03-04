@@ -12,22 +12,10 @@ import android.view.ViewGroup;
 import com.example.team_project_team6.R;
 import com.google.android.material.tabs.TabLayout;
 
-
-
 public class TeamFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
