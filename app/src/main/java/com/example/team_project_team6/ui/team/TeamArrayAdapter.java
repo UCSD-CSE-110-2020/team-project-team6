@@ -22,10 +22,10 @@ import static androidx.test.InstrumentationRegistry.getContext;
 
 public class TeamArrayAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<TeamMember> items;
+    private ArrayList<String> items;
     public View v;
 
-    public TeamArrayAdapter(Context context, ArrayList<TeamMember> items) {
+    public TeamArrayAdapter(Context context, ArrayList<String> items) {
         this.context = context;
         this.items = items;
     }
@@ -38,18 +38,17 @@ public class TeamArrayAdapter extends BaseAdapter {
         }
 
         // Get the data item for this position
-        TeamMember teamMember = (TeamMember) getItem(position);
+        String teamMemberName = (String) getItem(position);
 
-        TextView teamMemberName = (TextView) convertView.findViewById(R.id.txt_team_member_name);
-        teamMemberName.setText(teamMember.getFirstName() + " " + teamMember.getLastName());
+        TextView teamMemberNameView = (TextView) convertView.findViewById(R.id.txt_team_member_name);
+        teamMemberNameView.setText(teamMemberName);
 
         return convertView;
     }
 
-    public void updateData(ArrayList<TeamMember> data) {
+    public void updateData(ArrayList<String> data) {
         this.items = data;
     }
-
 
     @Override
     public int getCount() {
@@ -58,7 +57,7 @@ public class TeamArrayAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return (TeamMember) items.get(position); //returns list item at the specified position
+        return items.get(position); //returns list item at the specified position
     }
 
     @Override

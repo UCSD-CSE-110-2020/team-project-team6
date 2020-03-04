@@ -84,9 +84,8 @@ public class MemberFragment extends Fragment {
             public void onChanged(ArrayList<TeamMember> teamMembers) {
                 teamViewModel.updateMTeamMembers(teamMembers);
 
-                mfAdapter = new TeamArrayAdapter(getActivity(), teamMembers);
+                mfAdapter = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamMemberNames());
                 listView.setAdapter(mfAdapter);
-                mfAdapter.updateData(teamMembers);
                 mfAdapter.notifyDataSetChanged();
             }
         });
