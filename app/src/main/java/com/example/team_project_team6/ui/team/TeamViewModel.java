@@ -10,18 +10,15 @@ import androidx.lifecycle.ViewModel;
 
 public class TeamViewModel extends ViewModel {
     private MutableLiveData<ArrayList<TeamMember>> mTeamMembers;
+    private MutableLiveData<TeamMember> mInviter;
     private SaveData saveData;
     private boolean hasPendingTeamInvite; // records if another user has sent this user a team invite
+
+    private boolean inviteIsAccepted;
 
     public TeamViewModel() {
         ArrayList<TeamMember> data = new ArrayList<TeamMember>();
         mTeamMembers = new MutableLiveData<>(data);
-
-        // Mock names
-/*        data.add(new TeamMember("perry.platypus@gmail.com", "Perry", "Le Platypus"));
-        data.add(new TeamMember("sarap.soapbar@gmail.com", "Sarah", "the Soap Bar"));
-        data.add(new TeamMember("ellen.elephant@gmail.com", "Ellen", "Elephant"));
-*/
     }
 
     public void updateMTeamMembers(ArrayList<TeamMember> teamMembers) {
@@ -52,18 +49,6 @@ public class TeamViewModel extends ViewModel {
 
         return null;
     }
-
-//    public void updateTeamMemberAt(int index, TeamMember newTeamMember) {
-//        ArrayList<TeamMember> data = mTeamMembers.getValue();
-//
-//        if (data != null) {
-//            if (index < data.size() && index >= 0) {
-//                data.set(index, newTeamMember);
-//                saveData.addTeamMember(newTeamMember);
-//                mTeamMembers.postValue(data);
-//            }
-//        }
-//    }
 
     public ArrayList<String> getTeamMemberNames(ArrayList<TeamMember> members) {
         ArrayList<String> names = new ArrayList<>();
@@ -98,6 +83,18 @@ public class TeamViewModel extends ViewModel {
     }
 
     public LiveData<TeamMember> getTeamInviterData() {
-        return null;
+        if(saveData != null) {
+            return saveData.getTeamInviter();
+        } else {
+            return new MutableLiveData<>();
+        }
+    }
+
+    public boolean getInviteIsAccepted() {
+        return inviteIsAccepted;
+    }
+
+    public void setInviteIsAccepted(boolean inviteIsAccepted) {
+        this.inviteIsAccepted = inviteIsAccepted;
     }
 }

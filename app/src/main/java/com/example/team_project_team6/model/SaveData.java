@@ -82,6 +82,11 @@ public class SaveData {
         firebaseAdapter.uploadTeamRequest(email);
     }
 
+    public LiveData<TeamMember> getTeamInviter() {
+        // TODO return TeamMember who is TeamInviter
+        return null;
+    }
+
     public void setTeam() {
         String team = firebaseAdapter.getTeam();
 
