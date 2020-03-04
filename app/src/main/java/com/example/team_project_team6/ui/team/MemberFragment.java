@@ -39,7 +39,7 @@ public class MemberFragment extends Fragment {
             teamViewModel = new ViewModelProvider(requireActivity()).get(TeamViewModel.class);
         }
 
-        teamMemberArray = teamViewModel.getTeamMemberNameList().toArray(new String[0]);
+        teamMemberArray = teamViewModel.getTeamMembers().toArray(new String[0]);
         View root = inflater.inflate(R.layout.fragment_members, container, false);
         mfAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.single_item_list_view, teamMemberArray);
