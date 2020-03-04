@@ -71,7 +71,8 @@ public class SaveData {
     }
 
     public LiveData<ArrayList<TeamMember>> getAllMembers() {
-        return firebaseAdapter.downloadTeamData();
+        LiveData<ArrayList<TeamMember>> asd = firebaseAdapter.downloadTeamData();
+        return asd;
     }
 
     public String getTeam() {

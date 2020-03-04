@@ -1,5 +1,7 @@
 package com.example.team_project_team6.model;
 
+import java.util.HashMap;
+
 public class TeamMember {
     private String email;
     private String firstName;
@@ -7,6 +9,12 @@ public class TeamMember {
 
     public TeamMember() {
 
+    }
+
+    public TeamMember(HashMap<String, String> map) {
+        this.email = map.get("email");
+        this.firstName = map.get("firstName");
+        this.lastName = map.get("lastName");
     }
 
     public TeamMember(String email, String firstName, String lastName) {

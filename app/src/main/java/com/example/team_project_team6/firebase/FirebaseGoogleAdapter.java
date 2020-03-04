@@ -253,7 +253,12 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                         if (task.isSuccessful()) {
                                             DocumentSnapshot doc = task.getResult();
                                             if (doc != null && doc.exists()) {
-                                                data.postValue((ArrayList<TeamMember>) doc.get(teamUUID));
+                                                ArrayList<HashMap<String, String>> memMaps = (ArrayList<HashMap<String, String>>) doc.get(teamUUID);
+                                                ArrayList<TeamMember> members = new ArrayList<>();
+                                                for (HashMap<String, String> m : memMaps) {
+                                                    members.add(new TeamMember(m));
+                                                }
+                                                data.postValue(members);
                                                 Log.d(TAG, "Successfully retrieved team members");
                                             } else {
                                                 Log.d(TAG, "No such document");

@@ -74,12 +74,12 @@ public class TeamViewModel extends ViewModel {
         }
     }
 
-    public ArrayList<String> getTeamMemberNames() {
-        ArrayList<TeamMember> members = mTeamMembers.getValue();
+    public ArrayList<String> getTeamMemberNames(ArrayList<TeamMember> members) {
         ArrayList<String> names = new ArrayList<>();
 
         assert members != null;
         for (TeamMember m : members) {
+            if (m.getEmail().equals(saveData.getEmail())) continue;
             names.add(m.getFirstName() + " " + m.getLastName());
         }
 
