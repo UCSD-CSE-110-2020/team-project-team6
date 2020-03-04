@@ -1,5 +1,7 @@
 package com.example.team_project_team6.ui.team;
 
+import android.util.Log;
+
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
 
@@ -33,23 +35,6 @@ public class TeamViewModel extends ViewModel {
         return this.saveData;
     }
 
-    // mTeamMembers stores a list of all the routes in firebase
-    public void setTeamMemberData(MutableLiveData<ArrayList<TeamMember>> mTeamMembers) {
-        this.mTeamMembers = mTeamMembers;
-    }
-
-    public TeamMember getTeamMemberAt(int index) {
-        ArrayList<TeamMember> data = mTeamMembers.getValue();
-
-        if (data != null) {
-            if (index < data.size() && index >= 0) {
-                return data.get(index);
-            }
-        }
-
-        return null;
-    }
-
     public ArrayList<String> getTeamMemberNames(ArrayList<TeamMember> members) {
         ArrayList<String> names = new ArrayList<>();
 
@@ -74,20 +59,22 @@ public class TeamViewModel extends ViewModel {
         }
     }
 
+    public LiveData<String> getTeamInviterData() {
+        Log.e("TeamViewModel getTeamInviterData", "saveData is null: " + (saveData == null));
+        if(saveData != null) {
+//            Log.e("getTeamInviterData in ViewModel",  "inviter: " + saveData.getTeamInviter().toString());
+            return saveData.getTeamInviter();
+        } else {
+            return new MutableLiveData<>();
+        }
+    }
+
     public void setHasPendingTeamInvite(boolean hasPendingTeamInvite) {
         this.hasPendingTeamInvite = hasPendingTeamInvite;
     }
 
     public boolean getHasPendingTeamInvite() {
         return hasPendingTeamInvite;
-    }
-
-    public LiveData<String> getTeamInviterData() {
-        if(saveData != null) {
-            return saveData.getTeamInviter();
-        } else {
-            return new MutableLiveData<>();
-        }
     }
 
     public boolean getInviteIsAccepted() {

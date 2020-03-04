@@ -50,10 +50,13 @@ public class MemberFragment extends Fragment {
         btnDeclineInvite = root.findViewById(R.id.btn_decline_invite);
         txtInviterName = root.findViewById(R.id.txt_team_inviter_name);
 
+        resetInviteSection();
+        teamViewModel.setHasPendingTeamInvite(false);
+
         // if there is no pending team invite, buttons are not visible
         // and set to default string saying there is no invitation
-        if(!teamViewModel.getHasPendingTeamInvite()) {
-            resetInviteSection();
+        if(teamViewModel.getHasPendingTeamInvite()) {
+            enableInviteSection(teamViewModel.getTeamInviterData().getValue());
         }
 
         final FloatingActionButton btNewInvite = root.findViewById(R.id.bt_invite_member);
@@ -107,11 +110,17 @@ public class MemberFragment extends Fragment {
         teamViewModel.getTeamInviterData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String member) {
-                teamViewModel.setHasPendingTeamInvite(true);
-                txtInviterName.setText(member);
-                txtInviterName.setTypeface(txtInviterName.getTypeface(), Typeface.BOLD_ITALIC);
+                enableInviteSection(member);
             }
         });
+    }
+
+    private void enableInviteSection(String teamName) {
+        teamViewModel.setHasPendingTeamInvite(true);
+        btnAcceptInvite.setVisibility(View.VISIBLE);
+        btnDeclineInvite.setVisibility(View.VISIBLE);
+        txtInviterName.setText(teamName);
+        txtInviterName.setTypeface(txtInviterName.getTypeface(), Typeface.BOLD_ITALIC);
     }
 
     private void resetInviteSection() {
@@ -119,6 +128,5 @@ public class MemberFragment extends Fragment {
         txtInviterName.setTypeface(txtInviterName.getTypeface(), Typeface.NORMAL);
         btnAcceptInvite.setVisibility(View.INVISIBLE);
         btnDeclineInvite.setVisibility(View.INVISIBLE);
-        teamViewModel.setHasPendingTeamInvite(false);
     }
 }
