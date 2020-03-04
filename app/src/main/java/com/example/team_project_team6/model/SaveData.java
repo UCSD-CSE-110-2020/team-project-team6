@@ -83,8 +83,7 @@ public class SaveData {
     }
 
     public LiveData<String> getTeamInviter() {
-        firebaseAdapter.downloadTeamRequest();
-        return null;
+        return firebaseAdapter.downloadTeamRequest();
     }
 
     public void setTeam() {

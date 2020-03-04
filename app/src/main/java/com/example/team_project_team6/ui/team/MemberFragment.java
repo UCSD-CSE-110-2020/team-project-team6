@@ -104,14 +104,14 @@ public class MemberFragment extends Fragment {
             }
         });
 
-//        teamViewModel.getTeamInviterData().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(String member) {
-//                teamViewModel.setHasPendingTeamInvite(true);
-//                txtInviterName.setText(member);
-//                txtInviterName.setTypeface(txtInviterName.getTypeface(), Typeface.BOLD_ITALIC);
-//            }
-//        });
+        teamViewModel.getTeamInviterData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String member) {
+                teamViewModel.setHasPendingTeamInvite(true);
+                txtInviterName.setText(member);
+                txtInviterName.setTypeface(txtInviterName.getTypeface(), Typeface.BOLD_ITALIC);
+            }
+        });
     }
 
     private void resetInviteSection() {
