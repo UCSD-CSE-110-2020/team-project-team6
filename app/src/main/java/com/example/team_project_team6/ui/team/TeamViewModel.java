@@ -27,16 +27,15 @@ public class TeamViewModel extends ViewModel {
         mTeamMembers = new MutableLiveData<>(data);
 
         // Mock names
-        data.add(new TeamMember("perry.platypus@gmail.com", "Perry", "Le Platypus"));
+/*        data.add(new TeamMember("perry.platypus@gmail.com", "Perry", "Le Platypus"));
         data.add(new TeamMember("sarap.soapbar@gmail.com", "Sarah", "the Soap Bar"));
         data.add(new TeamMember("ellen.elephant@gmail.com", "Ellen", "Elephant"));
-        Collections.sort(data);
-
+*/
         mTeamMembers = new MutableLiveData<>(data);
     }
 
-    public void updateMRoutes(ArrayList<TeamMember> routes) {
-        mTeamMembers.postValue(routes);
+    public void updateMTeamMembers(ArrayList<TeamMember> teamMembers) {
+        mTeamMembers.postValue(teamMembers);
     }
 
     public void setSaveData(SaveData saveData) {
@@ -52,7 +51,7 @@ public class TeamViewModel extends ViewModel {
         this.mTeamMembers = mTeamMembers;
     }
 
-    TeamMember getTeamMemberAt(int index) {
+    public TeamMember getTeamMemberAt(int index) {
         ArrayList<TeamMember> data = mTeamMembers.getValue();
 
         if (data != null) {
@@ -64,41 +63,27 @@ public class TeamViewModel extends ViewModel {
         return null;
     }
 
-    void updateRouteAt(int index, TeamMember newTeamMember) {
+    public void updateTeamMemberAt(int index, TeamMember newTeamMember) {
         ArrayList<TeamMember> data = mTeamMembers.getValue();
 
         if (data != null) {
             if (index < data.size() && index >= 0) {
                 data.set(index, newTeamMember);
-                saveData.saveTeamMember(newTeamMember); // TODO: vestigial structure to mimic saveData.saveRoute(Route)
+                saveData.saveTeamMember(newTeamMember);
                 mTeamMembers.postValue(data);
             }
         }
     }
 
-    public List<String> getTeamMemberNameList() {
-        List<String> teamMemberNames = new ArrayList<>();
-        for(TeamMember teamMember : mTeamMembers.getValue()) {
-            teamMemberNames.add(teamMember.getFirstName() + " " + teamMember.getLastName());
+    public LiveData<ArrayList<TeamMember>> getTeamMemberData() {
+        if (saveData != null) {
+            return saveData.getAllMembers();
+        } else {
+            return new MutableLiveData<>();
         }
-        return teamMemberNames;
     }
 
-    // Routes are displayed in the same order they are present in
-    public LiveData<ArrayList<TeamMember>> getTeamMemberData() {
-        // populate list of routes tiles
-
-        Set<String> routeNameSet = saveData.getTeam();
-        List<String> routeNameList = new ArrayList<>(routeNameSet);
-        Collections.sort(routeNameList);
-
-        ArrayList<Route> routeList = new ArrayList<>();
-        for(String routeName : routeNameList) {
-            Route route = saveData.getRoute(routeName);
-            routeList.add(route);
-        }
-        mRoutes.postValue(routeList);
-        setRouteData(mRoutes);
-        return mRoutes;
+    public LiveData<TeamMember> getTeamInviterData() {
+        return null;
     }
 }

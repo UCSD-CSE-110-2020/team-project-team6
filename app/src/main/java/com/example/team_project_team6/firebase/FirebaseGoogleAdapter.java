@@ -230,29 +230,45 @@ public class FirebaseGoogleAdapter implements IFirebase {
     // TODO implement usage of TeamMember class
     public synchronized LiveData<ArrayList<TeamMember>> downloadTeamData() {
         MutableLiveData<ArrayList<TeamMember>> data = new MutableLiveData<>();
-        final String teamName = getTeam();
 
         if (user == null) {
             Log.d(TAG, "Could not download route data without signing in");
             return data;
         }
 
-        // go to the teams collection outside of users and get the list of emails
-        Gson gson = new Gson();
-        db.collection("teams")
-                .document(teamName)
+        db.collection("users")
+                .document(getEmail())
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot doc = task.getResult();
-                        if (doc != null && doc.exists()) {
-                            data.postValue((ArrayList<TeamMember>) doc.get(teamName));
-                            Log.d(TAG, "Successfully retrieved team members");
+                .addOnCompleteListener(getTeamNameTask -> {
+                    if (getTeamNameTask.isSuccessful()) {
+                        DocumentSnapshot teamNameDoc = getTeamNameTask.getResult();
+                        if (teamNameDoc != null && teamNameDoc.exists()) {
+                            String teamUUID = (String) teamNameDoc.get("team");
+
+                            // go to the teams collection outside of users and get the list of emails
+                            db.collection("teams")
+                                    .document(teamUUID)
+                                    .get()
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot doc = task.getResult();
+                                            if (doc != null && doc.exists()) {
+                                                data.postValue((ArrayList<TeamMember>) doc.get(teamUUID));
+                                                Log.d(TAG, "Successfully retrieved team members");
+                                            } else {
+                                                Log.d(TAG, "No such document");
+                                            }
+                                        } else {
+                                            Log.e(TAG, "Failed to retrieve team members");
+                                        }
+                                    })
+                                    .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
+
                         } else {
                             Log.d(TAG, "No such document");
                         }
                     } else {
-                        Log.e(TAG, "Failed to retrieve team members");
+                        Log.e(TAG, "Failed to retrieve team UUID");
                     }
                 })
                 .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
@@ -260,3 +276,6 @@ public class FirebaseGoogleAdapter implements IFirebase {
         return data;
     }
 }
+    /*
+
+        */

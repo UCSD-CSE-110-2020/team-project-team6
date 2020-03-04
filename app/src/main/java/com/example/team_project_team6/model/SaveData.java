@@ -74,9 +74,15 @@ public class SaveData {
         return firebaseAdapter.downloadTeamData();
     }
 
-    public void getTeam() {
+    public String getTeam() {
         String team = spfsUser.getString("team", "");
         Log.i(TAG, "Getting user's team from SharedPreferences");
+
+        return team;
+    }
+
+    public void saveTeamMember(TeamMember teamMember) {
+        // TODO save team member onto firebase
     }
 
     public void setTeam() {
@@ -87,6 +93,10 @@ public class SaveData {
         editor.apply();
 
         Log.i(TAG, "Saved user's team to SharedPreferences");
+    }
+
+    public String getEmail() {
+        return firebaseAdapter.getEmail();
     }
 
 }

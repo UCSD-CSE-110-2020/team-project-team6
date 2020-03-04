@@ -1,13 +1,6 @@
 package com.example.team_project_team6.ui.team;
 
 import android.content.Context;
-
-import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.model.TeamMember;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -15,7 +8,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 class TabAdapter extends FragmentPagerAdapter {
     Context context;
     int totalTabs;
-    List<TeamMember> items;
 
     public TabAdapter(Context c, FragmentManager fm, int totalTabs) {
         super(fm);
@@ -35,10 +27,6 @@ class TabAdapter extends FragmentPagerAdapter {
             default:
                 return null;
         }
-    }
-
-    public void updateData(ArrayList<TeamMember> data) {
-        this.items = data;
     }
 
     @Override
