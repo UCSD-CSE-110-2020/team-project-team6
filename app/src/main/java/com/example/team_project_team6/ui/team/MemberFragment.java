@@ -77,6 +77,7 @@ public class MemberFragment extends Fragment {
                 btnDeclineInvite.setVisibility(View.INVISIBLE);
             }
         });
+
         return root;
     }
 }
