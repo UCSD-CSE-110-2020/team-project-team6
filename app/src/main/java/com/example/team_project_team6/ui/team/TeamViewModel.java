@@ -98,5 +98,11 @@ public class TeamViewModel extends ViewModel {
 
     public void setInviteIsAccepted(boolean inviteIsAccepted) {
         this.inviteIsAccepted = inviteIsAccepted;
+
+        if (inviteIsAccepted) {
+            saveData.acceptTeamRequest();
+        } else {
+            saveData.declineTeamRequest();
+        }
     }
 }

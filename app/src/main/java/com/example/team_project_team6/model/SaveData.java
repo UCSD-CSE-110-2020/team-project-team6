@@ -97,6 +97,16 @@ public class SaveData {
         Log.i(TAG, "Saved user's team to SharedPreferences");
     }
 
+    //  todo
+    public void acceptTeamRequest() {
+        firebaseAdapter.acceptTeamRequest();
+    }
+
+    //  todo
+    public void declineTeamRequest() {
+        firebaseAdapter.declineTeamRequest();
+    }
+
     public String getEmail() {
         return firebaseAdapter.getEmail();
     }
