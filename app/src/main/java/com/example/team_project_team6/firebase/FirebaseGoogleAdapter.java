@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.TeamInvite;
 import com.example.team_project_team6.model.TeamMember;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
@@ -21,7 +22,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,21 +67,24 @@ public class FirebaseGoogleAdapter implements IFirebase {
                         if (createTask.isSuccessful()) {
                             DocumentSnapshot document = createTask.getResult();
                             if (!Objects.requireNonNull(document).exists()) {
-                                Map<String, String> team = new HashMap<>();
+                                Map<String, String> userInfo = new HashMap<>();
                                 String uuid = UUID.randomUUID().toString();
-                                team.put("team", uuid);
+                                String[] name = getName().split(" ");
+
+                                userInfo.put("team", uuid);
+                                userInfo.put("firstName", name[0]);
+                                userInfo.put("lastName", name[1]);
 
                                 Log.d(TAG, "No team found, assuming new user. Creating team " + uuid + " for user " + getEmail());
 
                                 Log.d(TAG, "Creating user " + getEmail());
                                 db.collection("users")
                                         .document(getEmail())
-                                        .set(team);
+                                        .set(userInfo);
 
                                 Map<String, List<TeamMember>> uuidTeam = new HashMap<>();
                                 List<TeamMember> members = new ArrayList<>();
 
-                                String[] name = getName().split(" ");
                                 TeamMember member = new TeamMember();
                                 member.setEmail(getEmail());
                                 member.setFirstName(name[0]);
@@ -231,22 +234,49 @@ public class FirebaseGoogleAdapter implements IFirebase {
         }
 
         Map<String, Object> requestFrom = new HashMap<>();
-        requestFrom.put("invitationFrom", getEmail());
+        TeamInvite from = new TeamInvite();
+        from.setEmail(getEmail());
+        from.setName(getName());
+        from.setMessage("fix later");
+        from.setToOrFrom("from");
+        from.setTeamUUID("do we need this?");
 
+        requestFrom.put("invitation", from);
+
+        // to user I am sending request to, update the "invitationFrom" field
         db.collection("users")
                 .document(email)
                 .update(requestFrom)
                 .addOnSuccessListener(documentReference -> {
 
-                    Map<String, Object> requestTo = new HashMap<>();
-                    requestTo.put("invitationTo", email);
-
-                    Log.d(TAG, "Team request sent to user with email: " + email);
                     db.collection("users")
-                            .document(getEmail())
-                            .update(requestTo)
-                            .addOnSuccessListener(d -> Log.d(TAG, "Pending invite info sent to user with email: " + getEmail()))
-                            .addOnFailureListener(e -> Log.e(TAG, "Error sending pending invite info to user with email: " + getEmail(), e));
+                            .document(email)
+                            .get()
+                            .addOnCompleteListener(getRecipientTask -> {
+                                if (getRecipientTask.isSuccessful()) {
+                                    DocumentSnapshot recipientDoc = getRecipientTask.getResult();
+                                    if (recipientDoc != null) {
+                                        Map<String, Object> requestTo = new HashMap<>();
+                                        TeamInvite to = new TeamInvite();
+                                        to.setEmail(email);
+                                        to.setName((String) recipientDoc.get("firstName") + " " +
+                                                (String) recipientDoc.get("lastName"));
+                                        to.setToOrFrom("to");
+
+                                        requestTo.put("invitation", to);
+
+                                        Log.d(TAG, "Team request sent to user with email: " + email);
+                                        db.collection("users")
+                                                .document(getEmail())
+                                                .update(requestTo)
+                                                .addOnSuccessListener(d -> Log.d(TAG, "Pending invite info sent to user with email: " + getEmail()))
+                                                .addOnFailureListener(e -> Log.e(TAG, "Error sending pending invite info to user with email: " + getEmail(), e));
+                                    }
+                                }
+
+                            })
+                            .addOnFailureListener(e -> Log.e(TAG, "Error getting name of user with email: " + email, e));
+
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "Error sending invite to user with email: " + email, e));
     }
