@@ -18,10 +18,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -228,12 +230,130 @@ public class FirebaseGoogleAdapter implements IFirebase {
     }
 
     public void acceptTeamRequest() {
-        // delete invitation A
+        if (user == null) {
+            Log.d(TAG, "Could not send team request without signing in");
+            return;
+        }
+
+        // get sender's email to update the sender's team and invitation status
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(getReceiverTask -> {
+                    if (getReceiverTask.isSuccessful()) {
+                        DocumentSnapshot receiverDoc = getReceiverTask.getResult();
+                        if (receiverDoc != null) {
+                            String senderEmail = (String) ((HashMap<String, Object>) receiverDoc.get("invitation")).get("email");
+                            String oldTeam = (String) receiverDoc.get("team"); // go in here to erase receiver's data from their team
+                            String[] name = getName().split(" ");
+                            TeamMember receiver = new TeamMember(getEmail(), name[0], name[1]);
+
+                            // get the sender's team from their email
+                            db.collection("users")
+                                    .document(senderEmail)
+                                    .get()
+                                    .addOnCompleteListener(getTeamTask -> {
+                                        if (getTeamTask.isSuccessful()) {
+                                            DocumentSnapshot newTeamDoc = getTeamTask.getResult();
+                                            if (newTeamDoc != null) {
+                                                String newTeam = (String) newTeamDoc.get("team");
+
+                                                // add receiver to sender's team
+                                                db.collection("teams")
+                                                        .document(newTeam)
+                                                        .update(newTeam, FieldValue.arrayUnion(receiver))
+                                                        .addOnSuccessListener(d -> Log.d(TAG, "Added " + getEmail() + " to " + senderEmail + "'s team."))
+                                                        .addOnFailureListener(e -> Log.e(TAG, "Error adding user to new team", e));
+
+                                                // remove receiver from their old team
+                                                db.collection("teams")
+                                                        .document(oldTeam)
+                                                        .update(oldTeam, FieldValue.arrayRemove(receiver))
+                                                        .addOnSuccessListener(d -> Log.d(TAG, "Removed " + getEmail() + " from old team."))
+                                                        .addOnFailureListener(e -> Log.e(TAG, "Error removing user from old team", e));
+
+                                                HashMap<String, Object> updatedTeam = new HashMap<>();
+                                                updatedTeam.put("team", newTeam);
+
+                                                db.collection("users")
+                                                        .document(getEmail())
+                                                        .update(updatedTeam)
+                                                        .addOnSuccessListener(d -> Log.d(TAG, "Updated user's team."))
+                                                        .addOnFailureListener(e -> Log.e(TAG, "Error updating user's team", e));
+
+                                                // delete the sender's invitation receipt
+                                                db.collection("users")
+                                                        .document(senderEmail)
+                                                        .update("invitation", FieldValue.delete())
+                                                        .addOnSuccessListener(d -> Log.d(TAG, "Removed invitation item from sender's fields."))
+                                                        .addOnFailureListener(e -> Log.e(TAG, "Error removing sender's invitation receipt", e));
+
+                                                // delete the receiver's invitation receipt
+                                                db.collection("users")
+                                                        .document(getEmail())
+                                                        .update("invitation", FieldValue.delete())
+                                                        .addOnSuccessListener(d -> Log.d(TAG, "Removed invitation to join team."))
+                                                        .addOnFailureListener(e -> Log.e(TAG, "Error removing received invitation.", e));
+
+                                            } else {
+                                                Log.e(TAG, "Document does not exist.");
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to get sender's team from email", e));
+
+                        } else {
+                            Log.e(TAG, "Document does not exist.");
+                        }
+
+                    } else {
+                        Log.e(TAG, "Document does not exist.");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to get sender's email", e));
     }
 
     public void declineTeamRequest() {
-        // delete invitation on A
-        // delete invitation on B
+        if (user == null) {
+            Log.d(TAG, "Could not send team request without signing in");
+            return;
+        }
+
+        // get sender's email
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(getSenderTask -> {
+
+                    if (getSenderTask.isSuccessful()) {
+                        DocumentSnapshot senderDoc = getSenderTask.getResult();
+                        if (senderDoc != null) {
+                            String senderEmail = (String) ((HashMap<String, Object>) senderDoc.get("invitation")).get("email");
+
+                            // delete the sender's invitation receipt
+                            db.collection("users")
+                                    .document(senderEmail)
+                                    .update("invitation", FieldValue.delete())
+                                    .addOnSuccessListener(d -> Log.d(TAG, "Removed invitation item from sender's fields."))
+                                    .addOnFailureListener(e -> Log.e(TAG, "Error removing sender's invitation receipt", e));
+
+                            // delete the receiver's invitation receipt
+                            db.collection("users")
+                                    .document(getEmail())
+                                    .update("invitation", FieldValue.delete())
+                                    .addOnSuccessListener(d -> Log.d(TAG, "Removed invitation to join team."))
+                                    .addOnFailureListener(e -> Log.e(TAG, "Error removing received invitation.", e));
+
+                        } else {
+                            Log.e(TAG, "Document does not exist.");
+                        }
+
+                    } else {
+                        Log.e(TAG, "Document does not exist.");
+                    }
+
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to get sender's email", e));
     }
 
     public void uploadTeamRequest(String email) {
