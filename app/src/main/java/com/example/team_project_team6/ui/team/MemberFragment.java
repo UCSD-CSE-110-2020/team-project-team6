@@ -73,7 +73,6 @@ public class MemberFragment extends Fragment {
             }
         });
 
-
         btnAcceptInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,18 +109,19 @@ public class MemberFragment extends Fragment {
             @Override
             public void onChanged(HashMap<String, String> memberMap) {
                 Log.i("MemberFragment getTeamInviterData", "getting changed inviter data");
-                if(memberMap.get("toOrFrom").equals("from")) {
-                    Log.i("MemberFragment getTeamInviterData", "found invitation from: " + memberMap.get("email"));
-                    enableInviteSection(memberMap.get("email")); // TODO: name is parameter in enableInviteSection(name)
-                    teamViewModel.setHasPendingTeamInvite(true);
-                } else {
-                    Log.i("MemberFragment getTeamInviterData", "found invitation to: " + memberMap.get("email"));
-                    teamViewModel.addTeamInviterName(memberMap.get("email"));
-                    mfAdapterInvited = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamInviterNames(), true);
-                    listViewInvited.setAdapter(mfAdapterInvited);
-                    mfAdapterInvited.notifyDataSetChanged();
+                if(!memberMap.isEmpty()) {
+                    if (memberMap.get("toOrFrom").equals("from")) {
+                        Log.i("MemberFragment getTeamInviterData", "found invitation from: " + memberMap.get("email"));
+                        enableInviteSection(memberMap.get("email")); // TODO: name is parameter in enableInviteSection(name)
+                        teamViewModel.setHasPendingTeamInvite(true);
+                    } else {
+                        Log.i("MemberFragment getTeamInviterData", "found invitation to: " + memberMap.get("email"));
+                        teamViewModel.addTeamInviterName(memberMap.get("email"));
+                        mfAdapterInvited = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamInviterNames(), true);
+                        listViewInvited.setAdapter(mfAdapterInvited);
+                        mfAdapterInvited.notifyDataSetChanged();
+                    }
                 }
-
             }
         });
     }
