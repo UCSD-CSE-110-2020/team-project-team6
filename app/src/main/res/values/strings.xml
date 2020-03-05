@@ -75,6 +75,7 @@
     <string name="your_routes">Your Routes</string>
 
     <string name="title_team_member_list">Team Member List</string>
+    <string name="title_invited_team_member_list">Invited Team Member List</string>
     <string name="title_invitation">Invitations</string>
     <string name="title_team">Team</string>
     <string name="title_members">Members</string>

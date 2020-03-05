@@ -10,6 +10,7 @@ import com.example.team_project_team6.firebase.IFirebase;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -69,10 +70,6 @@ public class SaveData {
         return firebaseAdapter.downloadRouteData(email);
     }
 
-    public void addTeamMember(TeamMember member) {
-        firebaseAdapter.uploadTeamRequest(member);
-    }
-
     public LiveData<ArrayList<TeamMember>> getAllMembers() {
         LiveData<ArrayList<TeamMember>> asd = firebaseAdapter.downloadTeamData();
         return asd;
@@ -82,8 +79,30 @@ public class SaveData {
         return firebaseAdapter.getTeamUUID();
     }
 
-    public void saveTeamMember(TeamMember teamMember) {
-        // TODO save team member onto firebase
+    public void addTeamMember(String email) {
+        firebaseAdapter.uploadTeamRequest(email);
+    }
+
+    public LiveData<HashMap<String, String>> getTeamInviter() {
+        return firebaseAdapter.downloadTeamRequest();
+    }
+
+    public void setTeam() {
+        String team = firebaseAdapter.getTeam();
+
+        SharedPreferences.Editor editor = spfsUser.edit();
+        editor.putString("team", team);
+        editor.apply();
+
+        Log.i(TAG, "Saved user's team to SharedPreferences");
+    }
+
+    public void acceptTeamRequest() {
+        firebaseAdapter.acceptTeamRequest();
+    }
+
+    public void declineTeamRequest() {
+        firebaseAdapter.declineTeamRequest();
     }
 
     public String getEmail() {

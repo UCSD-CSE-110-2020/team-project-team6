@@ -13,7 +13,9 @@ public class TeamMember {
     private String lastName;
 
     public TeamMember() {
-
+        email = "";
+        firstName = "";
+        lastName = "";
     }
 
     public TeamMember(HashMap<String, String> map) {

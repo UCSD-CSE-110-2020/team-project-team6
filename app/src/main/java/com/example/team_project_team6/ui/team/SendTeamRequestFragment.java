@@ -36,36 +36,25 @@ public class SendTeamRequestFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_send_team_request, container, false);
 
         final Button btSendInvite = root.findViewById(R.id.bt_invite);
-        final EditText firstname_invitation = root.findViewById(R.id.firstname_invitation_edit);
-        final EditText lastname_invitation = root.findViewById(R.id.lastname_invitation_edit);
-        final EditText gmail_invitation = root.findViewById(R.id.gmail_invitation_edit);
+        final EditText gmailInvitation = root.findViewById(R.id.gmail_invitation_edit);
 
         // navigate to team_fragment when send invite button is pressed
         btSendInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (firstname_invitation.getText().toString().isEmpty()) {
-                    firstname_invitation.requestFocus();
-                    Toast alert = Toast.makeText(getActivity(), getString(R.string.alert_firstname), Toast.LENGTH_SHORT);
-                    int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(), R.color.colorAccent, null);
-                    alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
-                    alert.show();
-                } else if (lastname_invitation.getText().toString().isEmpty()) {
-                    lastname_invitation.requestFocus();
-                    Toast alert = Toast.makeText(getActivity(), getString(R.string.alert_lastname), Toast.LENGTH_SHORT);
-                    int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(), R.color.colorAccent, null);
-                    alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
-                    alert.show();
-                } else if (gmail_invitation.getText().toString().isEmpty()) {
-                    gmail_invitation.requestFocus();
+                if (gmailInvitation.getText().toString().isEmpty()) {
+                    gmailInvitation.requestFocus();
                     Toast alert = Toast.makeText(getActivity(), getString(R.string.alert_gmail), Toast.LENGTH_SHORT);
                     int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(), R.color.colorAccent, null);
                     alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
                     alert.show();
-                }
-                else{
+                } else {
                     Log.i("go back to team", "Clicked on 'send invite' button");
+
+                    // send team request
+                    teamViewModel.sendTeamRequest(gmailInvitation.getText().toString());
+
                     NavController controller = Navigation.findNavController(requireView());
                     if (controller.getCurrentDestination().getId() == R.id.sendTeamRequestFragment) {
                         controller.navigate(R.id.R_id_SendTeamRequestFragment_to_action_teamFragment_);
