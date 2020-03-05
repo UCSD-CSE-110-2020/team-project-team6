@@ -123,7 +123,7 @@ public class RoutesFragment extends Fragment implements TabLayout.OnTabSelectedL
     }
 
     public void bind_views() {
-        routesViewModel.getRouteData(getViewLifecycleOwner()).observe(getViewLifecycleOwner(), routes -> {
+        routesViewModel.getRouteData().observe(getViewLifecycleOwner(), routes -> {
             routesViewModel.updateMRoutes(routes);
             mAdapter.updateData(routes);
             mAdapter.notifyDataSetChanged();

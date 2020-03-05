@@ -4,15 +4,10 @@ package com.example.team_project_team6.ui.team;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.team_project_team6.R;
-import org.hamcrest.Matcher;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
 import androidx.test.core.app.ApplicationProvider;
@@ -23,6 +18,13 @@ import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.team_project_team6.R;
+
+import org.hamcrest.Matcher;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -30,6 +32,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class TeamFragmentTest {
@@ -76,6 +79,8 @@ public class TeamFragmentTest {
 
     @Test
     public void TestTransitionToInviteForm() {
+        when(viewModel.getTeamMemberData()).thenReturn(new MutableLiveData<>());
+
         FragmentFactory factory = new FragmentFactory();
         FragmentScenario<TeamFragment> scenario =
                 FragmentScenario.launchInContainer(TeamFragment.class, null, R.style.Theme_AppCompat, factory);

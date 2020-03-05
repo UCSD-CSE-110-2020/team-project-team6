@@ -16,6 +16,7 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.example.team_project_team6.model.Features;
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.TeamMember;
 import com.example.team_project_team6.model.Walk;
 import com.example.team_project_team6.ui.routes.RoutesFragment;
 import com.example.team_project_team6.ui.routes.RoutesViewModel;
@@ -77,6 +78,7 @@ public class RoutesFragmentTest {
         f.setSurface(1);
         f.setTerrain(1);
         f.setType(1);
+        TeamMember owner = new TeamMember("example@example.com", "E", "C");
         Route route = new Route(w, "University of California, San Diego, EBU3B", null, "Test Walk Notes", f, "Mission Bay", "wsh", owner);
         ArrayList< Route > data = new ArrayList<Route>();
         data.add(route);
@@ -106,6 +108,7 @@ public class RoutesFragmentTest {
 
     @Test
     public void DisplaySameOrderTest() {
+        TeamMember owner = new TeamMember("example@example.com", "E", "C");
         Route mission = new Route(new Walk(), "", null, "", new Features(), "Mission Bay", "wsh", owner);
         Route aardvark_park = new Route(new Walk(), "", null, "", new Features(), "Aardvark Park", "wsh", owner);
         ArrayList<Route> data = new ArrayList<Route>();
@@ -144,6 +147,7 @@ public class RoutesFragmentTest {
 
     @Test
     public void UpdateDataTest() {
+        TeamMember owner = new TeamMember("example@example.com", "E", "C");
         final Route mission = new Route(new Walk(), "", null, "", new Features(), "Mission Bay", "wsh", owner);
         final Route aardvark_park = new Route(new Walk(), "", null, "", new Features(), "Aardvark Park", "wsh", owner);
         final ArrayList< Route > data = new ArrayList<Route>();

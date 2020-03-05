@@ -12,6 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.TeamMember;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.example.team_project_team6.ui.walk.WalkFragment;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
@@ -145,6 +146,7 @@ public class WalkFragmentTest {
         when(wViewModel.isWalking()).thenReturn(true);
 
         RouteDetailsViewModel rViewModel = mock(RouteDetailsViewModel.class);
+        TeamMember owner = new TeamMember("example@example.com", "E", "C");
         when(rViewModel.getRoute()).thenReturn(new Route(null, "University of California, San Diego, EBU3B", null, "Test Walk Notes", null, "Wild Area", "wsh", owner));
         doNothing().when(rViewModel).setRoute(any());
         when(rViewModel.getIsWalkFromRouteDetails()).thenReturn(true);

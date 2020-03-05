@@ -2,7 +2,6 @@ package com.example.team_project_team6.ui.routes;
 
 import android.util.Log;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -34,15 +33,14 @@ public class RoutesViewModel extends ViewModel {
     }
 
     // Routes are displayed in the same order they are present in
-    public LiveData<ArrayList<Route>> getRouteData(LifecycleOwner owner) {
+    public LiveData<ArrayList<Route>> getRouteData() {
         if (saveData != null) {
             if (!teamView) {
                 return saveData.getAllRoutes();
             } else {
-                MutableLiveData<ArrayList<Route>> routes = new MutableLiveData<>();
-                routes.setValue(new ArrayList<>());
+                MutableLiveData<ArrayList<Route>> routes = new MutableLiveData<>(new ArrayList<>());
 
-                saveData.getAllMembers().observe(owner, teamMembers -> {
+                saveData.getAllMembers().observeForever(teamMembers -> {
                     for (TeamMember member : teamMembers) {
                         // Skip if its yourself
                         if (member.getEmail().equals(saveData.getEmail())) {
@@ -55,7 +53,7 @@ public class RoutesViewModel extends ViewModel {
                         String last = member.getLastName().substring(0, 1);
                         String initials = first + last;
 
-                        saveData.getRoutesFor(member.getEmail()).observe(owner, memberRoutes -> {
+                        saveData.getRoutesFor(member.getEmail()).observeForever(memberRoutes -> {
                             ArrayList<Route> existing_routes = routes.getValue();
 
                             for (Route r : memberRoutes) {
