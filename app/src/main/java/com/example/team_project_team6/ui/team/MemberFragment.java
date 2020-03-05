@@ -112,11 +112,11 @@ public class MemberFragment extends Fragment {
                 if(!memberMap.isEmpty()) {
                     if (memberMap.get("toOrFrom").equals("from")) {
                         Log.i("MemberFragment getTeamInviterData", "found invitation from: " + memberMap.get("email"));
-                        enableInviteSection(memberMap.get("email")); // TODO: name is parameter in enableInviteSection(name)
+                        enableInviteSection(memberMap.get("name"));
                         teamViewModel.setHasPendingTeamInvite(true);
                     } else {
                         Log.i("MemberFragment getTeamInviterData", "found invitation to: " + memberMap.get("email"));
-                        teamViewModel.addTeamInviterName(memberMap.get("email"));
+                        teamViewModel.addTeamInviterName(memberMap.get("name"));
                         mfAdapterInvited = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamInviterNames(), true);
                         listViewInvited.setAdapter(mfAdapterInvited);
                         mfAdapterInvited.notifyDataSetChanged();
