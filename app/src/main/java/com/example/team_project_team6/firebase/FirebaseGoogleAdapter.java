@@ -233,20 +233,64 @@ public class FirebaseGoogleAdapter implements IFirebase {
         Map<String, Object> requestFrom = new HashMap<>();
         requestFrom.put("invitationFrom", getEmail());
 
+        // to user I am sending request to, update the "invitationFrom" field
         db.collection("users")
                 .document(email)
                 .update(requestFrom)
                 .addOnSuccessListener(documentReference -> {
 
-                    Map<String, Object> requestTo = new HashMap<>();
-                    requestTo.put("invitationTo", email);
-
-                    Log.d(TAG, "Team request sent to user with email: " + email);
+                    // retrieve my team uuid
                     db.collection("users")
                             .document(getEmail())
-                            .update(requestTo)
-                            .addOnSuccessListener(d -> Log.d(TAG, "Pending invite info sent to user with email: " + getEmail()))
-                            .addOnFailureListener(e -> Log.e(TAG, "Error sending pending invite info to user with email: " + getEmail(), e));
+                            .get()
+                            .addOnCompleteListener(getMyTeamTask -> {
+                                if (getMyTeamTask.isSuccessful()) {
+                                    DocumentSnapshot teamUuidDoc = getMyTeamTask.getResult();
+                                    if (teamUuidDoc != null) {
+                                        String teamUUID = (String) teamUuidDoc.get("team");
+
+                                        // get recipient's team uuid
+                                        db.collection("users")
+                                                .document(email)
+                                                .get()
+                                                .addOnCompleteListener(getTheirTeamTask -> {
+                                                    if (getTheirTeamTask.isSuccessful()) {
+                                                        DocumentSnapshot recipientTeamUuidDoc = getTheirTeamTask.getResult();
+                                                        if (recipientTeamUuidDoc != null) {
+                                                            String recipientUUID = (String) recipientTeamUuidDoc.get("team");
+
+                                                            // get recipient's member info from their team
+                                                            db.collection("users")
+
+                                                        } else {
+                                                            Log.d(TAG, "No such document");
+                                                        }
+                                                    } else {
+                                                        Log.e(TAG, "Failed to retrieve recipient's team uuid");
+                                                    }
+                                                })
+                                                .addOnFailureListener(e -> Log.e(TAG, "Error retrieving recipient's team uuid.", e))
+
+                                    } else {
+                                        Log.d(TAG, "No such document");
+                                    }
+                                } else {
+                                    Log.e(TAG, "Failed to retrieve team uuid");
+                                }
+
+                                TeamMember requestTo = new TeamMember();
+
+
+                                Log.d(TAG, "Team request sent to user with email: " + email);
+                                db.collection("users")
+                                        .document(getEmail())
+                                        .update(requestTo)
+                                        .addOnSuccessListener(d -> Log.d(TAG, "Pending invite info sent to user with email: " + getEmail()))
+                                        .addOnFailureListener(e -> Log.e(TAG, "Error sending pending invite info to user with email: " + getEmail(), e));
+
+
+                            })
+                            .addOnFailureListener(e -> Log.e(TAG, "Error retrieving user's team uuid.", e));
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "Error sending invite to user with email: " + email, e));
     }
