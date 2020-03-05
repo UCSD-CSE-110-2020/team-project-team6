@@ -1,22 +1,11 @@
 package com.example.team_project_team6.ui.route_details;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +13,15 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
@@ -67,8 +65,17 @@ public class RouteDetailsFragment extends Fragment {
         ((TextView) root.findViewById(R.id.details_duration)).setText(route.getWalk().getDuration());
 
         // starting location
-        String starting = String.format(Locale.ENGLISH, "Starting Location: %s", route.getStartPoint());
-        ((TextView) root.findViewById(R.id.details_last_starting)).setText(starting);
+        if (route.getStartPoint().isEmpty()) {
+            root.findViewById(R.id.details_start).setVisibility(View.GONE);
+            root.findViewById(R.id.details_start_label).setVisibility(View.GONE);
+        }
+
+        ((TextView) root.findViewById(R.id.details_start)).setText(route.getStartPoint());
+        root.findViewById(R.id.details_start).setOnClickListener(v -> {
+            String url = String.format("https://www.google.com/maps/search/%s/", route.getStartPoint());
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+        });
 
         final FlexboxLayout flexbox = root.findViewById(R.id.details_features_flex);
 
