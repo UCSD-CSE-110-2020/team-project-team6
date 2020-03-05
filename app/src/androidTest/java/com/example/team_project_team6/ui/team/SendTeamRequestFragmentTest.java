@@ -38,7 +38,7 @@ public class SendTeamRequestFragmentTest {
     }
 
     @Test
-    public void TestInviteFormFieldsCompeleted() {
+    public void TestInviteFormFieldsCompleted() {
         FragmentFactory factory = new FragmentFactory();
         FragmentScenario<SendTeamRequestFragment> scenario =
                 FragmentScenario.launchInContainer(SendTeamRequestFragment.class, null, R.style.Theme_AppCompat, factory);
