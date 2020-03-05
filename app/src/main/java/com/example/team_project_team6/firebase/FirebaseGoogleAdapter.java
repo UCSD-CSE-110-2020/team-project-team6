@@ -304,6 +304,8 @@ public class FirebaseGoogleAdapter implements IFirebase {
                             if (inviteDoc.contains("invitation")) {
                                 HashMap<String, String> invite = (HashMap<String, String>) inviteDoc.get("invitation");
                                 data.postValue(invite);
+                            } else {
+                                Log.i(TAG, "couldn't find invitation field");
                             }
                         } else {
                             Log.d(TAG, "No such document");

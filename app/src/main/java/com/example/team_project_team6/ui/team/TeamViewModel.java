@@ -6,6 +6,7 @@ import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import androidx.lifecycle.LiveData;
@@ -33,6 +34,7 @@ public class TeamViewModel extends ViewModel {
 
     public void addTeamInviterName(String inviterName) {
         this.teamInviterNames.add(inviterName);
+        Collections.sort(teamInviterNames);
     }
 
     public void removeTeamInviterName(String inviterName) {
@@ -78,7 +80,7 @@ public class TeamViewModel extends ViewModel {
 
     public LiveData<HashMap<String, String>> getTeamInviterData() {
         if(saveData != null) {
-//            Log.e("getTeamInviterData in ViewModel",  "inviter: " + saveData.getTeamInviter().toString());
+            Log.i("getTeamInviterData in ViewModel",  "inviter: " + saveData.getTeamInviter().toString());
             return saveData.getTeamInviter();
         } else {
             return new MutableLiveData<>();
