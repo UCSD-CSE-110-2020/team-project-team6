@@ -6,27 +6,23 @@ public class TeamMember {
     private String email;
     private String firstName;
     private String lastName;
-    private boolean pending;
 
     public TeamMember() {
         email = "";
         firstName = "";
         lastName = "";
-        pending = false;
     }
 
-    public TeamMember(HashMap<String, Object> map) {
-        this.email = (String) map.get("email");
-        this.firstName = (String) map.get("firstName");
-        this.lastName = (String) map.get("lastName");
-        this.pending = (Boolean) map.get("pending");
+    public TeamMember(HashMap<String, String> map) {
+        this.email = map.get("email");
+        this.firstName = map.get("firstName");
+        this.lastName = map.get("lastName");
     }
 
-    public TeamMember(String email, String firstName, String lastName, boolean pending) {
+    public TeamMember(String email, String firstName, String lastName) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.pending = pending;
     }
 
     public String getEmail() {
@@ -51,13 +47,5 @@ public class TeamMember {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public boolean isPending() {
-        return pending;
-    }
-
-    public void setPending(boolean pending) {
-        this.pending = pending;
     }
 }
