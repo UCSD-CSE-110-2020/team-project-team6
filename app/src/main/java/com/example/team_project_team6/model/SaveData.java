@@ -87,16 +87,6 @@ public class SaveData {
         return firebaseAdapter.downloadTeamRequest();
     }
 
-    public void setTeam() {
-        String team = firebaseAdapter.getTeam();
-
-        SharedPreferences.Editor editor = spfsUser.edit();
-        editor.putString("team", team);
-        editor.apply();
-
-        Log.i(TAG, "Saved user's team to SharedPreferences");
-    }
-
     public void acceptTeamRequest() {
         firebaseAdapter.acceptTeamRequest();
     }
