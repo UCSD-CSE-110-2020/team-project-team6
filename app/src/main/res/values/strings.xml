@@ -85,6 +85,22 @@
     <string name="gmail_invitation">Gmail</string>
     <string name="gmail_invitation_edit">example@gmail.com</string>
     <string name="bt_invite">Send Invite</string>
+    <string name="bt_propose">Propose Walk</string>
+
+    <string name="txt_proposed_rout_name">Name</string>
+    <string name="txt_proposed_date">Date</string>
+    <string name="txt_proposed_time">Time</string>
+    <string name="bt_schedule">Schedule Walk</string>
+    <string name="bt_withdraw">Withdraw Walk</string>
+    <string name="bt_acceptWalk">Accept</string>
+    <string name="bt_declineTime">Decline/Time</string>
+    <string name="bt_declineRoute">Decline/Route</string>
+    <string name="txt_proposed_steps">Steps</string>
+    <string name="txt_proposed_startingPoint">Starting Point</string>
+    <string name="txt_proposed_mile">Mile</string>
+    <string name="set_propose_time">2:35</string>
+    <string name="set_propose_date">3/20/20</string>
+    <string name="bt_send_propose">Send</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

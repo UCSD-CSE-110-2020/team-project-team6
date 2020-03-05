@@ -153,4 +153,9 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:launchSingleTop="false" />
     </fragment>
+    <fragment
+        android:id="@+id/setProposedDate"
+        android:name="com.example.team_project_team6.ui.team.SetProposedDate"
+        android:label="fragment_set_proposed_date"
+        tools:layout="@layout/fragment_set_proposed_date" />
 </navigation>
