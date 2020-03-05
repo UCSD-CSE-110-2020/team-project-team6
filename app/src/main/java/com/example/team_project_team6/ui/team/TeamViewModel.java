@@ -6,25 +6,41 @@ import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class TeamViewModel extends ViewModel {
     private MutableLiveData<ArrayList<TeamMember>> mTeamMembers;
+    private ArrayList<String> teamInviterNames;
     private MutableLiveData<TeamMember> mInviter;
     private SaveData saveData;
     private boolean hasPendingTeamInvite; // records if another user has sent this user a team invite
-
-    private boolean inviteIsAccepted;
+    private boolean inviteIsAccepted; // records whether or not user has accepted or decline the invite
 
     public TeamViewModel() {
         ArrayList<TeamMember> data = new ArrayList<TeamMember>();
         mTeamMembers = new MutableLiveData<>(data);
+
+        teamInviterNames = new ArrayList<>();
     }
 
     public void updateMTeamMembers(ArrayList<TeamMember> teamMembers) {
         mTeamMembers.postValue(teamMembers);
+    }
+
+    public void addTeamInviterName(String inviterName) {
+        this.teamInviterNames.add(inviterName);
+    }
+
+    public void removeTeamInviterName(String inviterName) {
+        this.teamInviterNames.remove(inviterName);
+    }
+
+    public ArrayList<String> getTeamInviterNames() {
+        return this.teamInviterNames;
     }
 
     public void setSaveData(SaveData saveData) {
@@ -59,8 +75,8 @@ public class TeamViewModel extends ViewModel {
         }
     }
 
-    public LiveData<String> getTeamInviterData() {
-        Log.e("TeamViewModel getTeamInviterData", "saveData is null: " + (saveData == null));
+
+    public LiveData<HashMap<String, String>> getTeamInviterData() {
         if(saveData != null) {
 //            Log.e("getTeamInviterData in ViewModel",  "inviter: " + saveData.getTeamInviter().toString());
             return saveData.getTeamInviter();

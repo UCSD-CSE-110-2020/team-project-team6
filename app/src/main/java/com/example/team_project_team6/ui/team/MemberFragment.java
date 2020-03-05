@@ -23,9 +23,10 @@ import com.example.team_project_team6.model.TeamMember;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MemberFragment extends Fragment {
-    private TeamArrayAdapter mfAdapter;
+
 
     @VisibleForTesting
     static TeamViewModel teamViewModel = null;
@@ -33,7 +34,10 @@ public class MemberFragment extends Fragment {
     private Button btnAcceptInvite;
     private Button btnDeclineInvite;
     private TextView txtInviterName;
-    private ListView listView;
+    private ListView listViewAccepted;
+    private ListView listViewInvited;
+    private TeamArrayAdapter mfAdapterAccepted;
+    private TeamArrayAdapter mfAdapterInvited;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +48,8 @@ public class MemberFragment extends Fragment {
         bind_views();
         View root = inflater.inflate(R.layout.fragment_members, container, false);
 
-        listView = (ListView) root.findViewById(R.id.list_team_members);
+        listViewAccepted = (ListView) root.findViewById(R.id.list_team_members);
+        listViewInvited = (ListView) root.findViewById(R.id.list_invited_team_members);
 
         btnAcceptInvite = root.findViewById(R.id.btn_accept_invite);
         btnDeclineInvite = root.findViewById(R.id.btn_decline_invite);
@@ -52,12 +57,6 @@ public class MemberFragment extends Fragment {
 
         resetInviteSection();
         teamViewModel.setHasPendingTeamInvite(false);
-
-        // if there is no pending team invite, buttons are not visible
-        // and set to default string saying there is no invitation
-        if(teamViewModel.getHasPendingTeamInvite()) {
-            enableInviteSection(teamViewModel.getTeamInviterData().getValue());
-        }
 
         final FloatingActionButton btNewInvite = root.findViewById(R.id.bt_invite_member);
 
@@ -99,24 +98,36 @@ public class MemberFragment extends Fragment {
         teamViewModel.getTeamMemberData().observe(getViewLifecycleOwner(), new Observer<ArrayList<TeamMember>>() {
             @Override
             public void onChanged(ArrayList<TeamMember> teamMembers) {
+                Log.i("MemberFragment getTeamMemberData", "getting changed team member data");
                 teamViewModel.updateMTeamMembers(teamMembers);
-
-                mfAdapter = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamMemberNames(teamMembers));
-                listView.setAdapter(mfAdapter);
-                mfAdapter.notifyDataSetChanged();
+                mfAdapterAccepted = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamMemberNames(teamMembers), false);
+                listViewAccepted.setAdapter(mfAdapterAccepted);
+                mfAdapterAccepted.notifyDataSetChanged();
             }
         });
 
-        teamViewModel.getTeamInviterData().observe(getViewLifecycleOwner(), new Observer<String>() {
+        teamViewModel.getTeamInviterData().observe(getViewLifecycleOwner(), new Observer<HashMap<String, String>>() {
             @Override
-            public void onChanged(String member) {
-                enableInviteSection(member);
+            public void onChanged(HashMap<String, String> memberMap) {
+                Log.i("MemberFragment getTeamInviterData", "getting changed inviter data");
+                teamViewModel.setHasPendingTeamInvite(true);
+                if(memberMap.get("type").equals("invitationFrom")) {
+                    Log.i("MemberFragment getTeamInviterData", "found invitation from: " + memberMap.get("email"));
+                    enableInviteSection(memberMap.get("email")); // TODO: name is parameter in enableInviteSection(name)
+                } else if(memberMap.get("type").equals("invitationTo")) {
+                    Log.i("MemberFragment getTeamInviterData", "found invitation to: " + memberMap.get("email"));
+                    teamViewModel.addTeamInviterName(memberMap.get("email"));
+                    mfAdapterInvited = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamInviterNames(), true);
+                    listViewInvited.setAdapter(mfAdapterInvited);
+                    mfAdapterInvited.notifyDataSetChanged();
+                }
+
             }
         });
     }
 
     private void enableInviteSection(String teamName) {
-        teamViewModel.setHasPendingTeamInvite(true);
+        Log.i("MemberFragment enableInviteSection", "enabling invite section");
         btnAcceptInvite.setVisibility(View.VISIBLE);
         btnDeclineInvite.setVisibility(View.VISIBLE);
         txtInviterName.setText(teamName);
@@ -124,6 +135,7 @@ public class MemberFragment extends Fragment {
     }
 
     private void resetInviteSection() {
+        Log.i("MemberFragment enableInviteSection", "resetting invite section");
         txtInviterName.setText(R.string.default_inviter_name_none);
         txtInviterName.setTypeface(txtInviterName.getTypeface(), Typeface.NORMAL);
         btnAcceptInvite.setVisibility(View.INVISIBLE);
