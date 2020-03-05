@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.TeamMember;
 import com.example.team_project_team6.model.Walk;
 
 import java.text.SimpleDateFormat;
@@ -128,6 +129,9 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
         }
 
         if (teamInitialsVisible) {
+            TeamMember owner = items.get(position).getOwner();
+            holder.initials.getBackground().setTint(owner.getColor());
+
             holder.initials.setVisibility(View.VISIBLE);
             holder.initials.setText(currRoute.getInitials());
         } else {

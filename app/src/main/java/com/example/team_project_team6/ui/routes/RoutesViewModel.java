@@ -1,13 +1,19 @@
 package com.example.team_project_team6.ui.routes;
 
+import android.util.Log;
+
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
+import com.example.team_project_team6.model.TeamMember;
 
 import java.util.ArrayList;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class RoutesViewModel extends ViewModel {
     private MutableLiveData<ArrayList<Route>> mRoutes;
@@ -27,22 +33,46 @@ public class RoutesViewModel extends ViewModel {
         this.saveData = saveData;
     }
 
-    public SaveData getSaveData(SaveData saveData) {
-        return this.saveData;
-    }
-
-    // mRoutes stores a list of all the routes in firebase
-    public void setRouteData(MutableLiveData<ArrayList<Route>> mRoutes) {
-        this.mRoutes = mRoutes;
-    }
-
     // Routes are displayed in the same order they are present in
-    public LiveData<ArrayList<Route>> getRouteData() {
+    public LiveData<ArrayList<Route>> getRouteData(LifecycleOwner owner) {
         if (saveData != null) {
             if (!teamView) {
                 return saveData.getAllRoutes();
             } else {
-                return new MutableLiveData<>();
+                MutableLiveData<ArrayList<Route>> routes = new MutableLiveData<>();
+                routes.setValue(new ArrayList<>());
+
+                saveData.getAllMembers().observe(owner, teamMembers -> {
+                    for (TeamMember member : teamMembers) {
+                        // Skip if its yourself
+                        if (member.getEmail().equals(saveData.getEmail())) {
+                            continue;
+                        }
+
+                        Log.d(TAG, "Adding routes for member " + member.getEmail());
+
+                        String first = member.getFirstName().substring(0, 1);
+                        String last = member.getLastName().substring(0, 1);
+                        String initials = first + last;
+
+                        saveData.getRoutesFor(member.getEmail()).observe(owner, memberRoutes -> {
+                            ArrayList<Route> existing_routes = routes.getValue();
+
+                            for (Route r : memberRoutes) {
+                                Log.d(TAG, "Adding route " + r.getName() + " from " + member.getEmail());
+
+                                r.setInitials(initials);
+                                r.setOwner(member);
+                                existing_routes.add(r);
+                            }
+
+                            existing_routes.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+                            routes.postValue(existing_routes);
+                        });
+                    }
+                });
+
+                return routes;
             }
         } else {
             return new MutableLiveData<>();

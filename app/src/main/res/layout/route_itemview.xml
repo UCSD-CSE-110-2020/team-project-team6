@@ -82,6 +82,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:background="@drawable/icon_border"
+            android:backgroundTint="@color/design_default_color_error"
+            android:backgroundTintMode="add"
+            android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_view_favorite"
             app:layout_constraintTop_toTopOf="parent" />

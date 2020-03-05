@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.TeamMember;
@@ -35,11 +36,13 @@ public class FirebaseGoogleAdapter implements IFirebase {
     private FirebaseUser user;
     private FirebaseAuth auth;
     private String TIMESTAMP_KEY = "timestamp";
+    private MutableLiveData<String> teamUUID;
 
     public FirebaseGoogleAdapter() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = null;
+        teamUUID = new MutableLiveData<>();
     }
 
     @Override
@@ -138,26 +141,21 @@ public class FirebaseGoogleAdapter implements IFirebase {
     }
 
     @Override
-    public String getTeam() {
-        String[] teamUUID = new String[1];
+    public LiveData<String> getTeamUUID() {
         db.collection("users")
                 .document(getEmail())
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot doc = task.getResult();
-                        if (doc != null && doc.exists()) {
-                            teamUUID[0] = (String) doc.get("team");
-                            Log.d(TAG, "Successfully retrieved team info");
-                        } else {
-                            Log.d(TAG, "No such document");
-                        }
-                    } else {
-                        Log.e(TAG, "Failed to retrieve team UUID");
-                    }
+                .addOnSuccessListener(documentSnapshot -> {
+                    Log.d(TAG, "Successfully retrieved team UUID");
+
+                    String uuid = documentSnapshot.getString("team");
+                    teamUUID.postValue(uuid);
                 })
-                .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
-        return teamUUID[0];
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Failed to retrieve team UUID");
+                });
+
+        return teamUUID;
     }
 
     @Override
@@ -186,7 +184,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
     }
 
     @Override
-    public synchronized LiveData<ArrayList<Route>> downloadRouteData() {
+    public synchronized LiveData<ArrayList<Route>> downloadRouteData(String email) {
         MutableLiveData<ArrayList<Route>> data = new MutableLiveData<>();
 
         if (user == null) {
@@ -196,7 +194,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
         Gson gson = new Gson();
         db.collection("users")
-                .document(getEmail())
+                .document(email)
                 .collection("routes")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {

@@ -12,7 +12,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class SaveData {
     private Gson gson;
@@ -63,7 +62,11 @@ public class SaveData {
     }
 
     public LiveData<ArrayList<Route>> getAllRoutes() {
-        return firebaseAdapter.downloadRouteData();
+        return firebaseAdapter.downloadRouteData(firebaseAdapter.getEmail());
+    }
+
+    public LiveData<ArrayList<Route>> getRoutesFor(String email) {
+        return firebaseAdapter.downloadRouteData(email);
     }
 
     public void addTeamMember(TeamMember member) {
@@ -75,25 +78,12 @@ public class SaveData {
         return asd;
     }
 
-    public String getTeam() {
-        String team = spfsUser.getString("team", "");
-        Log.i(TAG, "Getting user's team from SharedPreferences");
-
-        return team;
+    public LiveData<String> getTeam() {
+        return firebaseAdapter.getTeamUUID();
     }
 
     public void saveTeamMember(TeamMember teamMember) {
         // TODO save team member onto firebase
-    }
-
-    public void setTeam() {
-        String team = firebaseAdapter.getTeam();
-
-        SharedPreferences.Editor editor = spfsUser.edit();
-        editor.putString("team", team);
-        editor.apply();
-
-        Log.i(TAG, "Saved user's team to SharedPreferences");
     }
 
     public String getEmail() {

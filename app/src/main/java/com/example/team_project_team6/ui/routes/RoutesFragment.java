@@ -123,7 +123,7 @@ public class RoutesFragment extends Fragment implements TabLayout.OnTabSelectedL
     }
 
     public void bind_views() {
-        routesViewModel.getRouteData().observe(getViewLifecycleOwner(), routes -> {
+        routesViewModel.getRouteData(getViewLifecycleOwner()).observe(getViewLifecycleOwner(), routes -> {
             routesViewModel.updateMRoutes(routes);
             mAdapter.updateData(routes);
             mAdapter.notifyDataSetChanged();
@@ -136,7 +136,7 @@ public class RoutesFragment extends Fragment implements TabLayout.OnTabSelectedL
          *  a separate view. Then we can just bind each tab to its own view instead of
          *  checking the tab position like this. But this is good enough for now.
          */
-
+        
         // Clear list of routes
         routesViewModel.updateMRoutes(new ArrayList<>());
         mAdapter.updateData(new ArrayList<>());

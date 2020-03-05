@@ -77,7 +77,7 @@ public class RoutesFragmentTest {
         f.setSurface(1);
         f.setTerrain(1);
         f.setType(1);
-        Route route = new Route(w, "University of California, San Diego, EBU3B", null, "Test Walk Notes", f, "Mission Bay", "wsh");
+        Route route = new Route(w, "University of California, San Diego, EBU3B", null, "Test Walk Notes", f, "Mission Bay", "wsh", owner);
         ArrayList< Route > data = new ArrayList<Route>();
         data.add(route);
 
@@ -106,8 +106,8 @@ public class RoutesFragmentTest {
 
     @Test
     public void DisplaySameOrderTest() {
-        Route mission = new Route(new Walk(), "", null, "", new Features(), "Mission Bay", "wsh");
-        Route aardvark_park = new Route(new Walk(), "", null, "", new Features(), "Aardvark Park", "wsh");
+        Route mission = new Route(new Walk(), "", null, "", new Features(), "Mission Bay", "wsh", owner);
+        Route aardvark_park = new Route(new Walk(), "", null, "", new Features(), "Aardvark Park", "wsh", owner);
         ArrayList<Route> data = new ArrayList<Route>();
         data.add(aardvark_park);
         data.add(mission);
@@ -144,8 +144,8 @@ public class RoutesFragmentTest {
 
     @Test
     public void UpdateDataTest() {
-        final Route mission = new Route(new Walk(), "", null, "", new Features(), "Mission Bay", "wsh");
-        final Route aardvark_park = new Route(new Walk(), "", null, "", new Features(), "Aardvark Park", "wsh");
+        final Route mission = new Route(new Walk(), "", null, "", new Features(), "Mission Bay", "wsh", owner);
+        final Route aardvark_park = new Route(new Walk(), "", null, "", new Features(), "Aardvark Park", "wsh", owner);
         final ArrayList< Route > data = new ArrayList<Route>();
         data.add(mission);
 

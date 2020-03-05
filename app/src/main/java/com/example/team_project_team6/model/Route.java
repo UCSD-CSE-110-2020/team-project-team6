@@ -13,6 +13,7 @@ public class Route {
     private Features features;
     private String name;
     private String initials;
+    private TeamMember owner;
 
     public Route() {
         Log.i("empty Route constructor", "Initializing all values");
@@ -26,7 +27,8 @@ public class Route {
     }
 
     // If never walked, set lastStartDate to null
-    public Route(Walk walk, String startPoint, Date lastStartDate, String notes, Features features, String name, String initials) {
+    public Route(Walk walk, String startPoint, Date lastStartDate, String notes, Features features, String name, String initials, TeamMember owner) {
+        this.owner = owner;
         Log.i("Route constructor with all features", "Initializing all values");
         this.walk = walk;
         this.startPoint = startPoint;
@@ -157,5 +159,13 @@ public class Route {
 
     public void setInitials(String initials) {
         this.initials = initials;
+    }
+
+    public TeamMember getOwner() {
+        return owner;
+    }
+
+    public void setOwner(TeamMember owner) {
+        this.owner = owner;
     }
 }

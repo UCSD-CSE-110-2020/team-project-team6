@@ -17,11 +17,11 @@ public interface IFirebase {
     Boolean getSignedIn();
     String getEmail();
     String getId();
-    String getTeam();
+    LiveData<String> getTeamUUID();
     String getName();
 
     void uploadRouteData(Route route);
-    LiveData<ArrayList<Route>> downloadRouteData();
+    LiveData<ArrayList<Route>> downloadRouteData(String email);
 
     void uploadTeamRequest(TeamMember member);
     LiveData<ArrayList<TeamMember>> downloadTeamData();
