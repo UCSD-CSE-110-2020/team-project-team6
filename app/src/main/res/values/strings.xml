@@ -89,7 +89,7 @@
     <string name="gmail_invitation">Gmail</string>
     <string name="gmail_invitation_edit">example@gmail.com</string>
     <string name="bt_invite">Send Invite</string>
-
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

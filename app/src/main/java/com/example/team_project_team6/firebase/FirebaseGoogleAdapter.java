@@ -13,6 +13,8 @@ import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.TeamInvite;
 import com.example.team_project_team6.model.TeamMember;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +23,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -79,6 +82,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                 userInfo.put("team", uuid);
                                 userInfo.put("firstName", name[0]);
                                 userInfo.put("lastName", name[1]);
+                                userInfo.put("token_id", FirebaseInstanceId.getInstance().getToken());
 
                                 Log.d(TAG, "No team found, assuming new user. Creating team " + uuid + " for user " + getEmail());
 
@@ -111,6 +115,23 @@ public class FirebaseGoogleAdapter implements IFirebase {
                     Log.e(TAG, "Failed to sign in to Firebase");
                     Toast.makeText(activity, "ERROR: Failed to sign into Firebase", Toast.LENGTH_LONG).show();
                 }
+
+            //update token ID when user logout or uninstall the app
+            Map<String, Object> token_id = new HashMap<>();
+            token_id.put("token_id", FirebaseInstanceId.getInstance().getToken());
+            db.collection("users").document(user.getEmail()).update(token_id)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "Token ID successfully updated!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error updating Token ID", e);
+                        }
+                    });
             });
     }
 
