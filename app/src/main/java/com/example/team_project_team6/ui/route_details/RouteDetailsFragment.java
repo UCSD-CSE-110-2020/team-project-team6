@@ -143,7 +143,7 @@ public class RouteDetailsFragment extends Fragment {
         // last completed
         final TextView last_start = root.findViewById(R.id.details_last_completed);
         if (route.getLastStartDate() != null) {
-            Date dateLastWalked = route.getLastStartDate().getTime();
+            Date dateLastWalked = route.getLastStartDate();
             SimpleDateFormat format = new SimpleDateFormat("h:mm a. MMM d, yyyy", Locale.ENGLISH);
             last_start.setText(format.format(dateLastWalked));
         }

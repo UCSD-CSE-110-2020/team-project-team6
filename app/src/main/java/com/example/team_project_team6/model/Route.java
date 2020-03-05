@@ -1,22 +1,19 @@
 package com.example.team_project_team6.model;
 
 import android.util.Log;
-import com.google.gson.Gson;
-import androidx.annotation.Nullable;
 
-import java.util.Calendar;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 
 public class Route {
     private Walk walk;
     private String startPoint;
-    private Calendar lastStartDate;
+    private Date lastStartDate;
     private String notes;
     private Features features;
     private String name;
-    private Map<String, Object> routeDB;
+    private String initials;
+    private TeamMember owner;
 
     public Route() {
         Log.i("empty Route constructor", "Initializing all values");
@@ -26,10 +23,12 @@ public class Route {
         this.notes = "";
         this.features = new Features();
         this.name = "";
+        this.initials = "";
     }
 
     // If never walked, set lastStartDate to null
-    public Route(Walk walk, String startPoint, Calendar lastStartDate, String notes, Features features, String name) {
+    public Route(Walk walk, String startPoint, Date lastStartDate, String notes, Features features, String name, String initials, TeamMember owner) {
+        this.owner = owner;
         Log.i("Route constructor with all features", "Initializing all values");
         this.walk = walk;
         this.startPoint = startPoint;
@@ -37,6 +36,7 @@ public class Route {
         this.notes = notes;
         this.features = features;
         this.name = name;
+        this.initials = initials;
     }
 
     public String getName() {
@@ -88,7 +88,7 @@ public class Route {
         this.startPoint = startPoint;
     }
 
-    public Calendar getLastStartDate() {
+    public Date getLastStartDate() {
         if (lastStartDate == null) {
             Log.i("getLastStartDate from Route", "return: null");
         } else {
@@ -98,7 +98,7 @@ public class Route {
         return lastStartDate;
     }
 
-    public void setLastStartDate(@Nullable Calendar lastStartDate) {
+    public void setLastStartDate(Date lastStartDate) {
         if (lastStartDate != null) {
             Log.i("setLastStartDate from Route", "value: " + lastStartDate.toString());
         } else {
@@ -146,19 +146,26 @@ public class Route {
     public String toString() {
         if (lastStartDate != null) {
             return String.format(Locale.ENGLISH, "Name: %s, Walk: (%s), Starting Point: %s, Last Start Date: %s, Notes: %s,  Features: %s",
-                    name, walk.toString(), startPoint, lastStartDate.toString(), notes, features.toString());
+                    name, walk, startPoint, lastStartDate.toString(), notes, features.toString());
         } else {
             return String.format(Locale.ENGLISH, "Name: %s, Walk: (%s), Starting Point: %s, Last Start Date: null, Notes: %s,  Features: %s",
-                    name, walk.toString(), startPoint, notes, features.toString());
+                    name, walk, startPoint, notes, features.toString());
         }
     }
 
-    public Map<String, Object> getRouteDB() {
-        routeDB = new HashMap<>();
-        routeDB.put("start_point", this.startPoint);
-        routeDB.put("route_name", this.name);
-        routeDB.put("notes", this.notes);
-        routeDB.put("last_start_date", this.lastStartDate.toString());
-        return routeDB;
+    public String getInitials() {
+        return initials;
+    }
+
+    public void setInitials(String initials) {
+        this.initials = initials;
+    }
+
+    public TeamMember getOwner() {
+        return owner;
+    }
+
+    public void setOwner(TeamMember owner) {
+        this.owner = owner;
     }
 }

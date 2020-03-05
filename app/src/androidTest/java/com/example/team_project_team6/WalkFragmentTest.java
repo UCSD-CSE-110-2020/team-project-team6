@@ -1,46 +1,24 @@
 package com.example.team_project_team6;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.widget.Button;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.testing.FragmentScenario;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 
 import com.example.team_project_team6.model.Route;
-import com.example.team_project_team6.ui.new_route.NewRouteFragment;
-import com.example.team_project_team6.ui.new_route.NewRouteViewModel;
-import com.example.team_project_team6.ui.route_details.RouteDetailsFragment;
+import com.example.team_project_team6.model.TeamMember;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
-import com.example.team_project_team6.ui.routes.RoutesFragment;
-import com.example.team_project_team6.ui.routes.RoutesViewModel;
 import com.example.team_project_team6.ui.walk.WalkFragment;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.pressKey;
@@ -48,10 +26,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyObject;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -172,7 +146,8 @@ public class WalkFragmentTest {
         when(wViewModel.isWalking()).thenReturn(true);
 
         RouteDetailsViewModel rViewModel = mock(RouteDetailsViewModel.class);
-        when(rViewModel.getRoute()).thenReturn(new Route(null, "University of California, San Diego, EBU3B", null, "Test Walk Notes", null, "Wild Area"));
+        TeamMember owner = new TeamMember("example@example.com", "E", "C");
+        when(rViewModel.getRoute()).thenReturn(new Route(null, "University of California, San Diego, EBU3B", null, "Test Walk Notes", null, "Wild Area", "wsh", owner));
         doNothing().when(rViewModel).setRoute(any());
         when(rViewModel.getIsWalkFromRouteDetails()).thenReturn(true);
         doNothing().when(rViewModel).setIsWalkFromRouteDetails(anyBoolean());

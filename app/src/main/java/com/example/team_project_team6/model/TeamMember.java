@@ -1,5 +1,10 @@
 package com.example.team_project_team6.model;
 
+import android.graphics.Color;
+
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 public class TeamMember {
@@ -49,4 +54,19 @@ public class TeamMember {
         this.lastName = lastName;
     }
 
+    public int getColor() {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            final byte[] digest = md.digest(this.email.getBytes());
+            ByteBuffer wrapper = ByteBuffer.wrap(digest);
+            Color color = Color.valueOf(wrapper.getInt());
+
+            return Color.rgb(color.red(), color.green(), color.blue());
+        } catch (NoSuchAlgorithmException e) {
+            // Should never fail
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 }
