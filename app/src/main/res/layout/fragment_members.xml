@@ -31,6 +31,29 @@
         app:layout_constraintTop_toBottomOf="@+id/title_team_member_list" />
 
     <TextView
+        android:id="@+id/title_invited_team_member_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/title_invited_team_member_list"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/list_team_members" />
+
+    <ListView
+        android:id="@+id/list_invited_team_members"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_invited_team_member_list" />
+
+    <TextView
         android:id="@+id/title_invitation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,7 +62,7 @@
         android:text="@string/title_invitation"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_team_members" />
+        app:layout_constraintTop_toBottomOf="@+id/list_invited_team_members" />
 
     <TextView
         android:id="@+id/txt_team_inviter_name"

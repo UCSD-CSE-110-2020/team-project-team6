@@ -1,31 +1,48 @@
 package com.example.team_project_team6.ui.team;
 
+import android.util.Log;
+
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class TeamViewModel extends ViewModel {
     private MutableLiveData<ArrayList<TeamMember>> mTeamMembers;
+    private ArrayList<String> teamInviterNames;
+    private MutableLiveData<TeamMember> mInviter;
     private SaveData saveData;
     private boolean hasPendingTeamInvite; // records if another user has sent this user a team invite
+    private boolean inviteIsAccepted; // records whether or not user has accepted or decline the invite
 
     public TeamViewModel() {
         ArrayList<TeamMember> data = new ArrayList<TeamMember>();
         mTeamMembers = new MutableLiveData<>(data);
 
-        // Mock names
-/*        data.add(new TeamMember("perry.platypus@gmail.com", "Perry", "Le Platypus"));
-        data.add(new TeamMember("sarap.soapbar@gmail.com", "Sarah", "the Soap Bar"));
-        data.add(new TeamMember("ellen.elephant@gmail.com", "Ellen", "Elephant"));
-*/
+        teamInviterNames = new ArrayList<>();
     }
 
     public void updateMTeamMembers(ArrayList<TeamMember> teamMembers) {
         mTeamMembers.postValue(teamMembers);
+    }
+
+    public void addTeamInviterName(String inviterName) {
+        this.teamInviterNames.add(inviterName);
+        Collections.sort(teamInviterNames);
+    }
+
+    public void removeTeamInviterName(String inviterName) {
+        this.teamInviterNames.remove(inviterName);
+    }
+
+    public ArrayList<String> getTeamInviterNames() {
+        return this.teamInviterNames;
     }
 
     public void setSaveData(SaveData saveData) {
@@ -34,35 +51,6 @@ public class TeamViewModel extends ViewModel {
 
     public SaveData getSaveData(SaveData saveData) {
         return this.saveData;
-    }
-
-    // mTeamMembers stores a list of all the routes in firebase
-    public void setTeamMemberData(MutableLiveData<ArrayList<TeamMember>> mTeamMembers) {
-        this.mTeamMembers = mTeamMembers;
-    }
-
-    public TeamMember getTeamMemberAt(int index) {
-        ArrayList<TeamMember> data = mTeamMembers.getValue();
-
-        if (data != null) {
-            if (index < data.size() && index >= 0) {
-                return data.get(index);
-            }
-        }
-
-        return null;
-    }
-
-    public void updateTeamMemberAt(int index, TeamMember newTeamMember) {
-        ArrayList<TeamMember> data = mTeamMembers.getValue();
-
-        if (data != null) {
-            if (index < data.size() && index >= 0) {
-                data.set(index, newTeamMember);
-                saveData.saveTeamMember(newTeamMember);
-                mTeamMembers.postValue(data);
-            }
-        }
     }
 
     public ArrayList<String> getTeamMemberNames(ArrayList<TeamMember> members) {
@@ -77,9 +65,23 @@ public class TeamViewModel extends ViewModel {
         return names;
     }
 
+    public void sendTeamRequest(String email) {
+        saveData.addTeamMember(email);
+    }
+
     public LiveData<ArrayList<TeamMember>> getTeamMemberData() {
         if (saveData != null) {
             return saveData.getAllMembers();
+        } else {
+            return new MutableLiveData<>();
+        }
+    }
+
+
+    public LiveData<HashMap<String, String>> getTeamInviterData() {
+        if(saveData != null) {
+            Log.i("getTeamInviterData in ViewModel",  "inviter: " + saveData.getTeamInviter().toString());
+            return saveData.getTeamInviter();
         } else {
             return new MutableLiveData<>();
         }
@@ -93,7 +95,17 @@ public class TeamViewModel extends ViewModel {
         return hasPendingTeamInvite;
     }
 
-    public LiveData<TeamMember> getTeamInviterData() {
-        return null;
+    public boolean getInviteIsAccepted() {
+        return inviteIsAccepted;
+    }
+
+    public void setInviteIsAccepted(boolean inviteIsAccepted) {
+        this.inviteIsAccepted = inviteIsAccepted;
+
+        if (inviteIsAccepted) {
+            saveData.acceptTeamRequest();
+        } else {
+            saveData.declineTeamRequest();
+        }
     }
 }

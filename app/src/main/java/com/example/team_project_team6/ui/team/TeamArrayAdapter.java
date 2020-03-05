@@ -1,6 +1,8 @@
 package com.example.team_project_team6.ui.team;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,17 +10,19 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.model.TeamMember;
 
 import java.util.ArrayList;
 
 public class TeamArrayAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<String> items;
-    public View v;
+    private boolean isViewInvited;
 
-    public TeamArrayAdapter(Context context, ArrayList<String> items) {
+    public TeamArrayAdapter(Context context, ArrayList<String> items, boolean isViewInvited) {
         this.context = context;
         this.items = items;
+        this.isViewInvited = isViewInvited;
     }
 
     @Override
@@ -33,12 +37,16 @@ public class TeamArrayAdapter extends BaseAdapter {
 
         TextView teamMemberNameView = (TextView) convertView.findViewById(R.id.txt_team_member_name);
         teamMemberNameView.setText(teamMemberName);
+        if(isViewInvited) {
+            teamMemberNameView.setTypeface(teamMemberNameView.getTypeface(), Typeface.ITALIC);
+            teamMemberNameView.setTextColor(Color.GRAY);
+        }
 
         return convertView;
     }
 
-    public void updateData(ArrayList<String> data) {
-        this.items = data;
+    public void addData(String data) {
+        this.items.add(data);
     }
 
     @Override

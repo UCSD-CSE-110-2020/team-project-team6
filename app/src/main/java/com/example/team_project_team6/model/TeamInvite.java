@@ -2,15 +2,17 @@ package com.example.team_project_team6.model;
 
 public class TeamInvite {
     private String teamUUID;
-    private String inviter;
+    private String toOrFrom;
+    private String name;
+    private String email;
+    private String message;
 
     public TeamInvite() {
-
-    }
-
-    public TeamInvite(String teamUUID, String inviter) {
-        this.teamUUID = teamUUID;
-        this.inviter = inviter;
+        teamUUID = "";
+        toOrFrom = "";
+        name = "";
+        email = "";
+        message = "";
     }
 
     public String getTeamUUID() {
@@ -21,11 +23,35 @@ public class TeamInvite {
         this.teamUUID = teamUUID;
     }
 
-    public String getInviter() {
-        return inviter;
+    public String getToOrFrom() {
+        return toOrFrom;
     }
 
-    public void setInviter(String inviter) {
-        this.inviter = inviter;
+    public void setToOrFrom(String toOrFrom) {
+        this.toOrFrom = toOrFrom;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
