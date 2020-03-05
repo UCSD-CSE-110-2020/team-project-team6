@@ -228,11 +228,12 @@ public class FirebaseGoogleAdapter implements IFirebase {
     }
 
     public void acceptTeamRequest() {
-        //
+        // delete invitation A
     }
 
     public void declineTeamRequest() {
-
+        // delete invitation on A
+        // delete invitation on B
     }
 
     public void uploadTeamRequest(String email) {
