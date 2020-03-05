@@ -227,6 +227,14 @@ public class FirebaseGoogleAdapter implements IFirebase {
         return data;
     }
 
+    public void acceptTeamRequest() {
+        //
+    }
+
+    public void declineTeamRequest() {
+
+    }
+
     public void uploadTeamRequest(String email) {
         if (user == null) {
             Log.d(TAG, "Could not send team request without signing in");
@@ -292,21 +300,10 @@ public class FirebaseGoogleAdapter implements IFirebase {
                         DocumentSnapshot inviteDoc = getInviteTask.getResult();
 
                         if (inviteDoc != null && inviteDoc.exists()) {
-                            if (inviteDoc.contains("invitationFrom")) {
-                                String inviteFrom = (String) inviteDoc.get("invitationFrom");
-                                HashMap<String, String> res = new HashMap<>();
-                                res.put("type", "invitationFrom");
-                                res.put("email", inviteFrom);
 
-                                data.postValue(res);
-
-                            } else if (inviteDoc.contains("invitationTo")) {
-                                String inviteTo = (String) inviteDoc.get("invitationTo");
-                                HashMap<String, String> res = new HashMap<>();
-                                res.put("type", "invitationTo");
-                                res.put("email", inviteTo);
-
-                                data.postValue(res);
+                            if (inviteDoc.contains("invitation")) {
+                                HashMap<String, String> invite = (HashMap<String, String>) inviteDoc.get("invitation");
+                                data.postValue(invite);
                             }
                         } else {
                             Log.d(TAG, "No such document");
