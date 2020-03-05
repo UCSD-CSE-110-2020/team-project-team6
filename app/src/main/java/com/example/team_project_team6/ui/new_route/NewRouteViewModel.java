@@ -1,11 +1,12 @@
 package com.example.team_project_team6.ui.new_route;
 
-import com.example.team_project_team6.firebase.IFirebase;
+import android.util.Log;
+
+import androidx.lifecycle.ViewModel;
+
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.Walk;
-
-import androidx.lifecycle.ViewModel;
 
 public class NewRouteViewModel extends ViewModel {
     private SaveData saveData;
@@ -21,10 +22,14 @@ public class NewRouteViewModel extends ViewModel {
     }
 
     public void saveRoute(Route route) {
-        this.saveData.saveRoute(route);
+        if (saveData != null) {
+            this.saveData.saveRoute(route);
+        } else {
+            Log.w("SaveRoute", "Warning save route is null in NewRouteViewModel");
+        }
     }
 
     public Walk getWalk() {
-        return saveData.getWalk();
+        return saveData != null ? saveData.getWalk() : null;
     }
 }
