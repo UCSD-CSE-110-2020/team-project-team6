@@ -8,32 +8,40 @@ exports.senInvitationNotif = functions.firestore
 
       // Get an object representing the document
       const newValue = change.after.data();
-      console.log("after: " + newValue);
-
       // ...or the previous value before this update
-//      const previousValue = change.before.data();
-//      console.log("before: " + previousValue);
+      const previousValue = change.before.data();
+      console.log("before: " + previousValue);
+
 
       // access a particular field as you would any JS property
-      const invite = newValue.invitation.from;
-      console.log("after: " + invite);
+      const inviteFrom = newValue.invitation.from;
+      console.log("Email from: " + inviteFrom);
 
       const to_userId = context.params.userId;
       console.log("id: " + to_userId);
 
-      const payload = {
+      const token_id = newValue.token_id;
+      console.log("token ID: " + token_id);
 
+      if(newValue.invitation !== previousValue.invitation){
+          const payload = {
+                notification:{
+                    title: "Notification from: " + inviteFrom,
+                    body: newValue.invitation.message,
+                    icon: "default"
+                }
+          }
+
+          return admin.messaging().sendToDevice(token_id, payload).then(response => {
+               console.log('Successfully sent message:', response);
+               return response;
+          }).catch((error) => {
+                console.log('Error sending message:', error);
+                return error;
+          });
+      }else{
+            console.log("the field invitation hasn't changed !");
       }
 
-//      return admin.firestore().collection("users").doc(to_userId).
-//              get().then(snapshot =>  {
-//
-//                 const from_userId =  snapshot.from
-//
-//             }).catch(reason =>  {
-//                 // you should handle errors here
-//             })
-
-      // perform desired operations ...
     });
 

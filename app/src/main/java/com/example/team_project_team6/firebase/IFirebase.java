@@ -23,5 +23,4 @@ public interface IFirebase {
     LiveData<ArrayList<Route>> downloadRouteData();
 
     void updateNotification(String email);
-
 }

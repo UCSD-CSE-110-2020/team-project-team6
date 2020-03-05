@@ -68,6 +68,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                 Map<String, String> team = new HashMap<>();
                                 String uuid = UUID.randomUUID().toString();
                                 team.put("team", uuid);
+                                team.put("token_id", FirebaseInstanceId.getInstance().getToken());
 
                                 Log.d(TAG, "No team found, assuming new user. Creating team " + uuid + " for user " + getEmail());
 
@@ -94,7 +95,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                     //set token ID when user login or logout
                     Map<String, Object> token_id = new HashMap<>();
                     token_id.put("token_id", FirebaseInstanceId.getInstance().getToken());
-                    db.collection("users").document(getEmail()).update(token_id)
+                    db.collection("users").document(user.getEmail()).update(token_id)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -247,5 +248,6 @@ public class FirebaseGoogleAdapter implements IFirebase {
             });
 
     }
+
 
 }
