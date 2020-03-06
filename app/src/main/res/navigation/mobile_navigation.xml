@@ -113,6 +113,13 @@
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"
             app:launchSingleTop="false" />
+
+        <action
+            android:id="@+id/action_routeDetailFragment_to_SetProposeDate"
+            app:destination="@id/setProposedDate"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
     </fragment>
     <fragment
         android:id="@+id/navigation_team"
@@ -158,4 +165,5 @@
         android:name="com.example.team_project_team6.ui.team.SetProposedDate"
         android:label="fragment_set_proposed_date"
         tools:layout="@layout/fragment_set_proposed_date" />
+
 </navigation>

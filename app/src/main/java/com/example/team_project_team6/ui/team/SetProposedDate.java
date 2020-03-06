@@ -1,66 +1,106 @@
 package com.example.team_project_team6.ui.team;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
 
+import java.util.Calendar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SetProposedDate#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class SetProposedDate extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public SetProposedDate() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SetProposedDate.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SetProposedDate newInstance(String param1, String param2) {
-        SetProposedDate fragment = new SetProposedDate();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    DatePickerDialog dpicker;
+    TimePickerDialog tpicker;
+    EditText dateEdit;
+    EditText timeEdit;
+    Button btDoneSet;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_set_proposed_date, container, false);
+        View root= inflater.inflate(R.layout.fragment_set_proposed_date, container, false);
+
+        dateEdit=(EditText) root.findViewById(R.id.date_edit);
+        dateEdit.setInputType(InputType.TYPE_NULL);
+        timeEdit=(EditText) root.findViewById(R.id.time_edit);
+        timeEdit.setInputType(InputType.TYPE_NULL);
+        timeEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar cldr = Calendar.getInstance();
+                int hour = cldr.get(Calendar.HOUR_OF_DAY);
+                int minutes = cldr.get(Calendar.MINUTE);
+                // time picker dialog
+                tpicker = new TimePickerDialog(MainActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
+                                timeEdit.setText(sHour + ":" + sMinute);
+                            }
+                        }, hour, minutes, true);
+                tpicker.show();
+            }
+        });
+        dateEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                dpicker = new DatePickerDialog(MainActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                dateEdit.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, year, month, day);
+                dpicker.show();
+            }
+        });
+
+        btDoneSet = root.findViewById(R.id.bt_done_set);
+        btDoneSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("set date fragment", "set date and time");
+
+                if(dateEdit.getText().toString().isEmpty()) {
+                    dateEdit.requestFocus();
+                    Toast alert =  Toast.makeText(getActivity(), getString(R.string.alert_set_date), Toast.LENGTH_SHORT);
+                    int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(),R.color.colorAccent, null);
+                    alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
+                    alert.show();
+
+                }
+                else if(timeEdit.getText().toString().isEmpty()) {
+                    dateEdit.requestFocus();
+                    Toast alert =  Toast.makeText(getActivity(), getString(R.string.alert_set_time), Toast.LENGTH_SHORT);
+                    int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(),R.color.colorAccent, null);
+                    alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
+                    alert.show();
+                }
+            }
+        });
+        return root;
     }
 }

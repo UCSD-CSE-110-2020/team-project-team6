@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.team_project_team6.R;
@@ -176,6 +177,17 @@ public class RouteDetailsFragment extends Fragment {
                     mViewModel.setRoute(route);
                 }
 
+            }
+        });
+
+
+        final Button ProposeWalk = root.findViewById(R.id.bt_propose);
+        ProposeWalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (controller.getCurrentDestination().getId() == R.id.routeDetailsFragment) {
+                    controller.navigate(R.id.action_routeDetailFragment_to_SetProposeDate);
+                }
             }
         });
 
