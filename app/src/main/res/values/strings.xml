@@ -101,7 +101,7 @@
     <string name="bt_declineRoute">Decline/Route</string>
     <string name="txt_proposed_steps">Steps</string>
     <string name="txt_proposed_startingPoint">Starting Point</string>
-    <string name="txt_proposed_mile">Mile</string>
+    <string name="txt_proposed_mile">Distance</string>
     <string name="set_propose_time">2:35</string>
     <string name="set_propose_date">3/20/20</string>
     <string name="bt_send_propose">Send</string>

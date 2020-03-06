@@ -29,8 +29,6 @@ public class TeamViewModel extends ViewModel {
     private boolean isMyProposedWalk; //record if i proposed walk
 
 
-
-
     public TeamViewModel() {
         ArrayList<TeamMember> data = new ArrayList<TeamMember>();
         Map<String,String> goingStatus = new HashMap<>();
@@ -61,11 +59,9 @@ public class TeamViewModel extends ViewModel {
         this.hasProposedWalk = hasProposedWalk;
     }
 
-
-        public void updateMTeamMembers(ArrayList<TeamMember> teamMembers) {
-            mTeamMembers.postValue(teamMembers);
-        }
-
+    public void updateMTeamMembers(ArrayList<TeamMember> teamMembers) {
+        mTeamMembers.postValue(teamMembers);
+    }
 
     public void addTeamInviterName(String inviterName) {
         this.teamInviterNames.add(inviterName);
@@ -141,8 +137,16 @@ public class TeamViewModel extends ViewModel {
         } else {
             saveData.declineTeamRequest();
         }
-
     }
+
+    public void updateMemberGoingData(Map<String, String> memberGoingStatusMap) {
+        memberGoingStatus.postValue(memberGoingStatusMap);
+    }
+
+    public LiveData<Map<String, String>> getMemberGoingData() {
+        return this.memberGoingStatus;
+    }
+
     public ArrayList<String> getMemberGoingStatus() {
         Log.e(TAG,"TEAM MEMBER SIZE is equal " + memberGoingStatus.getValue().size());
         ArrayList<String> memberStatusList =new ArrayList<>();
