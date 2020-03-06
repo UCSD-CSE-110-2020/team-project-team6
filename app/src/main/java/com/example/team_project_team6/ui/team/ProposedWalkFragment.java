@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -68,9 +69,6 @@ public class ProposedWalkFragment extends Fragment {
         txt_miles = root.findViewById(R.id.txt_proposed_mile);
         txt_steps = root.findViewById(R.id.txt_proposed_steps);
         txt_startPoint = root.findViewById(R.id.txt_proposed_startingPoint);
-
-
-
 
         if(!teamViewModel.getHasProposedWalk()) {
             bt_acceptWalk.setVisibility(View.INVISIBLE);
@@ -137,6 +135,28 @@ public class ProposedWalkFragment extends Fragment {
             Log.i("Proposed Walk fragment", "decline route");
             setInvisibleScheduleWithdraw();
             setInvisibleAcceptDecline();
+        }
+    });
+
+    listView.setOnTouchListener(new ListView.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    // Disallow ScrollView to intercept touch events.
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                    // Allow ScrollView to intercept touch events.
+                    v.getParent().requestDisallowInterceptTouchEvent(false);
+                    break;
+            }
+
+            // Handle ListView touch events.
+            v.onTouchEvent(event);
+            return true;
         }
     });
 

@@ -80,16 +80,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_proposed_date" />
 
-        <ListView
-            android:id="@+id/list_is_going"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/linear_list_layout"
+            android:layout_width="402dp"
+            android:layout_height="175dp"
             android:layout_marginStart="44dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="44dp"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_proposed_time" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_proposed_time">
+
+            <ListView
+                android:id="@+id/list_is_going"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="44dp"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/bt_Schedule"
@@ -97,24 +112,23 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="140dp"
             android:layout_marginTop="24dp"
-            android:backgroundTint="#2196F3"
+            android:backgroundTint="@color/design_default_color_secondary_variant"
             android:text="@string/bt_schedule"
             android:textColor="#F5F1F1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/list_is_going" />
+            app:layout_constraintTop_toBottomOf="@+id/linear_list_layout" />
+
 
         <Button
             android:id="@+id/bt_withdraw"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="140dp"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#2196F3"
+            android:backgroundTint="@color/colorAccent"
             android:text="@string/bt_withdraw"
             android:textColor="#F5F1F1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bt_Schedule" />
-
 
         <Button
             android:id="@+id/bt_acceptWalk"
@@ -122,19 +136,18 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="140dp"
             android:layout_marginTop="24dp"
-            android:backgroundTint="#2196F3"
+            android:backgroundTint="@color/design_default_color_secondary_variant"
             android:text="@string/bt_acceptWalk"
             android:textColor="#F5F1F1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/list_is_going" />
+            app:layout_constraintTop_toBottomOf="@+id/linear_list_layout" />
 
         <Button
             android:id="@+id/bt_declineTime"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="140dp"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#2196F3"
+            android:backgroundTint="@color/colorAccent"
             android:text="@string/bt_declineTime"
             android:textColor="#F5F1F1"
             app:layout_constraintStart_toStartOf="parent"
@@ -145,8 +158,7 @@
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="140dp"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#2196F3"
+            android:backgroundTint="@color/colorAccent"
             android:text="@string/bt_declineRoute"
             android:textColor="#F5F1F1"
             app:layout_constraintStart_toStartOf="parent"
