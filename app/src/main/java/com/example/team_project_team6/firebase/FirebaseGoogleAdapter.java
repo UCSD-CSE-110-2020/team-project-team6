@@ -386,7 +386,15 @@ public class FirebaseGoogleAdapter implements IFirebase {
         TeamInvite from = new TeamInvite();
         from.setEmail(getEmail());
         from.setName(getName());
-        from.setMessage("fix later");
+
+        String message = "You received an invitation from ";
+        if(getName() != null) {
+            message += getName();
+        }else{
+            message += email;
+        }
+
+        from.setMessage(message);
         from.setToOrFrom("from");
         from.setTeamUUID("do we need this?");
 
@@ -512,4 +520,5 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
         return data;
     }
+
 }

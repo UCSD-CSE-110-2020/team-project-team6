@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         // Inject into TeamViewModel
         TeamViewModel teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
         teamViewModel.setSaveData(saveData);
+        teamViewModel.setFbaseAdapter(fgadapter);
 
         // Inject into homeViewModel
         homeViewModel.setSaveData(saveData);
@@ -131,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         // Inject into RouteDetailsViewModel
         RouteDetailsViewModel routeDetailsViewModel = new ViewModelProvider(this).get(RouteDetailsViewModel.class);
         routeDetailsViewModel.setSaveData(saveData);
+
 
         // Request username and ID tokens for Firebase auth when signing in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

@@ -50,6 +50,10 @@ public class SendTeamRequestFragment extends Fragment {
                     alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
                     alert.show();
                 } else {
+
+                    //send invitation
+                    //teamViewModel.getFbaseAdaper().sendSingleNotification(gmailInvitation.getText().toString().trim());
+
                     Log.i("go back to team", "Clicked on 'send invite' button");
 
                     // send team request

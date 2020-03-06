@@ -2,6 +2,7 @@ package com.example.team_project_team6.ui.team;
 
 import android.util.Log;
 
+import com.example.team_project_team6.firebase.IFirebase;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
 
@@ -20,12 +21,20 @@ public class TeamViewModel extends ViewModel {
     private SaveData saveData;
     private boolean hasPendingTeamInvite; // records if another user has sent this user a team invite
     private boolean inviteIsAccepted; // records whether or not user has accepted or decline the invite
-
+    private IFirebase adapter;
     public TeamViewModel() {
         ArrayList<TeamMember> data = new ArrayList<TeamMember>();
         mTeamMembers = new MutableLiveData<>(data);
 
         teamInviterNames = new ArrayList<>();
+    }
+
+    public void setFbaseAdapter(IFirebase adapter){
+        this.adapter = adapter;
+    }
+
+    public IFirebase getFbaseAdaper(){
+        return adapter;
     }
 
     public void updateMTeamMembers(ArrayList<TeamMember> teamMembers) {

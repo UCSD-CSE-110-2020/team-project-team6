@@ -14,7 +14,7 @@ exports.senInvitationNotif = functions.firestore
 
 
       // access a particular field as you would any JS property
-      const inviteFrom = newValue.invitation.from;
+      const inviteFrom = newValue.invitation.email;
       console.log("Email from: " + inviteFrom);
 
       const to_userId = context.params.userId;
