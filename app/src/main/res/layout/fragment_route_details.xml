@@ -175,6 +175,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="140dp"
+                android:layout_marginBottom="108dp"
                 android:layout_marginTop="24dp"
                 android:backgroundTint="#2196F3"
                 android:text="@string/bt_propose"
@@ -183,6 +184,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/details_notes" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

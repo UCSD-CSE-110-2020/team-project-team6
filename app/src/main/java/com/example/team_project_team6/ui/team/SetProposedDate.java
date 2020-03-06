@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.InputType;
 import android.util.Log;
@@ -37,6 +39,7 @@ public class SetProposedDate extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root= inflater.inflate(R.layout.fragment_set_proposed_date, container, false);
+        final NavController controller = NavHostFragment.findNavController(this);
 
         dateEdit=(EditText) root.findViewById(R.id.date_edit);
         dateEdit.setInputType(InputType.TYPE_NULL);
@@ -49,7 +52,7 @@ public class SetProposedDate extends Fragment {
                 int hour = cldr.get(Calendar.HOUR_OF_DAY);
                 int minutes = cldr.get(Calendar.MINUTE);
                 // time picker dialog
-                tpicker = new TimePickerDialog(MainActivity.this,
+                tpicker = new TimePickerDialog(getActivity(),
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
@@ -67,7 +70,7 @@ public class SetProposedDate extends Fragment {
                 int month = cldr.get(Calendar.MONTH);
                 int year = cldr.get(Calendar.YEAR);
                 // date picker dialog
-                dpicker = new DatePickerDialog(MainActivity.this,
+                dpicker = new DatePickerDialog(getActivity(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -98,6 +101,18 @@ public class SetProposedDate extends Fragment {
                     int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(),R.color.colorAccent, null);
                     alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
                     alert.show();
+                }
+
+                else{
+                    final Button setDate = root.findViewById(R.id.bt_done_set);
+                    setDate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (controller.getCurrentDestination().getId() == R.id.setProposedDate) {
+                                controller.navigate(R.id.navigate_setDate_to_ProposedWalkFragmet);
+                            }
+                        }
+                    });
                 }
             }
         });

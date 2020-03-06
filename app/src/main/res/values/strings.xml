@@ -103,13 +103,14 @@
     <string name="bt_declineRoute">Decline/Route</string>
     <string name="txt_proposed_steps">Steps</string>
     <string name="txt_proposed_startingPoint">Starting Point</string>
-    <string name="txt_proposed_mile">Mile</string>
 
     <string name="set_propose_time">Enter Time</string>
     <string name="set_propose_date">Enter Date</string>
     <string name="txt_set_propose_time">Time: </string>
     <string name="txt_set_propose_date">Date: </string>
     <string name="bt_set_date">Done</string>
+    <string name="txt_proposed_mile">Distance</string>
+
 
 
     <!-- TODO: Remove or change this placeholder text -->

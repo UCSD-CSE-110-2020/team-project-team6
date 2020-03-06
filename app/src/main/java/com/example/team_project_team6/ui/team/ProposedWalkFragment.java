@@ -4,13 +4,14 @@ import android.os.Bundle;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.example.team_project_team6.R;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -40,21 +42,22 @@ public class ProposedWalkFragment extends Fragment {
     private TextView txt_date;
     private TextView txt_time;
     private TextView txt_startPoint;
+    private ListView listView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i(TAG, "Creating ProposedWalkFragment");
 
         if (teamViewModel == null) {
             teamViewModel = new ViewModelProvider(requireActivity()).get(TeamViewModel.class);
         }
 
-
+        View root = inflater.inflate(R.layout.fragment_proposed_walk, container, false);
 
         goingStatusArray = teamViewModel.getMemberGoingStatus();
-        Log.d(TAG, "list of status size" + goingStatusArray.size());
-        View root = inflater.inflate(R.layout.fragment_proposed_walk, container, false);
         mfAdapter = new TeamArrayAdapter(getActivity(), goingStatusArray, false);
-        ListView listView = (ListView) root.findViewById(R.id.list_is_going);
+        listView = (ListView) root.findViewById(R.id.list_is_going);
         listView.setAdapter(mfAdapter);
 
         bt_acceptWalk = root.findViewById(R.id.bt_acceptWalk);
@@ -69,88 +72,127 @@ public class ProposedWalkFragment extends Fragment {
         txt_steps = root.findViewById(R.id.txt_proposed_steps);
         txt_startPoint = root.findViewById(R.id.txt_proposed_startingPoint);
 
-
-
+        bind_views();
 
         if(!teamViewModel.getHasProposedWalk()) {
-            bt_acceptWalk.setVisibility(View.INVISIBLE);
-            bt_declineRoute.setVisibility(View.INVISIBLE);
-            bt_declineTime.setVisibility(View.INVISIBLE);
-            bt_schedule.setVisibility(View.INVISIBLE);
-            bt_withdraw.setVisibility(View.INVISIBLE);
-            txt_date.setVisibility(View.INVISIBLE);
-            txt_time.setVisibility(View.INVISIBLE);
-            txt_routeName.setVisibility(View.INVISIBLE);
-            txt_miles.setVisibility(View.INVISIBLE);
-            txt_steps.setVisibility(View.INVISIBLE);
-            txt_startPoint.setVisibility(View.INVISIBLE);
-        }
-        else if(teamViewModel.isMyProposedWalk()) {
+            Log.i(TAG, "User does not have a proposed walk in ProposedWalkFragment.");
+            setAllInvisible();
+        } else if(teamViewModel.isMyProposedWalk()) {
+            Log.i(TAG, "Creating my proposed walk.");
             setInvisibleAcceptDecline();
-        }
-
-        else {
+        } else {
+            Log.i(TAG, "Creating another user's proposed walk.");
             setInvisibleScheduleWithdraw();
         }
-
-
 
         bt_schedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("Proposed Walk fragment", "schedule walk");
+                Log.i("Proposed Walk fragment", "schedule walk clicked");
                 setInvisibleScheduleWithdraw();
                 setInvisibleAcceptDecline();
             }
         });
 
-    bt_withdraw.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Log.i("Proposed Walk fragment", "withdraw walk");
-            setInvisibleScheduleWithdraw();
-            setInvisibleAcceptDecline();
-        }
-    });
+        bt_withdraw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Proposed Walk fragment", "withdraw walk clicked");
+                setInvisibleScheduleWithdraw();
+                setInvisibleAcceptDecline();
+            }
+        });
 
-    bt_acceptWalk.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Log.i("Proposed Walk fragment", "accept walk");
-            setInvisibleScheduleWithdraw();
-            setInvisibleAcceptDecline();
-        }
-    });
+        bt_acceptWalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Proposed Walk fragment", "accept walk clicked");
+                setInvisibleScheduleWithdraw();
+                setInvisibleAcceptDecline();
+            }
+        });
 
-    bt_declineTime.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Log.i("Proposed Walk fragment", "decline time");
-            setInvisibleScheduleWithdraw();
-            setInvisibleAcceptDecline();
-        }
-    });
+        bt_declineTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Proposed Walk fragment", "decline time clicked");
+                setInvisibleScheduleWithdraw();
+                setInvisibleAcceptDecline();
+            }
+        });
 
-    bt_declineRoute.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Log.i("Proposed Walk fragment", "decline route");
-            setInvisibleScheduleWithdraw();
-            setInvisibleAcceptDecline();
-        }
-    });
+        bt_declineRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Proposed Walk fragment", "decline route clicked");
+                setInvisibleScheduleWithdraw();
+                setInvisibleAcceptDecline();
+            }
+        });
 
-    return root;
-}
+        listView.setOnTouchListener(new ListView.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
 
-    public void setInvisibleAcceptDecline(){
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
+
+                // Handle ListView touch events.
+                v.onTouchEvent(event);
+                return true;
+            }
+        });
+
+        return root;
+    }
+
+    public void setInvisibleAcceptDecline() {
+        Log.i(TAG, "Setting ProposedWalkFragment accept and decline buttons invisible.");
         bt_acceptWalk.setVisibility(View.INVISIBLE);
         bt_declineRoute.setVisibility(View.INVISIBLE);
         bt_declineTime.setVisibility(View.INVISIBLE);
     }
 
-    public void setInvisibleScheduleWithdraw(){
+    public void setInvisibleScheduleWithdraw() {
+        Log.i(TAG, "Setting ProposedWalkFragment schedule and withdraw buttons invisible.");
         bt_schedule.setVisibility(View.INVISIBLE);
         bt_withdraw.setVisibility(View.INVISIBLE);
+    }
+
+    public void setAllInvisible() {
+        Log.i(TAG, "Setting ProposedWalkFragment all textviews and buttons invisible.");
+        bt_acceptWalk.setVisibility(View.INVISIBLE);
+        bt_declineRoute.setVisibility(View.INVISIBLE);
+        bt_declineTime.setVisibility(View.INVISIBLE);
+        bt_schedule.setVisibility(View.INVISIBLE);
+        bt_withdraw.setVisibility(View.INVISIBLE);
+        txt_date.setVisibility(View.INVISIBLE);
+        txt_time.setVisibility(View.INVISIBLE);
+        txt_routeName.setVisibility(View.INVISIBLE);
+        txt_miles.setVisibility(View.INVISIBLE);
+        txt_steps.setVisibility(View.INVISIBLE);
+        txt_startPoint.setVisibility(View.INVISIBLE);
+    }
+
+    public void bind_views() {
+        teamViewModel.getMemberGoingData().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
+            @Override
+            public void onChanged(Map<String, String> memberGoingStatusMap) {
+                Log.i("MemberFragment getMemberGoingData", "getting changed team member status data");
+                teamViewModel.updateMemberGoingData(memberGoingStatusMap);
+                mfAdapter = new TeamArrayAdapter(getActivity(), teamViewModel.getMemberGoingStatus(), false);
+                listView.setAdapter(mfAdapter);
+                mfAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

@@ -163,7 +163,14 @@
     <fragment
         android:id="@+id/setProposedDate"
         android:name="com.example.team_project_team6.ui.team.SetProposedDate"
-        android:label="fragment_set_proposed_date"
-        tools:layout="@layout/fragment_set_proposed_date" />
+        android:label="Set Proposed Walk Date"
+        tools:layout="@layout/fragment_set_proposed_date" >
+        <action
+            android:id="@+id/navigate_setDate_to_ProposedWalkFragmet"
+            app:destination="@id/proposedWalkFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:launchSingleTop="false" />
+    </fragment>
 
 </navigation>
