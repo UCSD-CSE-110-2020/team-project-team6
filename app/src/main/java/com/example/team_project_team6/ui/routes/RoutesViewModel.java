@@ -80,7 +80,7 @@ public class RoutesViewModel extends ViewModel {
     Route getRouteAt(int index) {
         ArrayList<Route> data = mRoutes.getValue();
 
-        if (data != null) {
+        if (data != null && !teamView) {
             if (index < data.size() && index >= 0) {
                 return data.get(index);
             }
@@ -92,7 +92,7 @@ public class RoutesViewModel extends ViewModel {
     void updateRouteAt(int index, Route newRoute) {
         ArrayList<Route> data = mRoutes.getValue();
 
-        if (data != null) {
+        if (data != null && !teamView) {
             if (index < data.size() && index >= 0) {
                 data.set(index, newRoute);
                 saveData.saveRoute(newRoute);
