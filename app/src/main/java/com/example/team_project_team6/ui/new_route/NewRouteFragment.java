@@ -173,7 +173,7 @@ public class NewRouteFragment extends Fragment {
                         Walk walk = mNewRouteViewModel.getWalk();
                         if (walk != null) {
                             route.setWalk(walk);
-                            route.setLastStartDate(walk.getStartTime());
+                            route.setLastStartDate(walk.getStartTime().getTime());
                         }
 
                     // otherwise, create a new walk object and save that inside route along with an unset

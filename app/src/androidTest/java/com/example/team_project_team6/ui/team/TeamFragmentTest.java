@@ -3,33 +3,44 @@ package com.example.team_project_team6.ui.team;
 
 import android.view.View;
 import android.widget.Button;
-
-import com.example.team_project_team6.R;
-import org.hamcrest.Matcher;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.team_project_team6.R;
+import com.example.team_project_team6.model.TeamMember;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class TeamFragmentTest {
@@ -66,7 +77,7 @@ public class TeamFragmentTest {
         onView(withId(R.id.btn_decline_invite)).check(ViewAssertions.matches(isDisplayed()));
 
         // click accept invite button
-        onView(ViewMatchers.withId(R.id.btn_accept_invite)).perform(ViewActions.click());
+        onView(withId(R.id.btn_accept_invite)).perform(click());
         // user should no longer have pending team invite
         assertEquals(viewModel.getHasPendingTeamInvite(), false);
         // accept and decline buttons should not be displayed
@@ -89,9 +100,63 @@ public class TeamFragmentTest {
         });
 
         // click '+' button
-        onView(ViewMatchers.withId(R.id.bt_invite_member)).perform(ViewActions.click());
+        onView(withId(R.id.bt_invite_member)).perform(click());
         // check that we transition to invite form
         assertEquals(R.id.sendTeamRequestFragment, navController.getCurrentDestination().getId());
+    }
+
+    @Test
+    public void TestSortedTeamList() {
+        ArrayList<TeamMember> teamMembers = new ArrayList<>();
+        teamMembers.add(new TeamMember("Sarah", "Soap", "sarah.soap@gmail.com"));
+        teamMembers.add(new TeamMember("Ellen", "Elephant", "ellen.elephant@gmail.com"));
+        teamMembers.add(new TeamMember("Bob", "Builder", "bob.builder@gmail.com"));
+
+        LiveData<ArrayList<TeamMember>> teamMembersData = new MutableLiveData<>(teamMembers);
+        when(viewModel.getTeamMemberData()).thenReturn(teamMembersData);
+
+        LiveData<HashMap<String, String>> teamInviterData = new MutableLiveData<>(new HashMap<>());
+        when(viewModel.getTeamInviterData()).thenReturn(teamInviterData);
+
+        FragmentScenario<MemberFragment> scenario =
+                FragmentScenario.launchInContainer(MemberFragment.class, null, R.style.Theme_AppCompat, new FragmentFactory() {
+                    @NonNull
+                    @Override
+                    public Fragment instantiate(@NonNull ClassLoader classLoader,
+                                                @NonNull String className) {
+                        MemberFragment fragment = new MemberFragment();
+
+                        fragment.getViewLifecycleOwnerLiveData().observeForever(lifecycleOwner -> {
+                            if (lifecycleOwner != null) {
+                                Navigation.setViewNavController(fragment.requireView(), navController);
+                            }
+                        });
+
+                        MemberFragment.teamViewModel = viewModel;
+
+                        return fragment;
+                    }
+                });
+
+        onView(withId(R.id.list_team_members)).check(ViewAssertions.matches(Matchers.withListSize(0)));
+    }
+
+    static class Matchers {
+        public static Matcher<View> withListSize (final int size) {
+            return new TypeSafeMatcher<View>() {
+                @Override public boolean matchesSafely (final View view) {
+                    return ((ListView) view).getCount () == size;
+                }
+
+                @Override public void describeTo (final Description description) {
+                    description.appendText ("ListView should have " + size + " items");
+                }
+            };
+        }
+    }
+    @Test
+    public void TestDisplayInvitedTeamList() {
+
     }
 
     private static ViewAction setButtonVisibility(final boolean value) {

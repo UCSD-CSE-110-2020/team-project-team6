@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.Route;
+import com.example.team_project_team6.model.TeamMember;
 import com.example.team_project_team6.model.Walk;
 
 import java.text.SimpleDateFormat;
@@ -23,9 +24,14 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
     private ArrayList<Route> items;
     private static ClickListener favoriteClickListener;
     private static ClickListener itemClickListener;
+    private boolean teamInitialsVisible = false;
+
+    void setTeamView(boolean b) {
+        teamInitialsVisible = b;
+    }
 
     static class RouteViewHolder extends RecyclerView.ViewHolder {
-        TextView trailName, steps, distance, lastCompleted, textFeatures;
+        TextView trailName, steps, distance, lastCompleted, textFeatures, initials;
         ImageButton favoriteButton;
 
         RouteViewHolder(final View itemView) {
@@ -38,6 +44,7 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
             lastCompleted = itemView.findViewById(R.id.item_view_date);
             favoriteButton = itemView.findViewById(R.id.item_view_favorite);
             textFeatures = itemView.findViewById(R.id.item_view_features);
+            initials = itemView.findViewById(R.id.item_view_initials);
 
             favoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -103,24 +110,32 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
         Walk walkInCurrRoute = items.get(position).getWalk();
 
         Log.i("RouteViewAdapter onBindViewHolder", "route name: " + currRoute.getName());
-        if(currRoute == null) {
-            Log.e("RouteViewAdapter onBindViewHolder","currRoute is null");
+        if(walkInCurrRoute != null) {
+            String steps = String.format(Locale.ENGLISH, "%d steps", walkInCurrRoute.getStep());
+            holder.steps.setText(steps);
+
+            String dist = String.format(Locale.ENGLISH, "%.2f mi", walkInCurrRoute.getDist());
+            holder.distance.setText(dist);
         } else {
             Log.e("RouteViewAdapter onBindViewHolder","walkInCurrRoute is null");
         }
 
-        String steps = String.format(Locale.ENGLISH, "%d steps", walkInCurrRoute.getStep());
-        holder.steps.setText(steps);
-
-        String dist = String.format(Locale.ENGLISH, "%.2f mi", walkInCurrRoute.getDist());
-        holder.distance.setText(dist);
-
         if (items.get(position).getLastStartDate() != null) {
-            Date dateLastWalked = items.get(position).getLastStartDate().getTime();
+            Date dateLastWalked = items.get(position).getLastStartDate();
             SimpleDateFormat format = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
             holder.lastCompleted.setText(format.format(dateLastWalked));
         } else {
             holder.lastCompleted.setText(R.string.never_completed);
+        }
+
+        if (teamInitialsVisible) {
+            TeamMember owner = items.get(position).getOwner();
+            holder.initials.getBackground().setTint(owner.getColor());
+
+            holder.initials.setVisibility(View.VISIBLE);
+            holder.initials.setText(currRoute.getInitials());
+        } else {
+            holder.initials.setVisibility(View.GONE);
         }
     }
 

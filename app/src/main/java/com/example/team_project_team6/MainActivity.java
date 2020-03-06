@@ -25,6 +25,7 @@ import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.new_route.NewRouteViewModel;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.example.team_project_team6.ui.routes.RoutesViewModel;
+import com.example.team_project_team6.ui.team.TeamViewModel;
 import com.example.team_project_team6.ui.walk.WalkViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -119,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
         // Inject into RoutesViewModel
         RoutesViewModel routesViewModel = new ViewModelProvider(this).get(RoutesViewModel.class);
         routesViewModel.setSaveData(saveData);
+
+        // Inject into TeamViewModel
+        TeamViewModel teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
+        teamViewModel.setSaveData(saveData);
 
         // Inject into homeViewModel
         homeViewModel.setSaveData(saveData);

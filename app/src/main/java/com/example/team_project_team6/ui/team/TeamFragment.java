@@ -1,9 +1,12 @@
 package com.example.team_project_team6.ui.team;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
@@ -12,10 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.team_project_team6.R;
-import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 import com.google.android.material.tabs.TabLayout;
-
-
 
 public class TeamFragment extends Fragment {
 
@@ -24,7 +24,6 @@ public class TeamFragment extends Fragment {
 
     @VisibleForTesting
     static TeamViewModel teamViewModel = null;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,5 +56,35 @@ public class TeamFragment extends Fragment {
             }
         });
         return root;
+    }
+
+    private class TabAdapter extends FragmentPagerAdapter {
+        Context context;
+        int totalTabs;
+
+        public TabAdapter(Context c, FragmentManager fm, int totalTabs) {
+            super(fm);
+            context = c;
+            this.totalTabs = totalTabs;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    MemberFragment memberFragment = new MemberFragment();
+                    return memberFragment;
+                case 1:
+                    ProposedWalkFragment proposedWalkFragment = new ProposedWalkFragment();
+                    return proposedWalkFragment;
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return totalTabs;
+        }
     }
 }

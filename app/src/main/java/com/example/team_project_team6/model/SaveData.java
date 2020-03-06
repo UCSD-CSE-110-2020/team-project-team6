@@ -5,14 +5,12 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 
 import com.example.team_project_team6.firebase.IFirebase;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.HashMap;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -65,7 +63,40 @@ public class SaveData {
     }
 
     public LiveData<ArrayList<Route>> getAllRoutes() {
-        return firebaseAdapter.downloadRouteData();
+        return firebaseAdapter.downloadRouteData(firebaseAdapter.getEmail());
+    }
+
+    public LiveData<ArrayList<Route>> getRoutesFor(String email) {
+        return firebaseAdapter.downloadRouteData(email);
+    }
+
+    public LiveData<ArrayList<TeamMember>> getAllMembers() {
+        LiveData<ArrayList<TeamMember>> asd = firebaseAdapter.downloadTeamData();
+        return asd;
+    }
+
+    public LiveData<String> getTeam() {
+        return firebaseAdapter.getTeamUUID();
+    }
+
+    public void addTeamMember(String email) {
+        firebaseAdapter.uploadTeamRequest(email);
+    }
+
+    public LiveData<HashMap<String, String>> getTeamInviter() {
+        return firebaseAdapter.downloadTeamRequest();
+    }
+
+    public void acceptTeamRequest() {
+        firebaseAdapter.acceptTeamRequest();
+    }
+
+    public void declineTeamRequest() {
+        firebaseAdapter.declineTeamRequest();
+    }
+
+    public String getEmail() {
+        return firebaseAdapter.getEmail();
     }
 
 }
