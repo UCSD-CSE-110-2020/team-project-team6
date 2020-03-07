@@ -119,8 +119,12 @@ public class SetProposedDateFragment extends Fragment {
                     // save info to firebase
                     RouteDetailsViewModel routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
                     Route route = routeDetailsViewModel.getRoute();
+
                     Log.i(TAG, "Route exists: " + (route != null));
-                    ProposedWalk proposedWalk = new ProposedWalk(route, dateEdit.getText().toString(), timeEdit.getText().toString());
+                    ProposedWalk proposedWalk = new ProposedWalk();
+                    proposedWalk.setpRoute(route);
+                    proposedWalk.setpDayMonthYearDate(dateEdit.getText().toString());
+                    proposedWalk.setpHourSecondTime(timeEdit.getText().toString());
                     teamViewModel.sendProposedWalk(proposedWalk);
 
                     // navigate to proposed walk fragment
