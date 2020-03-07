@@ -561,7 +561,11 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                             if (pWalkDoc != null) {
                                                 Map<String, Object> map = pWalkDoc.getData();
                                                 ProposedWalk pWalk = gson.fromJson(gson.toJson(map), ProposedWalk.class);
-
+                                                if (pWalk.getProposer().equals(getEmail())) {
+                                                    pWalk.setProposer("yes");
+                                                } else {
+                                                    pWalk.setProposer("no");
+                                                }
                                                 data.postValue(pWalk);
 
                                             } else {
