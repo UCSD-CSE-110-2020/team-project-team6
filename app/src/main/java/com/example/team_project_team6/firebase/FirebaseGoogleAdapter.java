@@ -516,7 +516,11 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
                             HashMap<String, Object> pwMap = new HashMap<>();
                             proposedWalk.setProposer(getEmail());
-                            pwMap.put("proposedWalk", proposedWalk);
+                            Map<String, Object> jsonToMap = gson.fromJson(
+                                    gson.toJson(proposedWalk), new TypeToken<HashMap<String, Object>>() {}.getType()
+                            );
+
+                            pwMap.put("proposedWalk", jsonToMap);
 
                             db.collection("teams")
                                     .document(team)
@@ -560,7 +564,8 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                             DocumentSnapshot pWalkDoc = getWalkTask.getResult();
                                             if (pWalkDoc != null) {
                                                 Map<String, Object> map = pWalkDoc.getData();
-                                                ProposedWalk pWalk = gson.fromJson(gson.toJson(map), ProposedWalk.class);
+                                                Map<String, Object> pWalkMap = (Map<String, Object>) map.get("proposedWalk");
+                                                ProposedWalk pWalk = gson.fromJson(gson.toJson(pWalkMap), ProposedWalk.class);
                                                 if (pWalk.getProposer().equals(getEmail())) {
                                                     pWalk.setProposer("yes");
                                                 } else {
