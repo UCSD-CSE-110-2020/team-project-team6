@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.TeamInvite;
 import com.example.team_project_team6.model.TeamMember;
@@ -412,6 +413,11 @@ public class FirebaseGoogleAdapter implements IFirebase {
     public synchronized LiveData<HashMap<String, String>> downloadTeamRequest() {
         MutableLiveData<HashMap<String, String>> data = new MutableLiveData<>();
 
+        if (user == null) {
+            Log.d(TAG, "Could not send team request without signing in");
+            return data;
+        }
+
         db.collection("users")
                 .document(getEmail())
                 .get()
@@ -434,7 +440,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                         Log.e(TAG, "Failed to retrieve team invitations");
                     }
                 })
-                .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));;
+                .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
 
         return data;
     }
@@ -489,6 +495,121 @@ public class FirebaseGoogleAdapter implements IFirebase {
                 })
                 .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
 
+        return data;
+    }
+
+    public void uploadProposedWalk(ProposedWalk proposedWalk) {
+        if(user == null) {
+            Log.d(TAG, "Could not send proposed walk without signing in");
+            return;
+        }
+
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(getTeamTask -> {
+                    if (getTeamTask.isSuccessful()) {
+                        DocumentSnapshot teamDoc = getTeamTask.getResult();
+                        if (teamDoc != null) {
+
+                            String team = (String) teamDoc.get("team");
+
+                            HashMap<String, Object> pwMap = new HashMap<>();
+                            proposedWalk.setProposer(getEmail());
+                            Map<String, Object> jsonToMap = gson.fromJson(
+                                    gson.toJson(proposedWalk), new TypeToken<HashMap<String, Object>>() {}.getType()
+                            );
+
+                            pwMap.put("proposedWalk", jsonToMap);
+
+                            db.collection("teams")
+                                    .document(team)
+                                    .update(pwMap)
+                                    .addOnCompleteListener(d -> Log.d(TAG, "Successfully stored proposed walk in team database"))
+                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to update proposed walk", e));
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
+    }
+
+    public synchronized LiveData<ProposedWalk> downloadProposedWalk() {
+        MutableLiveData<ProposedWalk> data = new MutableLiveData<>();
+
+        if (user == null) {
+            Log.d(TAG, "Could not download member going statuses data without signing in");
+            return data;
+        }
+
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(getTeamTask -> {
+                    if (getTeamTask.isSuccessful()) {
+                        DocumentSnapshot teamDoc = getTeamTask.getResult();
+                        if (teamDoc != null) {
+
+                            String team = (String) teamDoc.get("team");
+
+                            db.collection("teams")
+                                    .document(team)
+                                    .get()
+                                    .addOnCompleteListener(getWalkTask -> {
+                                        if (getWalkTask.isSuccessful()) {
+                                            DocumentSnapshot pWalkDoc = getWalkTask.getResult();
+                                            if (pWalkDoc != null && pWalkDoc.exists()) {
+                                                Map<String, Object> map = pWalkDoc.getData();
+                                                Map<String, Object> pWalkMap = (Map<String, Object>) map.get("proposedWalk");
+                                                ProposedWalk pWalk = gson.fromJson(gson.toJson(pWalkMap), ProposedWalk.class);
+
+                                                if (pWalk != null) {
+                                                    if (pWalk.getProposer().equals(getEmail())) {
+                                                        Log.i(TAG, "Setting current user as proposer of proposed walk");
+                                                        pWalk.setProposer("yes");
+                                                    } else {
+                                                        Log.i(TAG, "Setting current user as receiver of proposed walk");
+                                                        pWalk.setProposer("no");
+                                                    }
+                                                    data.postValue(pWalk);
+                                                } else {
+                                                    Log.i(TAG, "There are no proposed walks in Firebase.");
+                                                }
+
+                                            } else {
+                                                Log.d(TAG, "Failed to retrieve proposed walk from teams");
+                                            }
+                                        } else {
+                                            Log.d(TAG, "No such document");
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to download proposed walk", e));
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
+
+
+        return data;
+    }
+
+    public synchronized LiveData<HashMap<String, String>> downloadMemberGoingStatuses() {
+        MutableLiveData<HashMap<String, String>> data = new MutableLiveData<>();
+
+        if (user == null) {
+            Log.d(TAG, "Could not download member going statuses data without signing in");
+            return data;
+        }
+
+        // TODO update member attendance statuses for team
         return data;
     }
 }

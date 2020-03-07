@@ -1,14 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".ui.team.ProposedWalkFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="100dp">
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="30dp"
+            android:text="Proposed Walk Information"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_proposed_route_Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/txt_proposed_rout_name"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+        <TextView
+            android:id="@+id/txt_proposed_startingPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/txt_proposed_startingPoint"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_proposed_route_Name" />
+
+
+        <TextView
+            android:id="@+id/txt_proposed_mile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/txt_proposed_mile"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_proposed_startingPoint" />
+
+        <TextView
+            android:id="@+id/txt_proposed_steps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/txt_proposed_steps"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_proposed_mile" />
+
+        <TextView
+            android:id="@+id/txt_proposed_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/txt_proposed_date"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_proposed_steps" />
+
+        <TextView
+            android:id="@+id/txt_proposed_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/txt_proposed_time"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_proposed_date" />
+
+
+        <LinearLayout
+            android:id="@+id/linear_list_layout"
+            android:layout_width="402dp"
+            android:layout_height="112dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="44dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.506"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView14">
+
+            <ListView
+                android:id="@+id/list_is_going"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="44dp"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/bt_declineTime"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="140dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/bt_declineTime"
+            android:textColor="#F5F1F1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bt_acceptWalk" />
+
+        <Button
+            android:id="@+id/bt_acceptWalk"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/design_default_color_secondary_variant"
+            android:text="@string/bt_acceptWalk"
+            android:textColor="#F5F1F1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_list_layout" />
+
+        <Button
+            android:id="@+id/bt_declineRoute"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="140dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/bt_declineRoute"
+            android:textColor="#F5F1F1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bt_declineTime" />
+
+        <Button
+            android:id="@+id/bt_Schedule"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/design_default_color_secondary_variant"
+            android:text="@string/bt_schedule"
+            android:textColor="#F5F1F1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_list_layout" />
+
+        <Button
+            android:id="@+id/bt_withdraw"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="140dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/bt_withdraw"
+            android:textColor="#F5F1F1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bt_Schedule" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="35dp"
+            android:text="Team Member Statuses"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_proposed_time" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

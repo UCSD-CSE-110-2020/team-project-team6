@@ -22,6 +22,7 @@ import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.TeamMember;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -45,7 +46,7 @@ public class MemberFragment extends Fragment {
         if (teamViewModel == null) {
             teamViewModel = new ViewModelProvider(requireActivity()).get(TeamViewModel.class);
         }
-        bind_views();
+
         View root = inflater.inflate(R.layout.fragment_members, container, false);
 
         listViewAccepted = (ListView) root.findViewById(R.id.list_team_members);
@@ -56,7 +57,7 @@ public class MemberFragment extends Fragment {
         txtInviterName = root.findViewById(R.id.txt_team_inviter_name);
 
         resetInviteSection();
-        teamViewModel.setHasPendingTeamInvite(false);
+        bind_views();
 
         final FloatingActionButton btNewInvite = root.findViewById(R.id.bt_invite_member);
 
@@ -116,8 +117,10 @@ public class MemberFragment extends Fragment {
                         teamViewModel.setHasPendingTeamInvite(true);
                     } else {
                         Log.i("MemberFragment getTeamInviterData", "found invitation to: " + memberMap.get("email"));
-                        teamViewModel.addTeamInviterName(memberMap.get("name"));
-                        mfAdapterInvited = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamInviterNames(), true);
+                        // teamViewModel.addTeamInviterName(memberMap.get("name"));
+                        ArrayList<String> inviters = new ArrayList<>();
+                        inviters.add(memberMap.get("name"));
+                        mfAdapterInvited = new TeamArrayAdapter(getActivity(), inviters, true);
                         listViewInvited.setAdapter(mfAdapterInvited);
                         mfAdapterInvited.notifyDataSetChanged();
                     }
