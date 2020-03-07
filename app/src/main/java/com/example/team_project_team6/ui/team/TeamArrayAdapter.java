@@ -23,10 +23,10 @@ public class TeamArrayAdapter extends BaseAdapter {
     private boolean isViewInvited;
 
     public TeamArrayAdapter(Context context, ArrayList<String> items, boolean isViewInvited) {
+        Log.i(TAG, "Creating TeamArrayAdapter");
         this.context = context;
         this.items = items;
         this.isViewInvited = isViewInvited;
-        Log.d(TAG, "TEAM ARRAY ADAPTER SEES ITEMS OF LIST SIZE" + items.size());
     }
 
     @Override

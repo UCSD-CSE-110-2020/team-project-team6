@@ -50,7 +50,7 @@ public class TeamViewModel extends ViewModel {
     }
 
     public void setIsMyProposedWalk(boolean myProposedWalk) {
-        isMyProposedWalk = myProposedWalk;
+        this.isMyProposedWalk = myProposedWalk;
     }
 
     public boolean getHasProposedWalk() {

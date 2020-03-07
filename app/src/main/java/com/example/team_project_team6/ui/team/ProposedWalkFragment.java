@@ -76,17 +76,6 @@ public class ProposedWalkFragment extends Fragment {
 
         bind_views();
 
-        if(!teamViewModel.getHasProposedWalk()) {
-            Log.i(TAG, "User does not have a proposed walk in ProposedWalkFragment.");
-            setAllInvisible();
-        } else if(teamViewModel.isMyProposedWalk()) {
-            Log.i(TAG, "Creating my proposed walk.");
-            setInvisibleAcceptDecline();
-        } else {
-            Log.i(TAG, "Creating another user's proposed walk.");
-            setInvisibleScheduleWithdraw();
-        }
-
         bt_schedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,7 +162,7 @@ public class ProposedWalkFragment extends Fragment {
         bt_withdraw.setVisibility(View.INVISIBLE);
     }
 
-    public void setAllInvisible() {
+    public void setAllButtonsInvisible() {
         Log.i(TAG, "Setting ProposedWalkFragment all textviews and buttons invisible.");
         bt_acceptWalk.setVisibility(View.INVISIBLE);
         bt_declineRoute.setVisibility(View.INVISIBLE);
@@ -193,8 +182,12 @@ public class ProposedWalkFragment extends Fragment {
            @Override
            public void onChanged(ProposedWalk proposedWalk) {
                Log.i("ProposedWalkFragment getProposedWalkData", "getting proposed walk data");
-               teamViewModel.setHasProposedWalk(proposedWalk.getProposer().equals("yes"));
+               teamViewModel.setIsMyProposedWalk(proposedWalk.getProposer().equals("yes"));
+               teamViewModel.setHasProposedWalk(true);
+               Log.i(TAG, "teamViewModel has proposed walk: " + teamViewModel.getHasProposedWalk());
+               toggleButtonVisibility();
                populateProposedWalkElements(proposedWalk);
+
            }
         });
 
@@ -215,8 +208,32 @@ public class ProposedWalkFragment extends Fragment {
         txt_date.setText(proposedWalk.getpDayMonthYearDate());
         txt_time.setText(proposedWalk.getpHourSecondTime());
         txt_routeName.setText(proposedWalk.getpRoute().getName());
-        txt_miles.setText(Double.toString(proposedWalk.getpRoute().getWalk().getDist()));
-        txt_steps.setText(Long.toString(proposedWalk.getpRoute().getWalk().getStep()));
+        txt_miles.setText(Double.toString(proposedWalk.getpRoute().getWalk().getDist()) + " mi");
+        txt_steps.setText(Long.toString(proposedWalk.getpRoute().getWalk().getStep()) + " steps");
         txt_startPoint.setText(proposedWalk.getpRoute().getStartPoint());
+    }
+
+    public void toggleButtonVisibility() {
+        if(!teamViewModel.getHasProposedWalk()) {
+            Log.i(TAG, "User does not have a proposed walk in ProposedWalkFragment.");
+            setAllButtonsInvisible();
+        } else {
+            Log.i(TAG, "isMyProposedWalk: " + teamViewModel.isMyProposedWalk());
+            if (teamViewModel.isMyProposedWalk()) {
+                Log.i(TAG, "Creating my proposed walk.");
+                bt_acceptWalk.setVisibility(View.INVISIBLE);
+                bt_declineRoute.setVisibility(View.INVISIBLE);
+                bt_declineTime.setVisibility(View.INVISIBLE);
+                bt_schedule.setVisibility(View.VISIBLE);
+                bt_withdraw.setVisibility(View.VISIBLE);
+            } else {
+                Log.i(TAG, "Creating another user's proposed walk.");
+                bt_acceptWalk.setVisibility(View.VISIBLE);
+                bt_declineRoute.setVisibility(View.VISIBLE);
+                bt_declineTime.setVisibility(View.VISIBLE);
+                bt_schedule.setVisibility(View.INVISIBLE);
+                bt_withdraw.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 }

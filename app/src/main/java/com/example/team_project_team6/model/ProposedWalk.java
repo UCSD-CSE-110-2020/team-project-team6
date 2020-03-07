@@ -7,6 +7,7 @@ public class ProposedWalk{
     private String proposer;
 
     public ProposedWalk() {
+        this.proposer = "";
     }
 
     public ProposedWalk(Route route, String dayMonthYearDate, String hourSecondTime) {

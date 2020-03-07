@@ -562,16 +562,23 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                     .addOnCompleteListener(getWalkTask -> {
                                         if (getWalkTask.isSuccessful()) {
                                             DocumentSnapshot pWalkDoc = getWalkTask.getResult();
-                                            if (pWalkDoc != null) {
+                                            if (pWalkDoc != null && pWalkDoc.exists()) {
                                                 Map<String, Object> map = pWalkDoc.getData();
                                                 Map<String, Object> pWalkMap = (Map<String, Object>) map.get("proposedWalk");
                                                 ProposedWalk pWalk = gson.fromJson(gson.toJson(pWalkMap), ProposedWalk.class);
-                                                if (pWalk.getProposer().equals(getEmail())) {
-                                                    pWalk.setProposer("yes");
+
+                                                if (pWalk != null) {
+                                                    if (pWalk.getProposer().equals(getEmail())) {
+                                                        Log.i(TAG, "Setting current user as proposer of proposed walk");
+                                                        pWalk.setProposer("yes");
+                                                    } else {
+                                                        Log.i(TAG, "Setting current user as receiver of proposed walk");
+                                                        pWalk.setProposer("no");
+                                                    }
+                                                    data.postValue(pWalk);
                                                 } else {
-                                                    pWalk.setProposer("no");
+                                                    Log.i(TAG, "There are no proposed walks in Firebase.");
                                                 }
-                                                data.postValue(pWalk);
 
                                             } else {
                                                 Log.d(TAG, "Failed to retrieve proposed walk from teams");

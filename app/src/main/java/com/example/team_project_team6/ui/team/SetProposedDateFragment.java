@@ -69,7 +69,9 @@ public class SetProposedDateFragment extends Fragment {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                timeEdit.setText(sHour + ":" + sMinute);
+                                String sHourStr = sHour < 10 ? ("0" + sHour) : Integer.toString(sHour);
+                                String sMinuteStr = sMinute < 10 ? ("0" + sMinute) : Integer.toString(sMinute);
+                                timeEdit.setText(sHourStr + ":" + sMinuteStr);
                             }
                         }, hour, minutes, true);
                 tpicker.show();
@@ -88,7 +90,9 @@ public class SetProposedDateFragment extends Fragment {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                dateEdit.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                String dayOfMonthStr = dayOfMonth < 10 ? ("0" + dayOfMonth) : Integer.toString(dayOfMonth);
+                                String monthOfYearStr = monthOfYear + 1 < 10 ? ("0" + (monthOfYear + 1)) : Integer.toString(monthOfYear + 1);
+                                dateEdit.setText(monthOfYearStr + "/" + dayOfMonthStr + "/" + year);
                             }
                         }, year, month, day);
                 dpicker.show();
