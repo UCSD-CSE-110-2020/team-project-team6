@@ -1,5 +1,6 @@
 package com.example.team_project_team6.ui.team;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.VisibleForTesting;
@@ -100,7 +101,6 @@ public class ProposedWalkFragment extends Fragment {
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "withdraw walk clicked");
                 setInvisibleScheduleWithdraw();
-                setInvisibleAcceptDecline();
             }
         });
 
@@ -108,17 +108,9 @@ public class ProposedWalkFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "accept walk clicked");
-                setInvisibleScheduleWithdraw();
-                setInvisibleAcceptDecline();
-            }
-        });
-
-        bt_declineTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("Proposed Walk fragment", "decline time clicked");
-                setInvisibleScheduleWithdraw();
-                setInvisibleAcceptDecline();
+                bt_acceptWalk.setBackgroundColor(getResources().getColor(R.color.design_default_color_secondary_variant));
+                bt_declineRoute.setBackgroundColor(Color.GRAY);
+                bt_declineTime.setBackgroundColor(Color.GRAY);
             }
         });
 
@@ -126,14 +118,26 @@ public class ProposedWalkFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "decline route clicked");
-                setInvisibleScheduleWithdraw();
-                setInvisibleAcceptDecline();
+                bt_acceptWalk.setBackgroundColor(Color.GRAY);
+                bt_declineRoute.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                bt_declineTime.setBackgroundColor(Color.GRAY);
+            }
+        });
+
+        bt_declineTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Proposed Walk fragment", "decline time clicked");
+                bt_acceptWalk.setBackgroundColor(Color.GRAY);
+                bt_declineRoute.setBackgroundColor(Color.GRAY);
+                bt_declineTime.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             }
         });
 
         listView.setOnTouchListener(new ListView.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                Log.i(TAG, "Disabling ScrollView touch event interception for ListView");
                 int action = event.getAction();
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
@@ -189,7 +193,7 @@ public class ProposedWalkFragment extends Fragment {
            @Override
            public void onChanged(ProposedWalk proposedWalk) {
                Log.i("ProposedWalkFragment getProposedWalkData", "getting proposed walk data");
-               teamViewModel.setHasProposedWalk(true);
+               teamViewModel.setHasProposedWalk(proposedWalk.getProposer().equals("yes"));
                populateProposedWalkElements(proposedWalk);
            }
         });
@@ -207,6 +211,7 @@ public class ProposedWalkFragment extends Fragment {
     }
 
     public void populateProposedWalkElements(ProposedWalk proposedWalk) {
+        Log.i(TAG, "Populating Proposed Walk elements");
         txt_date.setText(proposedWalk.getpDayMonthYearDate());
         txt_time.setText(proposedWalk.getpHourSecondTime());
         txt_routeName.setText(proposedWalk.getpRoute().getName());

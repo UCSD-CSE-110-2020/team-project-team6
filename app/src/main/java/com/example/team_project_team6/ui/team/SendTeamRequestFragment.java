@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.example.team_project_team6.R;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 public class SendTeamRequestFragment extends Fragment {
     @VisibleForTesting
     static TeamViewModel teamViewModel = null;
@@ -41,21 +43,23 @@ public class SendTeamRequestFragment extends Fragment {
         btSendInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Log.i(TAG, "Clicked on send invite button from SendTeamRequestFragment");
                 if (gmailInvitation.getText().toString().isEmpty()) {
+                    Log.i(TAG, "Gmail field is empty");
                     gmailInvitation.requestFocus();
                     Toast alert = Toast.makeText(getActivity(), getString(R.string.alert_gmail), Toast.LENGTH_SHORT);
                     int backgroundColor = ResourcesCompat.getColor(alert.getView().getResources(), R.color.colorAccent, null);
                     alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
                     alert.show();
                 } else {
-                    Log.i("go back to team", "Clicked on 'send invite' button");
+                    Log.i(TAG, "Sending team request");
 
                     // send team request
                     teamViewModel.sendTeamRequest(gmailInvitation.getText().toString());
                     teamViewModel.setIsMyProposedWalk(true);
                     NavController controller = Navigation.findNavController(requireView());
                     if (controller.getCurrentDestination().getId() == R.id.sendTeamRequestFragment) {
+                        Log.i(TAG, "Navigating to team fragment");
                         controller.navigate(R.id.R_id_SendTeamRequestFragment_to_action_teamFragment_);
                     }
                 }

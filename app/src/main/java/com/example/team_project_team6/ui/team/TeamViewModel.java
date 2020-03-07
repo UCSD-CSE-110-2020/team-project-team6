@@ -42,7 +42,7 @@ public class TeamViewModel extends ViewModel {
 
         allMemberGoingStatuses = new MutableLiveData<>(goingStatus);
         hasPendingTeamInvite = false;
-        hasProposedWalk = true;
+        hasProposedWalk = false;
     }
 
     public boolean isMyProposedWalk() {
