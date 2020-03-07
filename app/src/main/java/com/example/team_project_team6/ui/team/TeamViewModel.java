@@ -49,7 +49,7 @@ public class TeamViewModel extends ViewModel {
         return isMyProposedWalk;
     }
 
-    public void setMyProposedWalk(boolean myProposedWalk) {
+    public void setIsMyProposedWalk(boolean myProposedWalk) {
         isMyProposedWalk = myProposedWalk;
     }
 
@@ -67,6 +67,14 @@ public class TeamViewModel extends ViewModel {
 
     public void sendProposedWalk(ProposedWalk proposedWalk) {
             saveData.addProposedWalk(proposedWalk);
+    }
+
+    public LiveData<ProposedWalk> getProposedWalkData() {
+        if(saveData != null) {
+            return saveData.getProposedWalk();
+        } else {
+            return new MutableLiveData<>();
+        }
     }
 
     public void addTeamInviterName(String inviterName) {

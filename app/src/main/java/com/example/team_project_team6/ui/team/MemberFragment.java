@@ -116,7 +116,7 @@ public class MemberFragment extends Fragment {
                         teamViewModel.setHasPendingTeamInvite(true);
                     } else {
                         Log.i("MemberFragment getTeamInviterData", "found invitation to: " + memberMap.get("email"));
-                        teamViewModel.addTeamInviterName(memberMap.get("name"));
+                        // teamViewModel.addTeamInviterName(memberMap.get("name"));
                         mfAdapterInvited = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamInviterNames(), true);
                         listViewInvited.setAdapter(mfAdapterInvited);
                         mfAdapterInvited.notifyDataSetChanged();

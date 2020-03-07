@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.team_project_team6.R;
+import com.example.team_project_team6.model.ProposedWalk;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -184,15 +185,33 @@ public class ProposedWalkFragment extends Fragment {
     }
 
     public void bind_views() {
+        teamViewModel.getProposedWalkData().observe(getViewLifecycleOwner(), new Observer<ProposedWalk>() {
+           @Override
+           public void onChanged(ProposedWalk proposedWalk) {
+               Log.i("ProposedWalkFragment getProposedWalkData", "getting proposed walk data");
+               teamViewModel.setHasProposedWalk(true);
+               populateProposedWalkElements(proposedWalk);
+           }
+        });
+
         teamViewModel.getAllMemberGoingData().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
             @Override
             public void onChanged(Map<String, String> memberGoingStatusMap) {
-                Log.i("MemberFragment getMemberGoingData", "getting changed team member status data");
+                Log.i("ProposedWalkFragment getMemberGoingData", "getting changed team member status data");
                 teamViewModel.updateMemberGoingData(memberGoingStatusMap);
                 mfAdapter = new TeamArrayAdapter(getActivity(), teamViewModel.getAllMemberGoingStatuses(), false);
                 listView.setAdapter(mfAdapter);
                 mfAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void populateProposedWalkElements(ProposedWalk proposedWalk) {
+        txt_date.setText(proposedWalk.getpDayMonthYearDate());
+        txt_time.setText(proposedWalk.getpHourSecondTime());
+        txt_routeName.setText(proposedWalk.getpRoute().getName());
+        txt_miles.setText(Double.toString(proposedWalk.getpRoute().getWalk().getDist()));
+        txt_steps.setText(Long.toString(proposedWalk.getpRoute().getWalk().getStep()));
+        txt_startPoint.setText(proposedWalk.getpRoute().getStartPoint());
     }
 }

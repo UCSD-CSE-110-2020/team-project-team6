@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,7 +53,7 @@ public class SendTeamRequestFragment extends Fragment {
 
                     // send team request
                     teamViewModel.sendTeamRequest(gmailInvitation.getText().toString());
-
+                    teamViewModel.setIsMyProposedWalk(true);
                     NavController controller = Navigation.findNavController(requireView());
                     if (controller.getCurrentDestination().getId() == R.id.sendTeamRequestFragment) {
                         controller.navigate(R.id.R_id_SendTeamRequestFragment_to_action_teamFragment_);
