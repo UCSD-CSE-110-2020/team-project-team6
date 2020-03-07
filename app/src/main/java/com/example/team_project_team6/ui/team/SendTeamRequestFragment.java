@@ -60,7 +60,7 @@ public class SendTeamRequestFragment extends Fragment {
                     NavController controller = Navigation.findNavController(requireView());
                     if (controller.getCurrentDestination().getId() == R.id.sendTeamRequestFragment) {
                         Log.i(TAG, "Navigating to team fragment");
-                        controller.navigate(R.id.R_id_SendTeamRequestFragment_to_action_teamFragment_);
+                        controller.navigate(R.id.R_id_SendTeamRequestFragment_to_action_teamFragment);
                     }
                 }
             }

@@ -33,9 +33,11 @@ public class TeamViewModel extends ViewModel {
     public TeamViewModel() {
         ArrayList<TeamMember> data = new ArrayList<TeamMember>();
         Map<String,String> goingStatus = new HashMap<>();
-        goingStatus.put("maryam","accepted");
-        goingStatus.put("cora","declined walk");
-        goingStatus.put("warren","decline time");
+
+//        Mock data
+//        goingStatus.put("maryam","accepted");
+//        goingStatus.put("cora","declined walk");
+//        goingStatus.put("warren","declined time");
 
         teamInviterNames = new ArrayList<>();
         mTeamMembers = new MutableLiveData<>(data);
@@ -165,12 +167,14 @@ public class TeamViewModel extends ViewModel {
         }
     }
 
-    public ArrayList<String> getAllMemberGoingStatuses() {
-        Log.e(TAG,"TEAM MEMBER SIZE is equal " + allMemberGoingStatuses.getValue().size());
+    public ArrayList<String> getAllMemberGoingStatusesExceptSelf() {
+        Log.e(TAG,"Team size: " + allMemberGoingStatuses.getValue().size());
         ArrayList<String> memberStatusList =new ArrayList<>();
         for( String member : allMemberGoingStatuses.getValue().keySet()){
-            String nameAndStatus= member + " " + allMemberGoingStatuses.getValue().get(member);
-            memberStatusList.add(nameAndStatus);
+            if(!member.equals("self")) {
+                String nameAndStatus = member + " " + allMemberGoingStatuses.getValue().get(member);
+                memberStatusList.add(nameAndStatus);
+            }
         }
         return memberStatusList;
     }

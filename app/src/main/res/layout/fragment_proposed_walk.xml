@@ -96,7 +96,7 @@
         <LinearLayout
             android:id="@+id/linear_list_layout"
             android:layout_width="402dp"
-            android:layout_height="175dp"
+            android:layout_height="112dp"
             android:layout_marginStart="44dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="44dp"
@@ -164,7 +164,6 @@
             android:textColor="#F5F1F1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linear_list_layout" />
-
 
         <Button
             android:id="@+id/bt_withdraw"

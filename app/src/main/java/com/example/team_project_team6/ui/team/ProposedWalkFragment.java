@@ -57,7 +57,7 @@ public class ProposedWalkFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_proposed_walk, container, false);
 
-        goingStatusArray = teamViewModel.getAllMemberGoingStatuses();
+        goingStatusArray = teamViewModel.getAllMemberGoingStatusesExceptSelf();
         mfAdapter = new TeamArrayAdapter(getActivity(), goingStatusArray, false);
         listView = (ListView) root.findViewById(R.id.list_is_going);
         listView.setAdapter(mfAdapter);
@@ -74,6 +74,8 @@ public class ProposedWalkFragment extends Fragment {
         txt_steps = root.findViewById(R.id.txt_proposed_steps);
         txt_startPoint = root.findViewById(R.id.txt_proposed_startingPoint);
 
+        setAllButtonsInvisible();
+        setAllChangeableTextInvisible();
         bind_views();
 
         bt_schedule.setOnClickListener(new View.OnClickListener() {
@@ -97,9 +99,7 @@ public class ProposedWalkFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "accept walk clicked");
-                bt_acceptWalk.setBackgroundColor(getResources().getColor(R.color.design_default_color_secondary_variant));
-                bt_declineRoute.setBackgroundColor(Color.GRAY);
-                bt_declineTime.setBackgroundColor(Color.GRAY);
+                toggleAccept();
             }
         });
 
@@ -107,9 +107,7 @@ public class ProposedWalkFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "decline route clicked");
-                bt_acceptWalk.setBackgroundColor(Color.GRAY);
-                bt_declineRoute.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                bt_declineTime.setBackgroundColor(Color.GRAY);
+                toggleDeclineRoute();
             }
         });
 
@@ -117,9 +115,7 @@ public class ProposedWalkFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "decline time clicked");
-                bt_acceptWalk.setBackgroundColor(Color.GRAY);
-                bt_declineRoute.setBackgroundColor(Color.GRAY);
-                bt_declineTime.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                toggleDeclineTime();
             }
         });
 
@@ -149,41 +145,13 @@ public class ProposedWalkFragment extends Fragment {
         return root;
     }
 
-    public void setInvisibleAcceptDecline() {
-        Log.i(TAG, "Setting ProposedWalkFragment accept and decline buttons invisible.");
-        bt_acceptWalk.setVisibility(View.INVISIBLE);
-        bt_declineRoute.setVisibility(View.INVISIBLE);
-        bt_declineTime.setVisibility(View.INVISIBLE);
-    }
-
-    public void setInvisibleScheduleWithdraw() {
-        Log.i(TAG, "Setting ProposedWalkFragment schedule and withdraw buttons invisible.");
-        bt_schedule.setVisibility(View.INVISIBLE);
-        bt_withdraw.setVisibility(View.INVISIBLE);
-    }
-
-    public void setAllButtonsInvisible() {
-        Log.i(TAG, "Setting ProposedWalkFragment all textviews and buttons invisible.");
-        bt_acceptWalk.setVisibility(View.INVISIBLE);
-        bt_declineRoute.setVisibility(View.INVISIBLE);
-        bt_declineTime.setVisibility(View.INVISIBLE);
-        bt_schedule.setVisibility(View.INVISIBLE);
-        bt_withdraw.setVisibility(View.INVISIBLE);
-        txt_date.setVisibility(View.INVISIBLE);
-        txt_time.setVisibility(View.INVISIBLE);
-        txt_routeName.setVisibility(View.INVISIBLE);
-        txt_miles.setVisibility(View.INVISIBLE);
-        txt_steps.setVisibility(View.INVISIBLE);
-        txt_startPoint.setVisibility(View.INVISIBLE);
-    }
-
     public void bind_views() {
         teamViewModel.getProposedWalkData().observe(getViewLifecycleOwner(), new Observer<ProposedWalk>() {
            @Override
            public void onChanged(ProposedWalk proposedWalk) {
                Log.i("ProposedWalkFragment getProposedWalkData", "getting proposed walk data");
                teamViewModel.setIsMyProposedWalk(proposedWalk.getProposer().equals("yes"));
-               teamViewModel.setHasProposedWalk(true);
+               teamViewModel.setHasProposedWalk(proposedWalk != null);
                Log.i(TAG, "teamViewModel has proposed walk: " + teamViewModel.getHasProposedWalk());
                toggleButtonVisibility();
                populateProposedWalkElements(proposedWalk);
@@ -196,11 +164,48 @@ public class ProposedWalkFragment extends Fragment {
             public void onChanged(Map<String, String> memberGoingStatusMap) {
                 Log.i("ProposedWalkFragment getMemberGoingData", "getting changed team member status data");
                 teamViewModel.updateMemberGoingData(memberGoingStatusMap);
-                mfAdapter = new TeamArrayAdapter(getActivity(), teamViewModel.getAllMemberGoingStatuses(), false);
+                mfAdapter = new TeamArrayAdapter(getActivity(), teamViewModel.getAllMemberGoingStatusesExceptSelf(), false);
                 listView.setAdapter(mfAdapter);
                 mfAdapter.notifyDataSetChanged();
+
+                // TODO: set button colors for current user for accept or decline buttons
+                if(teamViewModel.isMyProposedWalk()) {
+                    switch (memberGoingStatusMap.get("self")) {
+                        case "accepted":
+                            toggleAccept();
+                            break;
+                        case "declined route":
+                            toggleDeclineRoute();
+                            break;
+                        case "declined time":
+                            toggleDeclineTime();
+                            break;
+                    }
+                }
             }
         });
+    }
+
+    public void toggleAccept() {
+        Log.i(TAG, "Setting accept button colors");
+        bt_acceptWalk.setBackgroundColor(getResources().getColor(R.color.design_default_color_secondary_variant));
+        bt_declineRoute.setBackgroundColor(Color.GRAY);
+        bt_declineTime.setBackgroundColor(Color.GRAY);
+    }
+
+    public void toggleDeclineRoute() {
+        Log.i(TAG, "Setting decline route button colors");
+        bt_acceptWalk.setBackgroundColor(Color.GRAY);
+        bt_declineRoute.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        bt_declineTime.setBackgroundColor(Color.GRAY);
+
+    }
+
+    public void toggleDeclineTime() {
+        Log.i(TAG, "Setting decline time button colors");
+        bt_acceptWalk.setBackgroundColor(Color.GRAY);
+        bt_declineRoute.setBackgroundColor(Color.GRAY);
+        bt_declineTime.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
     public void populateProposedWalkElements(ProposedWalk proposedWalk) {
@@ -221,6 +226,7 @@ public class ProposedWalkFragment extends Fragment {
             Log.i(TAG, "isMyProposedWalk: " + teamViewModel.isMyProposedWalk());
             if (teamViewModel.isMyProposedWalk()) {
                 Log.i(TAG, "Creating my proposed walk.");
+                setAllChangeableTextVisible();
                 bt_acceptWalk.setVisibility(View.INVISIBLE);
                 bt_declineRoute.setVisibility(View.INVISIBLE);
                 bt_declineTime.setVisibility(View.INVISIBLE);
@@ -228,6 +234,7 @@ public class ProposedWalkFragment extends Fragment {
                 bt_withdraw.setVisibility(View.VISIBLE);
             } else {
                 Log.i(TAG, "Creating another user's proposed walk.");
+                setAllChangeableTextVisible();
                 bt_acceptWalk.setVisibility(View.VISIBLE);
                 bt_declineRoute.setVisibility(View.VISIBLE);
                 bt_declineTime.setVisibility(View.VISIBLE);
@@ -235,5 +242,45 @@ public class ProposedWalkFragment extends Fragment {
                 bt_withdraw.setVisibility(View.INVISIBLE);
             }
         }
+    }
+
+    public void setInvisibleAcceptDecline() {
+        Log.i(TAG, "Setting ProposedWalkFragment accept and decline buttons invisible.");
+        bt_acceptWalk.setVisibility(View.INVISIBLE);
+        bt_declineRoute.setVisibility(View.INVISIBLE);
+        bt_declineTime.setVisibility(View.INVISIBLE);
+    }
+
+    public void setInvisibleScheduleWithdraw() {
+        Log.i(TAG, "Setting ProposedWalkFragment schedule and withdraw buttons invisible.");
+        bt_schedule.setVisibility(View.INVISIBLE);
+        bt_withdraw.setVisibility(View.INVISIBLE);
+    }
+
+    public void setAllButtonsInvisible() {
+        Log.i(TAG, "Setting ProposedWalkFragment all textviews and buttons invisible.");
+        bt_acceptWalk.setVisibility(View.INVISIBLE);
+        bt_declineRoute.setVisibility(View.INVISIBLE);
+        bt_declineTime.setVisibility(View.INVISIBLE);
+        bt_schedule.setVisibility(View.INVISIBLE);
+        bt_withdraw.setVisibility(View.INVISIBLE);
+    }
+
+    public void setAllChangeableTextInvisible() {
+        txt_date.setVisibility(View.INVISIBLE);
+        txt_time.setVisibility(View.INVISIBLE);
+        txt_routeName.setVisibility(View.INVISIBLE);
+        txt_miles.setVisibility(View.INVISIBLE);
+        txt_steps.setVisibility(View.INVISIBLE);
+        txt_startPoint.setVisibility(View.INVISIBLE);
+    }
+
+    public void setAllChangeableTextVisible() {
+        txt_date.setVisibility(View.VISIBLE);
+        txt_time.setVisibility(View.VISIBLE);
+        txt_routeName.setVisibility(View.VISIBLE);
+        txt_miles.setVisibility(View.VISIBLE);
+        txt_steps.setVisibility(View.VISIBLE);
+        txt_startPoint.setVisibility(View.VISIBLE);
     }
 }

@@ -134,7 +134,7 @@ public class SetProposedDateFragment extends Fragment {
                     // navigate to proposed walk fragment
                     if (controller.getCurrentDestination().getId() == R.id.setProposedDate) {
                         Log.i(TAG, "Navigating from setProposedDateFragment to ProposeWalkFragment");
-                        controller.navigate(R.id.navigate_SetDateFragment_to_ProposedWalkFragment);
+                        controller.navigate(R.id.navigate_SetDateFragment_to_TeamFragment);
                     }
                 }
             }
