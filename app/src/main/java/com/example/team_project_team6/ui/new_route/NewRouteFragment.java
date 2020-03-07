@@ -27,11 +27,6 @@ import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.Walk;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 public class NewRouteFragment extends Fragment {
 
@@ -137,29 +132,29 @@ public class NewRouteFragment extends Fragment {
 
                     if(radDiff != null) {
                         String lvlType = radDiff.getText().toString();
-                        features.setLevel(lvlType);
+                        features.findLevel(lvlType);
                     }
 
                     if(radLoop != null) {
                         String dirType = radLoop.getText().toString();
-                        features.setDirectionType(dirType);
+                        features.findDirectionType(dirType);
                     }
 
                     if(radHilly != null) {
                         String terrainType = radHilly.getText().toString();
-                        features.setTerrain(terrainType);
+                        features.findTerrain(terrainType);
                     }
 
                     features.setFavorite(false);
 
                     if(radStreet != null) {
                         String typeType = radStreet.getText().toString();
-                        features.setType(typeType);
+                        features.findType(typeType);
                     }
 
                     if (radEven != null) {
                         String surfaceType = radEven.getText().toString();
-                        features.setSurface(surfaceType);
+                        features.findSurface(surfaceType);
                     }
 
                     Log.i("value of Features in NewRouteFragment", features.toString());

@@ -42,7 +42,7 @@ public class Features {
         this.level = level;
     }
 
-    public void setLevel(String level) {
+    public void findLevel(String level) {
         Log.i("setLevel from Features", "value: " + level);
         switch (level) {
             case "Easy":
@@ -70,7 +70,7 @@ public class Features {
         this.directionType = directionType;
     }
 
-    public void setDirectionType(String directionType) {
+    public void findDirectionType(String directionType) {
         Log.i("setDirectionType from Features", "value: " + directionType);
         switch (directionType) {
             case "Loop":
@@ -95,7 +95,7 @@ public class Features {
         this.terrain = terrain;
     }
 
-    public void setTerrain(String terrain) {
+    public void findTerrain(String terrain) {
         Log.i("setTerrain from Features", "value: " + terrain);
         switch (terrain) {
             case "Flat":
@@ -130,7 +130,7 @@ public class Features {
         this.type = type;
     }
 
-    public void setType(String type) {
+    public void findType(String type) {
         Log.i("setType from Features", "value: " + type);
         switch (type) {
             case "Street":
@@ -155,7 +155,7 @@ public class Features {
         this.surface = surface;
     }
 
-    public void setSurface(String surface) {
+    public void findSurface(String surface) {
         Log.i("setSurface from Features", "value: " + surface);
         switch (surface) {
             case "Even":
