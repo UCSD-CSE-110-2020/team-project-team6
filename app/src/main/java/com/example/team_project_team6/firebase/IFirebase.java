@@ -33,4 +33,5 @@ public interface IFirebase {
     LiveData<HashMap<String, String>> downloadMemberGoingStatuses();
 
     void uploadProposedWalk(ProposedWalk proposedWalk);
+    LiveData<ProposedWalk> downloadProposedWalk();
 }

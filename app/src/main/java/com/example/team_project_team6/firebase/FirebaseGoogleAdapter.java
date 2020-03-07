@@ -528,6 +528,57 @@ public class FirebaseGoogleAdapter implements IFirebase {
                 .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
     }
 
+    public synchronized LiveData<ProposedWalk> downloadProposedWalk() {
+        MutableLiveData<ProposedWalk> data = new MutableLiveData<>();
+
+        if (user == null) {
+            Log.d(TAG, "Could not download member going statuses data without signing in");
+            return data;
+        }
+
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(getTeamTask -> {
+                    if (getTeamTask.isSuccessful()) {
+                        DocumentSnapshot teamDoc = getTeamTask.getResult();
+                        if (teamDoc != null) {
+
+                            String team = (String) teamDoc.get("team");
+
+                            db.collection("teams")
+                                    .document(team)
+                                    .get()
+                                    .addOnCompleteListener(getWalkTask -> {
+                                        if (getWalkTask.isSuccessful()) {
+                                            DocumentSnapshot pWalkDoc = getWalkTask.getResult();
+                                            if (pWalkDoc != null) {
+                                                Map<String, Object> map = pWalkDoc.getData();
+                                                ProposedWalk pWalk = gson.fromJson(gson.toJson(map), ProposedWalk.class);
+
+                                                data.postValue(pWalk);
+
+                                            } else {
+                                                Log.d(TAG, "Failed to retrieve proposed walk from teams");
+                                            }
+                                        } else {
+                                            Log.d(TAG, "No such document");
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to download proposed walk", e));
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
+
+
+        return data;
+    }
+
     public synchronized LiveData<HashMap<String, String>> downloadMemberGoingStatuses() {
         MutableLiveData<HashMap<String, String>> data = new MutableLiveData<>();
 
