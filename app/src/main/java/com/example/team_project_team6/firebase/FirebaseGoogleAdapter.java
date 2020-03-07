@@ -515,6 +515,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                             String team = (String) teamDoc.get("team");
 
                             HashMap<String, Object> pwMap = new HashMap<>();
+                            proposedWalk.setProposer(getEmail());
                             pwMap.put("proposedWalk", proposedWalk);
 
                             db.collection("teams")
