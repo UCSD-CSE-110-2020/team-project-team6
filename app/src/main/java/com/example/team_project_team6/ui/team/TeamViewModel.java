@@ -2,6 +2,7 @@ package com.example.team_project_team6.ui.team;
 
 import android.util.Log;
 
+import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
 
@@ -21,7 +22,7 @@ public class TeamViewModel extends ViewModel {
     private MutableLiveData<ArrayList<TeamMember>> mTeamMembers;
     private ArrayList<String> teamInviterNames;
     private MutableLiveData<TeamMember> mInviter;
-    private MutableLiveData<Map<String, String>> memberGoingStatus;
+    private MutableLiveData<Map<String, String>> allMemberGoingStatuses;
     private boolean hasPendingTeamInvite; // records if another user has sent this user a team invite
     private boolean hasProposedWalk; // records if user has proposedWalk
     private SaveData saveData;
@@ -39,10 +40,11 @@ public class TeamViewModel extends ViewModel {
         teamInviterNames = new ArrayList<>();
         mTeamMembers = new MutableLiveData<>(data);
 
-        memberGoingStatus = new MutableLiveData<>(goingStatus);
+        allMemberGoingStatuses = new MutableLiveData<>(goingStatus);
         hasPendingTeamInvite = false;
         hasProposedWalk = true;
     }
+
     public boolean isMyProposedWalk() {
         return isMyProposedWalk;
     }
@@ -61,6 +63,10 @@ public class TeamViewModel extends ViewModel {
 
     public void updateMTeamMembers(ArrayList<TeamMember> teamMembers) {
         mTeamMembers.postValue(teamMembers);
+    }
+
+    public void sendProposedWalk(ProposedWalk proposedWalk) {
+            saveData.addProposedWalk(proposedWalk);
     }
 
     public void addTeamInviterName(String inviterName) {
@@ -140,18 +146,22 @@ public class TeamViewModel extends ViewModel {
     }
 
     public void updateMemberGoingData(Map<String, String> memberGoingStatusMap) {
-        memberGoingStatus.postValue(memberGoingStatusMap);
+        allMemberGoingStatuses.postValue(memberGoingStatusMap);
     }
 
-    public LiveData<Map<String, String>> getMemberGoingData() {
-        return this.memberGoingStatus;
+    public LiveData<HashMap<String, String>> getAllMemberGoingData() {
+        if (saveData != null) {
+            return saveData.getMemberGoingStatuses();
+        } else {
+            return new MutableLiveData<>();
+        }
     }
 
-    public ArrayList<String> getMemberGoingStatus() {
-        Log.e(TAG,"TEAM MEMBER SIZE is equal " + memberGoingStatus.getValue().size());
+    public ArrayList<String> getAllMemberGoingStatuses() {
+        Log.e(TAG,"TEAM MEMBER SIZE is equal " + allMemberGoingStatuses.getValue().size());
         ArrayList<String> memberStatusList =new ArrayList<>();
-        for( String member : memberGoingStatus.getValue().keySet()){
-            String nameAndStatus= member + " " + memberGoingStatus.getValue().get(member);
+        for( String member : allMemberGoingStatuses.getValue().keySet()){
+            String nameAndStatus= member + " " + allMemberGoingStatuses.getValue().get(member);
             memberStatusList.add(nameAndStatus);
         }
         return memberStatusList;

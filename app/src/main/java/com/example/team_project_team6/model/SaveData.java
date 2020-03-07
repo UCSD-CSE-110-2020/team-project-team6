@@ -83,8 +83,13 @@ public class SaveData {
         firebaseAdapter.uploadTeamRequest(email);
     }
 
+    public void addProposedWalk(ProposedWalk proposedWalk) { firebaseAdapter.uploadProposedWalk(proposedWalk); }
     public LiveData<HashMap<String, String>> getTeamInviter() {
         return firebaseAdapter.downloadTeamRequest();
+    }
+
+    public LiveData<HashMap<String, String>> getMemberGoingStatuses() {
+        return firebaseAdapter.downloadMemberGoingStatuses();
     }
 
     public void acceptTeamRequest() {

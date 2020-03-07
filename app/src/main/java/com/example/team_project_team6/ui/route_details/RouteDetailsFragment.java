@@ -181,12 +181,14 @@ public class RouteDetailsFragment extends Fragment {
         });
 
 
-        final Button ProposeWalk = root.findViewById(R.id.bt_propose);
-        ProposeWalk.setOnClickListener(new View.OnClickListener() {
+        final Button proposeWalk = root.findViewById(R.id.bt_propose);
+        proposeWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (controller.getCurrentDestination().getId() == R.id.routeDetailsFragment) {
                     controller.navigate(R.id.action_routeDetailFragment_to_SetProposeDate);
+
+                    mViewModel.setRoute(route);
                 }
             }
         });

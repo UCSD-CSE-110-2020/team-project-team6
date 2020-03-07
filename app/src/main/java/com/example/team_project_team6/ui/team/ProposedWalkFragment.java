@@ -55,7 +55,7 @@ public class ProposedWalkFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_proposed_walk, container, false);
 
-        goingStatusArray = teamViewModel.getMemberGoingStatus();
+        goingStatusArray = teamViewModel.getAllMemberGoingStatuses();
         mfAdapter = new TeamArrayAdapter(getActivity(), goingStatusArray, false);
         listView = (ListView) root.findViewById(R.id.list_is_going);
         listView.setAdapter(mfAdapter);
@@ -184,12 +184,12 @@ public class ProposedWalkFragment extends Fragment {
     }
 
     public void bind_views() {
-        teamViewModel.getMemberGoingData().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
+        teamViewModel.getAllMemberGoingData().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
             @Override
             public void onChanged(Map<String, String> memberGoingStatusMap) {
                 Log.i("MemberFragment getMemberGoingData", "getting changed team member status data");
                 teamViewModel.updateMemberGoingData(memberGoingStatusMap);
-                mfAdapter = new TeamArrayAdapter(getActivity(), teamViewModel.getMemberGoingStatus(), false);
+                mfAdapter = new TeamArrayAdapter(getActivity(), teamViewModel.getAllMemberGoingStatuses(), false);
                 listView.setAdapter(mfAdapter);
                 mfAdapter.notifyDataSetChanged();
             }

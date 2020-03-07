@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.TeamInvite;
 import com.example.team_project_team6.model.TeamMember;
@@ -489,6 +490,27 @@ public class FirebaseGoogleAdapter implements IFirebase {
                 })
                 .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
 
+        return data;
+    }
+
+    public void uploadProposedWalk(ProposedWalk proposedWalk) {
+        if(user == null) {
+            Log.d(TAG, "Could not send proposed walk without signing in");
+            return;
+        }
+
+        // TODO upload a proposed walk
+    }
+
+    public synchronized LiveData<HashMap<String, String>> downloadMemberGoingStatuses() {
+        MutableLiveData<HashMap<String, String>> data = new MutableLiveData<>();
+
+        if (user == null) {
+            Log.d(TAG, "Could not download member going statuses data without signing in");
+            return data;
+        }
+
+        // TODO update member attendance statuses for team
         return data;
     }
 }
