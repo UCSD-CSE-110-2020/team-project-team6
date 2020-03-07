@@ -413,6 +413,11 @@ public class FirebaseGoogleAdapter implements IFirebase {
     public synchronized LiveData<HashMap<String, String>> downloadTeamRequest() {
         MutableLiveData<HashMap<String, String>> data = new MutableLiveData<>();
 
+        if (user == null) {
+            Log.d(TAG, "Could not send team request without signing in");
+            return data;
+        }
+
         db.collection("users")
                 .document(getEmail())
                 .get()
@@ -435,7 +440,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                         Log.e(TAG, "Failed to retrieve team invitations");
                     }
                 })
-                .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));;
+                .addOnFailureListener(queryDocumentSnapshots -> Log.e(TAG, "Failed to read data from firebase"));
 
         return data;
     }
