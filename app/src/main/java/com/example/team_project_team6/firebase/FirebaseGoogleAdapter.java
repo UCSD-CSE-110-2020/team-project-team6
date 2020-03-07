@@ -499,7 +499,33 @@ public class FirebaseGoogleAdapter implements IFirebase {
             return;
         }
 
-        // TODO upload a proposed walk
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(getTeamTask -> {
+                    if (getTeamTask.isSuccessful()) {
+                        DocumentSnapshot teamDoc = getTeamTask.getResult();
+                        if (teamDoc != null) {
+
+                            String team = (String) teamDoc.get("team");
+
+                            HashMap<String, Object> pwMap = new HashMap<>();
+                            pwMap.put("proposedWalk", proposedWalk);
+
+                            db.collection("teams")
+                                    .document(team)
+                                    .update(pwMap)
+                                    .addOnCompleteListener(d -> Log.d(TAG, "Successfully stored proposed walk in team database"))
+                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to update proposed walk", e));
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
     }
 
     public synchronized LiveData<HashMap<String, String>> downloadMemberGoingStatuses() {

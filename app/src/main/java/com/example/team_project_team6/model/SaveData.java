@@ -84,6 +84,7 @@ public class SaveData {
     }
 
     public void addProposedWalk(ProposedWalk proposedWalk) { firebaseAdapter.uploadProposedWalk(proposedWalk); }
+
     public LiveData<HashMap<String, String>> getTeamInviter() {
         return firebaseAdapter.downloadTeamRequest();
     }
