@@ -115,14 +115,17 @@ public class SetProposedDateFragment extends Fragment {
                     alert.getView().getBackground().setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN);
                     alert.show();
                 } else {
+                    Log.i(TAG, "Saving proposed walk to Firebase");
                     // save info to firebase
                     RouteDetailsViewModel routeDetailsViewModel = new ViewModelProvider(requireActivity()).get(RouteDetailsViewModel.class);
                     Route route = routeDetailsViewModel.getRoute();
+                    Log.i(TAG, "Route exists: " + (route != null));
                     ProposedWalk proposedWalk = new ProposedWalk(route, dateEdit.getText().toString(), timeEdit.getText().toString());
                     teamViewModel.sendProposedWalk(proposedWalk);
 
                     // navigate to proposed walk fragment
                     if (controller.getCurrentDestination().getId() == R.id.setProposedDate) {
+                        Log.i(TAG, "Navigating from setProposedDateFragment to ProposeWalkFragment");
                         controller.navigate(R.id.navigate_SetDateFragment_to_ProposedWalkFragment);
                     }
                 }

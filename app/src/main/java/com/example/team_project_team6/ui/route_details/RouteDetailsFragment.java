@@ -36,6 +36,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 public class RouteDetailsFragment extends Fragment {
 
     public RouteDetailsViewModel mViewModel;
@@ -180,15 +182,16 @@ public class RouteDetailsFragment extends Fragment {
             }
         });
 
-
         final Button proposeWalk = root.findViewById(R.id.bt_propose);
         proposeWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i(TAG, "Propose walk button pressed in route details fragment");
                 if (controller.getCurrentDestination().getId() == R.id.routeDetailsFragment) {
                     controller.navigate(R.id.action_routeDetailFragment_to_SetProposeDate);
 
                     mViewModel.setRoute(route);
+                    Log.i("Setting route in routeDetailsViewModel", "route name: " + route.getName());
                 }
             }
         });
