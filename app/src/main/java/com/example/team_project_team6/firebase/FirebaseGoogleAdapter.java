@@ -611,6 +611,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
             return;
         }
 
+        // get team uuid
         db.collection("users")
                 .document(getEmail())
                 .get()
@@ -620,6 +621,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                         if (teamDoc != null) {
                             String team = (String) teamDoc.get("team");
 
+                            // get list of team members who have already responded to the proposed walk
                             db.collection("teams")
                                     .document(team)
                                     .get()
@@ -632,31 +634,22 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                                 attendMap.put(getName(), attendance);
                                                 map.put("attendance", attendMap);
 
+                                                // update proposed walk responses with current user's response
                                                 db.collection("teams")
                                                     .document(team)
                                                     .update(map)
                                                     .addOnCompleteListener(d -> Log.d(TAG, "Successfully updated proposed walk attendance"))
-                                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
+                                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to update proposed walk attendance", e));
 
                                             } else {
-
+                                                Log.d(TAG, "No such document");
                                             }
                                         } else {
-
+                                            Log.d(TAG, "No such document");
                                         }
                                     })
-                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
+                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to read attendance data from firebase", e));
 
-//                            HashMap<String, Object> map = new HashMap<>();
-//                            HashMap<String, Object> attendanceMap = new HashMap<>();
-//                            attendanceMap.put("attending", attendance);
-//                            map.put("proposedWalk", attendanceMap);
-
-//                            db.collection("teams")
-//                                    .document(team)
-//                                    .update(map)
-//                                    .addOnCompleteListener(d -> Log.d(TAG, "Successfully updated proposed walk attendance"))
-//                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
                         } else {
                             Log.d(TAG, "Task to retrieve team information failed.");
                         }
@@ -664,7 +657,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                         Log.d(TAG, "No such document");
                     }
                 })
-                .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to read user's team from firebase", e));
     }
 
     public synchronized LiveData<HashMap<String, String>> downloadMemberGoingStatuses() {
@@ -675,7 +668,50 @@ public class FirebaseGoogleAdapter implements IFirebase {
             return data;
         }
 
-        // TODO update member attendance statuses for team
+        // get team uuid
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(teamTask -> {
+                    if (teamTask.isSuccessful()) {
+                        DocumentSnapshot teamDoc = teamTask.getResult();
+                        if (teamDoc != null) {
+                            String team = (String) teamDoc.get("team");
+
+
+                            db.collection("teams")
+                                    .document(team)
+                                    .get()
+                                    .addOnCompleteListener(getAttendanceTask -> {
+                                        if (getAttendanceTask.isSuccessful()) {
+                                            DocumentSnapshot attendDoc = getAttendanceTask.getResult();
+                                            if (attendDoc != null) {
+                                                HashMap<String, String> attendMap = (HashMap<String, String>) attendDoc.get("attendance");
+                                                if (attendMap != null ) {
+                                                    String self = attendMap.get(getName());
+                                                    if (self != null) {
+                                                        attendMap.put("self", self);
+                                                    }
+                                                    data.postValue(attendMap);
+                                                }
+                                            } else {
+                                                Log.d(TAG, "No such document");
+                                            }
+                                        } else {
+                                            Log.d(TAG, "No such document");
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to read attendance data from firebase", e));
+
+                        } else {
+                            Log.d(TAG, "Task to retrieve team information failed.");
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to read user's team from firebase", e));
+
         return data;
     }
 }

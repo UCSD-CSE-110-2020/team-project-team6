@@ -23,6 +23,7 @@ import com.example.team_project_team6.model.ProposedWalk;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -172,9 +173,8 @@ public class ProposedWalkFragment extends Fragment {
                 listView.setAdapter(mfAdapter);
                 mfAdapter.notifyDataSetChanged();
 
-                // TODO: set button colors for current user for accept or decline buttons
-                if(teamViewModel.isMyProposedWalk()) {
-                    switch (memberGoingStatusMap.get("self")) {
+                if(memberGoingStatusMap != null && !teamViewModel.isMyProposedWalk()) {
+                    switch (Objects.requireNonNull(memberGoingStatusMap.get("self"))) {
                         case "accepted":
                             toggleAccept();
                             break;
