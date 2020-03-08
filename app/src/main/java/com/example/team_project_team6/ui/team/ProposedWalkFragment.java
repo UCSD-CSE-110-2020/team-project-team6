@@ -101,14 +101,7 @@ public class ProposedWalkFragment extends Fragment {
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "accept walk clicked");
                 toggleAccept();
-            }
-        });
-
-        bt_declineRoute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("Proposed Walk fragment", "decline route clicked");
-                toggleDeclineRoute();
+                teamViewModel.updateMemberGoingStatus("accepted");
             }
         });
 
@@ -117,6 +110,16 @@ public class ProposedWalkFragment extends Fragment {
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "decline time clicked");
                 toggleDeclineTime();
+                teamViewModel.updateMemberGoingStatus("declined time");
+            }
+        });
+
+        bt_declineRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Proposed Walk fragment", "decline route clicked");
+                toggleDeclineRoute();
+                teamViewModel.updateMemberGoingStatus("declined route");
             }
         });
 
@@ -175,11 +178,11 @@ public class ProposedWalkFragment extends Fragment {
                         case "accepted":
                             toggleAccept();
                             break;
-                        case "declined route":
-                            toggleDeclineRoute();
-                            break;
                         case "declined time":
                             toggleDeclineTime();
+                            break;
+                        case "declined route":
+                            toggleDeclineRoute();
                             break;
                     }
                 }

@@ -520,7 +520,11 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                     gson.toJson(proposedWalk), new TypeToken<HashMap<String, Object>>() {}.getType()
                             );
 
+                            HashMap<String, Object> attendanceMap = new HashMap<>();
+                            attendanceMap.put(getName(), "accepted");
+
                             pwMap.put("proposedWalk", jsonToMap);
+                            pwMap.put("attendance", attendanceMap);
 
                             db.collection("teams")
                                     .document(team)
@@ -599,6 +603,68 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
 
         return data;
+    }
+
+    public void uploadMemberGoingStatus(String attendance) {
+        if (user == null) {
+            Log.d(TAG, "Could not download member going statuses data without signing in");
+            return;
+        }
+
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(teamTask -> {
+                    if (teamTask.isSuccessful()) {
+                        DocumentSnapshot teamDoc = teamTask.getResult();
+                        if (teamDoc != null) {
+                            String team = (String) teamDoc.get("team");
+
+                            db.collection("teams")
+                                    .document(team)
+                                    .get()
+                                    .addOnCompleteListener(getAttendanceTask -> {
+                                        if (getAttendanceTask.isSuccessful()) {
+                                            DocumentSnapshot attendDoc = getAttendanceTask.getResult();
+                                            if (attendDoc != null) {
+                                                HashMap<String, Object> map = new HashMap<>();
+                                                HashMap<String, Object> attendMap = (HashMap<String, Object>) attendDoc.get("attendance");
+                                                attendMap.put(getName(), attendance);
+                                                map.put("attendance", attendMap);
+
+                                                db.collection("teams")
+                                                    .document(team)
+                                                    .update(map)
+                                                    .addOnCompleteListener(d -> Log.d(TAG, "Successfully updated proposed walk attendance"))
+                                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
+
+                                            } else {
+
+                                            }
+                                        } else {
+
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
+
+//                            HashMap<String, Object> map = new HashMap<>();
+//                            HashMap<String, Object> attendanceMap = new HashMap<>();
+//                            attendanceMap.put("attending", attendance);
+//                            map.put("proposedWalk", attendanceMap);
+
+//                            db.collection("teams")
+//                                    .document(team)
+//                                    .update(map)
+//                                    .addOnCompleteListener(d -> Log.d(TAG, "Successfully updated proposed walk attendance"))
+//                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
+                        } else {
+                            Log.d(TAG, "Task to retrieve team information failed.");
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
     }
 
     public synchronized LiveData<HashMap<String, String>> downloadMemberGoingStatuses() {

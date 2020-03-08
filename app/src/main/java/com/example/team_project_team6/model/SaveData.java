@@ -102,6 +102,10 @@ public class SaveData {
         firebaseAdapter.declineTeamRequest();
     }
 
+    public void updateMemberGoingStatus(String attendance) {
+        firebaseAdapter.uploadMemberGoingStatus(attendance);
+    }
+
     public String getEmail() {
         return firebaseAdapter.getEmail();
     }
