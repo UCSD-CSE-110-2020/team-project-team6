@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.TeamMember;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -29,4 +30,10 @@ public interface IFirebase {
     void uploadTeamRequest(String member);
     LiveData<HashMap<String, String>> downloadTeamRequest();
     LiveData<ArrayList<TeamMember>> downloadTeamData();
+
+    LiveData<HashMap<String, String>> downloadMemberGoingStatuses();
+    void uploadMemberGoingStatus(String attendance);
+
+    void uploadProposedWalk(ProposedWalk proposedWalk);
+    LiveData<ProposedWalk> downloadProposedWalk();
 }
