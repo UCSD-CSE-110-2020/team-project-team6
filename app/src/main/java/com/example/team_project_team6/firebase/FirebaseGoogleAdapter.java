@@ -275,6 +275,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                                 HashMap<String, Object> updatedTeam = new HashMap<>();
                                                 updatedTeam.put("team", newTeam);
 
+                                                // save the new team uuid to the user's fields
                                                 db.collection("users")
                                                         .document(getEmail())
                                                         .update(updatedTeam)
@@ -378,6 +379,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                 .update(requestFrom)
                 .addOnSuccessListener(documentReference -> {
 
+                    // for the user sending the request, save a receipt of who the invitation was sent to
                     db.collection("users")
                             .document(email)
                             .get()
@@ -418,6 +420,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
             return data;
         }
 
+        // retrieve team invitation
         db.collection("users")
                 .document(getEmail())
                 .get()
@@ -427,6 +430,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
                         if (inviteDoc != null && inviteDoc.exists()) {
 
+                            // post invitation if user has one
                             if (inviteDoc.contains("invitation")) {
                                 HashMap<String, String> invite = (HashMap<String, String>) inviteDoc.get("invitation");
                                 data.postValue(invite);
@@ -504,6 +508,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
             return;
         }
 
+        // retrieve team uuid
         db.collection("users")
                 .document(getEmail())
                 .get()
@@ -514,18 +519,21 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
                             String team = (String) teamDoc.get("team");
 
+                            // convert proposed walk object to a hash map to save inside firebase
                             HashMap<String, Object> pwMap = new HashMap<>();
                             proposedWalk.setProposer(getEmail());
                             Map<String, Object> jsonToMap = gson.fromJson(
                                     gson.toJson(proposedWalk), new TypeToken<HashMap<String, Object>>() {}.getType()
                             );
 
+                            // create map to save walk proposer's response status (assumed going to walk)
                             HashMap<String, Object> attendanceMap = new HashMap<>();
                             attendanceMap.put(getName(), "accepted");
 
                             pwMap.put("proposedWalk", jsonToMap);
                             pwMap.put("attendance", attendanceMap);
 
+                            // save proposed walk to team document
                             db.collection("teams")
                                     .document(team)
                                     .update(pwMap)
@@ -550,6 +558,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
             return data;
         }
 
+        // retrieve team uuid
         db.collection("users")
                 .document(getEmail())
                 .get()
@@ -560,6 +569,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
                             String team = (String) teamDoc.get("team");
 
+                            // retrieve proposed walk
                             db.collection("teams")
                                     .document(team)
                                     .get()
@@ -571,6 +581,8 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                                 Map<String, Object> pWalkMap = (Map<String, Object>) map.get("proposedWalk");
                                                 ProposedWalk pWalk = gson.fromJson(gson.toJson(pWalkMap), ProposedWalk.class);
 
+                                                // if a walk has been proposed, then identify if current user was the proposer
+                                                // and add the walk to the mutablelivedata object
                                                 if (pWalk != null) {
                                                     if (pWalk.getProposer().equals(getEmail())) {
                                                         Log.i(TAG, "Setting current user as proposer of proposed walk");
@@ -678,7 +690,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                         if (teamDoc != null) {
                             String team = (String) teamDoc.get("team");
 
-
+                            // retrieve responses to the proposed walk
                             db.collection("teams")
                                     .document(team)
                                     .get()
@@ -690,6 +702,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                                 if (attendMap != null ) {
                                                     String self = attendMap.get(getName());
                                                     if (self != null) {
+                                                        attendMap.remove(getName());
                                                         attendMap.put("self", self);
                                                     }
                                                     data.postValue(attendMap);

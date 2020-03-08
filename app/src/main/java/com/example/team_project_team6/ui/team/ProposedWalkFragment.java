@@ -173,8 +173,8 @@ public class ProposedWalkFragment extends Fragment {
                 listView.setAdapter(mfAdapter);
                 mfAdapter.notifyDataSetChanged();
 
-                if(memberGoingStatusMap != null && !teamViewModel.isMyProposedWalk()) {
-                    switch (Objects.requireNonNull(memberGoingStatusMap.get("self"))) {
+                if(memberGoingStatusMap.get("self") != null && !teamViewModel.isMyProposedWalk()) {
+                    switch (memberGoingStatusMap.get("self")) {
                         case "accepted":
                             toggleAccept();
                             break;
