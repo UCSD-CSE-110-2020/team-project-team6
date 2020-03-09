@@ -13,7 +13,10 @@ import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.TeamInvite;
 import com.example.team_project_team6.model.TeamMember;
+import com.example.team_project_team6.notification.INotification;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,6 +47,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
     private String TIMESTAMP_KEY = "timestamp";
     private MutableLiveData<String> teamUUID;
+    private INotification notificationAdapter;
 
     public FirebaseGoogleAdapter() {
         db = FirebaseFirestore.getInstance();
@@ -51,6 +55,11 @@ public class FirebaseGoogleAdapter implements IFirebase {
         user = null;
         teamUUID = new MutableLiveData<>();
         gson = new Gson();
+
+    }
+    @Override
+    public void setNotificationAdapter(INotification notificationAdapter){
+        this.notificationAdapter = notificationAdapter;
     }
 
     @Override
@@ -105,6 +114,10 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                 db.collection("teams")
                                         .document(uuid)
                                         .set(uuidTeam);
+
+                                //register a team notification
+                                notificationAdapter.subcribeToTeamTopic(uuid);
+
                             } else {
                                 Log.d(TAG, "Found user " + getEmail());
                             }
@@ -114,6 +127,23 @@ public class FirebaseGoogleAdapter implements IFirebase {
                     Log.e(TAG, "Failed to sign in to Firebase");
                     Toast.makeText(activity, "ERROR: Failed to sign into Firebase", Toast.LENGTH_LONG).show();
                 }
+
+                //update token ID when user logout or uninstall the app
+                Map<String, Object> token_id = new HashMap<>();
+                token_id.put("token_id", FirebaseInstanceId.getInstance().getToken());
+                db.collection("users").document(user.getEmail()).update(token_id)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "Token ID successfully updated!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error updating Token ID", e);
+                            }
+                        });
             });
     }
 
@@ -283,6 +313,9 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                                         .update(updatedTeam)
                                                         .addOnSuccessListener(d -> Log.d(TAG, "Updated user's team."))
                                                         .addOnFailureListener(e -> Log.e(TAG, "Error updating user's team", e));
+
+                                                //add member to subcribe team notification
+                                                notificationAdapter.subcribeToTeamTopic(newTeam);
 
                                                 // delete the sender's invitation receipt
                                                 db.collection("users")

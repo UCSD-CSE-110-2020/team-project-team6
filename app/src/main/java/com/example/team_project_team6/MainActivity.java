@@ -112,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
         fgadapter = new FirebaseGoogleAdapter();
         SaveData saveData = new SaveData(getApplicationContext(), fgadapter);
 
+        firebaseMessagingAdapter = new FirebaseMessagingAdapter();
+        //set cloud messaging to firebase adapter
+        fgadapter.setNotificationAdapter(firebaseMessagingAdapter);
+
         // Inject into walkViewModel
         walkViewModel.setSaveData(saveData);
 
