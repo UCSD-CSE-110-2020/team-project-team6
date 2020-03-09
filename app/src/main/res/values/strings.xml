@@ -115,6 +115,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="proposed_walk_information">Proposed Walk Information</string>
+    <string name="scheduled_walk_information">Scheduled Walk Information</string>
 </resources>
 
 
