@@ -22,6 +22,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -80,6 +81,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                 userInfo.put("team", uuid);
                                 userInfo.put("firstName", name[0]);
                                 userInfo.put("lastName", name[1]);
+                                userInfo.put("token_id", FirebaseInstanceId.getInstance().getToken());
 
                                 Log.d(TAG, "No team found, assuming new user. Creating team " + uuid + " for user " + getEmail());
 
@@ -365,9 +367,17 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
         Map<String, Object> requestFrom = new HashMap<>();
         TeamInvite from = new TeamInvite();
+
+        String message = "You received an invitation from ";
+        if(getName() != null) {
+            message += getName();
+        }else{
+            message += email;
+        }
+
         from.setEmail(getEmail());
         from.setName(getName());
-        from.setMessage("fix later");
+        from.setMessage(message);
         from.setToOrFrom("from");
         from.setTeamUUID("do we need this?");
 
