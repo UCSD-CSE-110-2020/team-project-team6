@@ -21,6 +21,7 @@ import com.example.team_project_team6.fitness.FitnessServiceFactory;
 import com.example.team_project_team6.fitness.GoogleFitAdapter;
 import com.example.team_project_team6.fitness.TestAdapter;
 import com.example.team_project_team6.model.SaveData;
+import com.example.team_project_team6.notification.FirebaseMessagingAdapter;
 import com.example.team_project_team6.ui.home.HomeViewModel;
 import com.example.team_project_team6.ui.new_route.NewRouteViewModel;
 import com.example.team_project_team6.ui.route_details.RouteDetailsViewModel;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FitnessService fitnessService;
     private FirebaseGoogleAdapter fgadapter;
+    private FirebaseMessagingAdapter firebaseMessagingAdapter;
 
     private HomeViewModel homeViewModel;
     private WalkViewModel walkViewModel;
@@ -124,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         // Inject into TeamViewModel
         TeamViewModel teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
         teamViewModel.setSaveData(saveData);
+        teamViewModel.setNotificationAdapter(firebaseMessagingAdapter);
 
         // Inject into homeViewModel
         homeViewModel.setSaveData(saveData);

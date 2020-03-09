@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
+import com.example.team_project_team6.notification.INotification;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +29,7 @@ public class TeamViewModel extends ViewModel {
     private SaveData saveData;
     private boolean inviteIsAccepted; // records whether or not user has accepted or decline the invite
     private boolean isMyProposedWalk; //record if i proposed walk
-
+    private INotification notificationAdapter;
 
     public TeamViewModel() {
         ArrayList<TeamMember> data = new ArrayList<TeamMember>();
@@ -45,6 +46,14 @@ public class TeamViewModel extends ViewModel {
         allMemberGoingStatuses = new MutableLiveData<>(goingStatus);
         hasPendingTeamInvite = false;
         hasProposedWalk = false;
+    }
+
+    public void setNotificationAdapter(INotification adapter){
+        notificationAdapter = adapter;
+    }
+
+    public INotification getNotificationAdapter(){
+        return notificationAdapter;
     }
 
     public boolean isMyProposedWalk() {
