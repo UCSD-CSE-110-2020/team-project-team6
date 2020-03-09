@@ -23,7 +23,7 @@ exports.senInvitationNotif = functions.firestore
       const token_id = newValue.token_id;
       console.log("token ID: " + token_id);
 
-      if(newValue.invitation.toOrFrom == "from"){
+      if(newValue.invitation.toOrFrom === "from"){
           const payload = {
                 notification:{
                     title: "Notification from: " + inviteFrom,
