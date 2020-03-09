@@ -183,7 +183,18 @@
                 android:inputType="textMultiLine"
                 android:textSize="24sp" />
 
-
+            <Button
+                android:id="@+id/bt_propose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="140dp"
+                android:layout_marginBottom="150dp"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="#2196F3"
+                android:text="@string/bt_propose"
+                android:textColor="#F5F1F1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/details_notes" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
 
@@ -213,5 +224,6 @@
             android:elevation="16dp"
             android:textColor="@android:color/white"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
     </FrameLayout>
 </RelativeLayout>

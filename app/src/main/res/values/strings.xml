@@ -56,6 +56,8 @@
     <string name="alert_route_name">Please Enter The Route Name!</string>
     <string name="alert_firstname">Please Enter Firstname!</string>
     <string name="alert_lastname">Please Enter Lastname!</string>
+    <string name="alert_set_date">Please Enter Date!</string>
+    <string name="alert_set_time">Please Enter Time!</string>
     <string name="alert_gmail">Please Enter Gmail!</string>
     <string name="alert_starting_point">Please Enter The Starting Point!</string>
     <string name="lb_route_fea">Route Features</string>
@@ -89,6 +91,26 @@
     <string name="gmail_invitation">Gmail</string>
     <string name="gmail_invitation_edit">example@gmail.com</string>
     <string name="bt_invite">Send Invite</string>
+    <string name="bt_propose">Propose Walk</string>
+
+    <string name="txt_proposed_rout_name">Name</string>
+    <string name="txt_proposed_date">Date</string>
+    <string name="txt_proposed_time">Time</string>
+    <string name="bt_schedule">Schedule Walk</string>
+    <string name="bt_withdraw">Withdraw Walk</string>
+    <string name="bt_acceptWalk">Accept</string>
+    <string name="bt_declineTime">Decline/Time</string>
+    <string name="bt_declineRoute">Decline/Route</string>
+    <string name="txt_proposed_steps">Steps</string>
+    <string name="txt_proposed_startingPoint">Starting Point</string>
+
+    <string name="set_propose_time">Enter Time</string>
+    <string name="set_propose_date">Enter Date</string>
+    <string name="txt_set_propose_time">Time: </string>
+    <string name="txt_set_propose_date">Date: </string>
+    <string name="bt_set_date">Done</string>
+    <string name="txt_proposed_mile">Distance</string>
+
     <string name="start_label">Starting Point:</string>
 
     <!-- TODO: Remove or change this placeholder text -->

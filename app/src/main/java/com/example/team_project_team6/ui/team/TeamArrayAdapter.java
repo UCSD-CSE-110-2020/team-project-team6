@@ -3,6 +3,7 @@ package com.example.team_project_team6.ui.team;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,15 @@ import com.example.team_project_team6.model.TeamMember;
 
 import java.util.ArrayList;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 public class TeamArrayAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<String> items;
     private boolean isViewInvited;
 
     public TeamArrayAdapter(Context context, ArrayList<String> items, boolean isViewInvited) {
+        Log.i(TAG, "Creating TeamArrayAdapter");
         this.context = context;
         this.items = items;
         this.isViewInvited = isViewInvited;
