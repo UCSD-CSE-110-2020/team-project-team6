@@ -71,8 +71,7 @@ public class SaveData {
     }
 
     public LiveData<ArrayList<TeamMember>> getAllMembers() {
-        LiveData<ArrayList<TeamMember>> asd = firebaseAdapter.downloadTeamData();
-        return asd;
+        return firebaseAdapter.downloadTeamData();
     }
 
     public LiveData<String> getTeam() {
@@ -83,9 +82,14 @@ public class SaveData {
         firebaseAdapter.uploadTeamRequest(email);
     }
 
-    public void addProposedWalk(ProposedWalk proposedWalk) { firebaseAdapter.uploadProposedWalk(proposedWalk); }
+    public void addProposedWalk(ProposedWalk proposedWalk) {
+        firebaseAdapter.uploadProposedWalk(proposedWalk);
+    }
 
-    public LiveData<ProposedWalk> getProposedWalk() { return firebaseAdapter.downloadProposedWalk(); }
+    public LiveData<ProposedWalk> getProposedWalk() {
+        return firebaseAdapter.downloadProposedWalk();
+    }
+
     public LiveData<HashMap<String, String>> getTeamInviter() {
         return firebaseAdapter.downloadTeamRequest();
     }
@@ -100,6 +104,10 @@ public class SaveData {
 
     public void declineTeamRequest() {
         firebaseAdapter.declineTeamRequest();
+    }
+
+    public void updateMemberGoingStatus(String attendance) {
+        firebaseAdapter.uploadMemberGoingStatus(attendance);
     }
 
     public String getEmail() {

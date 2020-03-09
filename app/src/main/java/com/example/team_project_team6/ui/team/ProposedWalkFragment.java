@@ -1,6 +1,7 @@
 package com.example.team_project_team6.ui.team;
 
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.annotation.VisibleForTesting;
@@ -22,6 +23,7 @@ import com.example.team_project_team6.model.ProposedWalk;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -100,14 +102,7 @@ public class ProposedWalkFragment extends Fragment {
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "accept walk clicked");
                 toggleAccept();
-            }
-        });
-
-        bt_declineRoute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("Proposed Walk fragment", "decline route clicked");
-                toggleDeclineRoute();
+                teamViewModel.updateMemberGoingStatus("accepted");
             }
         });
 
@@ -116,6 +111,16 @@ public class ProposedWalkFragment extends Fragment {
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "decline time clicked");
                 toggleDeclineTime();
+                teamViewModel.updateMemberGoingStatus("declined time");
+            }
+        });
+
+        bt_declineRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Proposed Walk fragment", "decline route clicked");
+                toggleDeclineRoute();
+                teamViewModel.updateMemberGoingStatus("declined route");
             }
         });
 
@@ -168,17 +173,16 @@ public class ProposedWalkFragment extends Fragment {
                 listView.setAdapter(mfAdapter);
                 mfAdapter.notifyDataSetChanged();
 
-                // TODO: set button colors for current user for accept or decline buttons
-                if(teamViewModel.isMyProposedWalk()) {
+                if(memberGoingStatusMap.get("self") != null && !teamViewModel.isMyProposedWalk()) {
                     switch (memberGoingStatusMap.get("self")) {
                         case "accepted":
                             toggleAccept();
                             break;
-                        case "declined route":
-                            toggleDeclineRoute();
-                            break;
                         case "declined time":
                             toggleDeclineTime();
+                            break;
+                        case "declined route":
+                            toggleDeclineRoute();
                             break;
                     }
                 }
@@ -188,24 +192,24 @@ public class ProposedWalkFragment extends Fragment {
 
     public void toggleAccept() {
         Log.i(TAG, "Setting accept button colors");
-        bt_acceptWalk.setBackgroundColor(getResources().getColor(R.color.design_default_color_secondary_variant));
-        bt_declineRoute.setBackgroundColor(Color.GRAY);
-        bt_declineTime.setBackgroundColor(Color.GRAY);
+        bt_acceptWalk.getBackground().setColorFilter(bt_acceptWalk.getContext().getResources().getColor(R.color.design_default_color_secondary_variant), PorterDuff.Mode.MULTIPLY);
+        bt_declineRoute.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        bt_declineTime.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
     }
 
     public void toggleDeclineRoute() {
         Log.i(TAG, "Setting decline route button colors");
-        bt_acceptWalk.setBackgroundColor(Color.GRAY);
-        bt_declineRoute.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-        bt_declineTime.setBackgroundColor(Color.GRAY);
+        bt_acceptWalk.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        bt_declineRoute.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+        bt_declineTime.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
 
     }
 
     public void toggleDeclineTime() {
         Log.i(TAG, "Setting decline time button colors");
-        bt_acceptWalk.setBackgroundColor(Color.GRAY);
-        bt_declineRoute.setBackgroundColor(Color.GRAY);
-        bt_declineTime.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        bt_acceptWalk.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        bt_declineRoute.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        bt_declineTime.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
     }
 
     public void populateProposedWalkElements(ProposedWalk proposedWalk) {

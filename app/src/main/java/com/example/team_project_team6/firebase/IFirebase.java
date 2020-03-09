@@ -30,7 +30,9 @@ public interface IFirebase {
     void uploadTeamRequest(String member);
     LiveData<HashMap<String, String>> downloadTeamRequest();
     LiveData<ArrayList<TeamMember>> downloadTeamData();
+
     LiveData<HashMap<String, String>> downloadMemberGoingStatuses();
+    void uploadMemberGoingStatus(String attendance);
 
     void uploadProposedWalk(ProposedWalk proposedWalk);
     LiveData<ProposedWalk> downloadProposedWalk();

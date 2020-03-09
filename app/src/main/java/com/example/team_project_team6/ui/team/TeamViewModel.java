@@ -178,4 +178,8 @@ public class TeamViewModel extends ViewModel {
         }
         return memberStatusList;
     }
+
+    public void updateMemberGoingStatus(String attendance) {
+        saveData.updateMemberGoingStatus(attendance);
+    }
 }
