@@ -103,6 +103,7 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "accept walk clicked");
                 toggleAccept();
                 teamViewModel.updateMemberGoingStatus("accepted");
+                //teamViewModel.setInviteIsAccepted(true);
             }
         });
 
