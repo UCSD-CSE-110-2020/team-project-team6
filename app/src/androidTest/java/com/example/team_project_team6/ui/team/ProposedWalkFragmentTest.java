@@ -63,6 +63,4 @@ public class ProposedWalkFragmentTest {
         //assertEquals(true, viewModel.getInviteIsAccepted());
 
     }
-
-
-    }
+}

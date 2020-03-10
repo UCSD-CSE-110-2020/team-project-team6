@@ -1,25 +1,25 @@
 package com.example.team_project_team6.ui.team;
 
 
-        import androidx.annotation.NonNull;
-        import androidx.fragment.app.FragmentFactory;
-        import androidx.fragment.app.testing.FragmentScenario;
-        import androidx.navigation.Navigation;
-        import androidx.navigation.testing.TestNavHostController;
-        import androidx.test.core.app.ApplicationProvider;
-        import androidx.test.espresso.action.ViewActions;
-        import androidx.test.espresso.matcher.ViewMatchers;
-        import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentFactory;
+import androidx.fragment.app.testing.FragmentScenario;
+import androidx.navigation.Navigation;
+import androidx.navigation.testing.TestNavHostController;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-        import com.example.team_project_team6.R;
+import com.example.team_project_team6.R;
 
-        import org.junit.Before;
-        import org.junit.Test;
-        import org.junit.runner.RunWith;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-        import static androidx.test.espresso.Espresso.onView;
-        import static org.junit.Assert.*;
-        import static org.mockito.Mockito.mock;
+import static androidx.test.espresso.Espresso.onView;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 @RunWith(AndroidJUnit4.class)
 public class SetProposedDateFragmentTest {

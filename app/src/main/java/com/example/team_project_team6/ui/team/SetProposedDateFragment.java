@@ -45,13 +45,13 @@ public class SetProposedDateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_set_proposed_date, container, false);
-        final NavController controller = NavHostFragment.findNavController(this);
-
         if (teamViewModel == null) {
             teamViewModel = new ViewModelProvider(requireActivity()).get(TeamViewModel.class);
         }
+
+        // Inflate the layout for this fragment
+        View root = inflater.inflate(R.layout.fragment_set_proposed_date, container, false);
+
 
         dateEdit = (EditText) root.findViewById(R.id.date_edit);
         dateEdit.setInputType(InputType.TYPE_NULL);
@@ -131,6 +131,7 @@ public class SetProposedDateFragment extends Fragment {
                     proposedWalk.setpHourSecondTime(timeEdit.getText().toString());
                     teamViewModel.sendProposedWalk(proposedWalk);
 
+                    final NavController controller = NavHostFragment.findNavController(requireParentFragment());
                     // navigate to proposed walk fragment
                     if (controller.getCurrentDestination().getId() == R.id.setProposedDate) {
                         Log.i(TAG, "Navigating from setProposedDateFragment to ProposeWalkFragment");
