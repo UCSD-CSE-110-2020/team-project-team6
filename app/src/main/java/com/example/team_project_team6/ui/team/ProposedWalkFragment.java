@@ -103,7 +103,7 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "accept walk clicked");
                 toggleAccept();
                 teamViewModel.updateMemberGoingStatus("accepted");
-                //teamViewModel.setInviteIsAccepted(true);
+                teamViewModel.setInviteIsAccepted(true);
             }
         });
 
@@ -113,6 +113,7 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "decline time clicked");
                 toggleDeclineTime();
                 teamViewModel.updateMemberGoingStatus("declined time");
+                teamViewModel.setInviteIsAccepted(false);
             }
         });
 
@@ -122,6 +123,7 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "decline route clicked");
                 toggleDeclineRoute();
                 teamViewModel.updateMemberGoingStatus("declined route");
+                teamViewModel.setInviteIsAccepted(false);
             }
         });
 
