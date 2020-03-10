@@ -2,9 +2,11 @@ package com.example.team_project_team6.ui.team;
 
 import android.util.Log;
 
+import com.example.team_project_team6.firebase.IFirebase;
 import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
+import com.example.team_project_team6.model.TeamMessage;
 import com.example.team_project_team6.notification.INotification;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class TeamViewModel extends ViewModel {
     private SaveData saveData;
     private boolean inviteIsAccepted; // records whether or not user has accepted or decline the invite
     private boolean isMyProposedWalk; //record if i proposed walk
-    private INotification notificationAdapter;
+    private TeamMessage teamMessage;
 
     public TeamViewModel() {
         ArrayList<TeamMember> data = new ArrayList<TeamMember>();
@@ -48,12 +50,8 @@ public class TeamViewModel extends ViewModel {
         hasProposedWalk = false;
     }
 
-    public void setNotificationAdapter(INotification adapter){
-        notificationAdapter = adapter;
-    }
-
-    public INotification getNotificationAdapter(){
-        return notificationAdapter;
+    public void setTeamMessage(TeamMessage message){
+        this.teamMessage = message;
     }
 
     public boolean isMyProposedWalk() {
@@ -159,6 +157,11 @@ public class TeamViewModel extends ViewModel {
 
         if (inviteIsAccepted) {
             saveData.acceptTeamRequest();
+
+            //send notification to team
+            String message = saveData.getName() + " has joined the team!";
+            TeamMessage tMessage = new TeamMessage(saveData.getEmail(), message);
+            saveData.sendTeamNotification(tMessage);
         } else {
             saveData.declineTeamRequest();
         }

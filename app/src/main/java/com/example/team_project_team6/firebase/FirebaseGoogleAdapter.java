@@ -13,6 +13,7 @@ import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.TeamInvite;
 import com.example.team_project_team6.model.TeamMember;
+import com.example.team_project_team6.model.TeamMessage;
 import com.example.team_project_team6.notification.INotification;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -116,7 +117,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                         .set(uuidTeam);
 
                                 //register a team notification
-                                notificationAdapter.subcribeToTeamTopic(uuid);
+                                notificationAdapter.subscribeToTeamTopic(uuid);
 
                             } else {
                                 Log.d(TAG, "Found user " + getEmail());
@@ -314,8 +315,8 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                                         .addOnSuccessListener(d -> Log.d(TAG, "Updated user's team."))
                                                         .addOnFailureListener(e -> Log.e(TAG, "Error updating user's team", e));
 
-                                                //add member to subcribe team notification
-                                                notificationAdapter.subcribeToTeamTopic(newTeam);
+                                                //add member to subscribe team notification
+                                                notificationAdapter.subscribeToTeamTopic(newTeam);
 
                                                 // delete the sender's invitation receipt
                                                 db.collection("users")
@@ -770,4 +771,36 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
         return data;
     }
+
+    public void sendTeamNotification(TeamMessage message){
+        if (user == null) {
+            Log.d(TAG, "Could not send message data without signing in");
+            return;
+        }
+
+        db.collection("users").document(getEmail()).get().addOnCompleteListener(getSenderEmail -> {
+            if(getSenderEmail.isSuccessful()){
+                DocumentSnapshot snapshot = getSenderEmail.getResult();
+                String senderEmail = snapshot.getString("invitation.email");
+
+                db.collection("users").document(senderEmail).get().addOnCompleteListener(getSenderTeamID -> {
+                    if(getSenderTeamID.isSuccessful()){
+                        String topic_key = getSenderTeamID.getResult().getString("team");
+                        Log.i(TAG, "get sender team ID: " + topic_key);
+
+                        //send topic id and notification to FirebaseMessagingAdapter
+                        notificationAdapter.sendTeamNotification(topic_key, message);
+
+                    }else {
+                        Log.e(TAG, "Failed to retrieve sender's team UUID!");
+                    }
+
+                });
+
+            } else {
+                Log.e(TAG, "Failed to retrieve sender email!");
+            }
+        });
+    }
+
 }

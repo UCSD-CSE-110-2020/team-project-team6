@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         // Inject into TeamViewModel
         TeamViewModel teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
         teamViewModel.setSaveData(saveData);
-        teamViewModel.setNotificationAdapter(firebaseMessagingAdapter);
+
 
         // Inject into homeViewModel
         homeViewModel.setSaveData(saveData);

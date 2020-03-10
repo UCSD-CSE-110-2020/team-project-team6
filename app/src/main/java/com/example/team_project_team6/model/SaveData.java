@@ -114,4 +114,12 @@ public class SaveData {
         return firebaseAdapter.getEmail();
     }
 
+    public String getName() {
+        return firebaseAdapter.getName();
+    }
+
+    public void sendTeamNotification(TeamMessage message){
+        firebaseAdapter.sendTeamNotification(message);
+    }
+
 }

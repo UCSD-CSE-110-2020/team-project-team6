@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.TeamMember;
+import com.example.team_project_team6.model.TeamMessage;
 import com.example.team_project_team6.notification.INotification;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
@@ -39,4 +40,5 @@ public interface IFirebase {
     LiveData<ProposedWalk> downloadProposedWalk();
 
     void setNotificationAdapter(INotification notificationAdapter);
+    void sendTeamNotification(TeamMessage message);
 }
