@@ -58,11 +58,24 @@
                 android:textSize="36sp" />
 
             <TextView
-                android:id="@+id/details_last_starting"
+                android:id="@+id/details_start_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:clickable="true"
+                android:fontFamily="casual"
+                android:text="@string/start_label"
+                android:textSize="36sp" />
+
+            <TextView
+                android:id="@+id/details_start"
+                style="@style/Hyperlink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:clickable="true"
                 android:fontFamily="casual"
                 android:text="@string/bt_start"
                 android:textSize="36sp" />
