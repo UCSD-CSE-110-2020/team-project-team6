@@ -34,9 +34,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.d("MyFirebaseMessagingService", "Message Notification Body: " + remoteMessage.getNotification().getBody()
             + " title: " + title);
             //just push for other members and skip the notification from current user.
-            if(auth.getCurrentUser() != null && auth.getCurrentUser().getEmail() != title) {
-                title += "Notification from: " + title;
-                sendNotification(remoteMessage.getNotification().getBody(), title);
+            if(auth.getCurrentUser() != null && !auth.getCurrentUser().getEmail().equalsIgnoreCase(title)) {
+                String title_email = "Notification from: " + title;
+                sendNotification(remoteMessage.getNotification().getBody(), title_email);
             }else{
                 Log.i("MyFirebaseMessagingService", "Need to sign in to get current user email!!!");
             }

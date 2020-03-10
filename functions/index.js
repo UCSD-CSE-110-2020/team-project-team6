@@ -57,7 +57,7 @@ exports.senInvitationNotif = functions.firestore
            var message = {
              notification: {
                title: document.fromEmail,
-               body: document.messages
+               body: document.message
              },
              topic: context.params.teamId
            };
