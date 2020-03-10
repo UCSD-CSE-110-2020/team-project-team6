@@ -23,6 +23,7 @@ import com.example.team_project_team6.model.ProposedWalk;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -101,14 +102,8 @@ public class ProposedWalkFragment extends Fragment {
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "accept walk clicked");
                 toggleAccept();
-            }
-        });
-
-        bt_declineRoute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("Proposed Walk fragment", "decline route clicked");
-                toggleDeclineRoute();
+                teamViewModel.updateMemberGoingStatus("accepted");
+                //teamViewModel.setInviteIsAccepted(true);
             }
         });
 
@@ -117,6 +112,16 @@ public class ProposedWalkFragment extends Fragment {
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "decline time clicked");
                 toggleDeclineTime();
+                teamViewModel.updateMemberGoingStatus("declined time");
+            }
+        });
+
+        bt_declineRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Proposed Walk fragment", "decline route clicked");
+                toggleDeclineRoute();
+                teamViewModel.updateMemberGoingStatus("declined route");
             }
         });
 
@@ -169,17 +174,16 @@ public class ProposedWalkFragment extends Fragment {
                 listView.setAdapter(mfAdapter);
                 mfAdapter.notifyDataSetChanged();
 
-                // TODO: set button colors for current user for accept or decline buttons
-                if(teamViewModel.isMyProposedWalk()) {
+                if(memberGoingStatusMap.get("self") != null && !teamViewModel.isMyProposedWalk()) {
                     switch (memberGoingStatusMap.get("self")) {
                         case "accepted":
                             toggleAccept();
                             break;
-                        case "declined route":
-                            toggleDeclineRoute();
-                            break;
                         case "declined time":
                             toggleDeclineTime();
+                            break;
+                        case "declined route":
+                            toggleDeclineRoute();
                             break;
                     }
                 }

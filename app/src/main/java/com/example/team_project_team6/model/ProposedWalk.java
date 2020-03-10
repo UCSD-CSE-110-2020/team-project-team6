@@ -14,6 +14,7 @@ public class ProposedWalk{
         this.pRoute = route;
         this.pDayMonthYearDate = dayMonthYearDate;
         this.pHourSecondTime = hourSecondTime;
+        proposer = "";
     }
 
     public String getpDayMonthYearDate() {
