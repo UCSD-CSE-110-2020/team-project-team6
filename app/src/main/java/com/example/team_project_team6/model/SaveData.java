@@ -108,6 +108,7 @@ public class SaveData {
 
     public void updateMemberGoingStatus(String attendance) {
         firebaseAdapter.uploadMemberGoingStatus(attendance);
+
     }
 
     public String getEmail() {
@@ -118,8 +119,8 @@ public class SaveData {
         return firebaseAdapter.getName();
     }
 
-    public void sendTeamNotification(TeamMessage message){
-        firebaseAdapter.sendTeamNotification(message);
+    public void sendTeamNotification(TeamMessage message, boolean isMessageForProposeWalk){
+        firebaseAdapter.sendTeamNotification(message, isMessageForProposeWalk);
     }
 
 }

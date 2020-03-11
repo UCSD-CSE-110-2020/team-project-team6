@@ -40,5 +40,5 @@ public interface IFirebase {
     LiveData<ProposedWalk> downloadProposedWalk();
 
     void setNotificationAdapter(INotification notificationAdapter);
-    void sendTeamNotification(TeamMessage message);
+    void sendTeamNotification(TeamMessage message, boolean isMessageForProposeWalk);
 }

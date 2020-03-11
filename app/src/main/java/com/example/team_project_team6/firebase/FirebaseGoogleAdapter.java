@@ -772,31 +772,42 @@ public class FirebaseGoogleAdapter implements IFirebase {
         return data;
     }
 
-    public void sendTeamNotification(TeamMessage message){
+    public void sendTeamNotification(TeamMessage message, boolean isMessageForProposeWalk){
         if (user == null) {
             Log.d(TAG, "Could not send message data without signing in");
             return;
         }
 
+
         db.collection("users").document(getEmail()).get().addOnCompleteListener(getSenderEmail -> {
             if(getSenderEmail.isSuccessful()){
                 DocumentSnapshot snapshot = getSenderEmail.getResult();
-                String senderEmail = snapshot.getString("invitation.email");
 
-                db.collection("users").document(senderEmail).get().addOnCompleteListener(getSenderTeamID -> {
-                    if(getSenderTeamID.isSuccessful()){
-                        String topic_key = getSenderTeamID.getResult().getString("team");
-                        Log.i(TAG, "get sender team ID: " + topic_key);
+                //get team ID as a topic_key base on email
+                if(isMessageForProposeWalk){
+                    //if user is already in team, just get team ID base on that user
+                    String teamID = snapshot.getString("team");
+                    Log.i(TAG, "get team ID as topic key: " + teamID);
+                    notificationAdapter.sendTeamNotification(teamID, message);
+                }else {
+                    //if user is going to accept, get teamID from sender email
+                    String senderEmail = snapshot.getString("invitation.email");
 
-                        //send topic id and notification to FirebaseMessagingAdapter
-                        notificationAdapter.sendTeamNotification(topic_key, message);
+                    db.collection("users").document(senderEmail).get().addOnCompleteListener(getSenderTeamID -> {
+                        if(getSenderTeamID.isSuccessful()){
+                            String topic_key = getSenderTeamID.getResult().getString("team");
+                            Log.i(TAG, "get sender team ID as topic key: " + topic_key);
 
-                    }else {
-                        Log.e(TAG, "Failed to retrieve sender's team UUID!");
-                    }
+                            //send topic id and notification to FirebaseMessagingAdapter
+                            notificationAdapter.sendTeamNotification(topic_key, message);
 
-                });
+                        }else {
+                            Log.e(TAG, "Failed to retrieve sender's team UUID!");
+                        }
 
+                    });
+
+                }
             } else {
                 Log.e(TAG, "Failed to retrieve sender email!");
             }

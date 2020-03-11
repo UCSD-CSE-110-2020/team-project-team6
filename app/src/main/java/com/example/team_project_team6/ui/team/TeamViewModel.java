@@ -31,7 +31,7 @@ public class TeamViewModel extends ViewModel {
     private SaveData saveData;
     private boolean inviteIsAccepted; // records whether or not user has accepted or decline the invite
     private boolean isMyProposedWalk; //record if i proposed walk
-    private TeamMessage teamMessage;
+    private TeamMessage tMessage;
 
     public TeamViewModel() {
         ArrayList<TeamMember> data = new ArrayList<TeamMember>();
@@ -50,9 +50,6 @@ public class TeamViewModel extends ViewModel {
         hasProposedWalk = false;
     }
 
-    public void setTeamMessage(TeamMessage message){
-        this.teamMessage = message;
-    }
 
     public boolean isMyProposedWalk() {
         return isMyProposedWalk;
@@ -76,6 +73,10 @@ public class TeamViewModel extends ViewModel {
 
     public void sendProposedWalk(ProposedWalk proposedWalk) {
             saveData.addProposedWalk(proposedWalk);
+            //send notification to team
+            String message = saveData.getName() + " has updated proposed walk!";
+            tMessage = new TeamMessage(saveData.getEmail(), message);
+            sendTeamNotification(tMessage, true);
     }
 
     public LiveData<ProposedWalk> getProposedWalkData() {
@@ -160,8 +161,8 @@ public class TeamViewModel extends ViewModel {
 
             //send notification to team
             String message = saveData.getName() + " has joined the team!";
-            TeamMessage tMessage = new TeamMessage(saveData.getEmail(), message);
-            saveData.sendTeamNotification(tMessage);
+            tMessage = new TeamMessage(saveData.getEmail(), message);
+            sendTeamNotification(tMessage, false);
         } else {
             saveData.declineTeamRequest();
         }
@@ -193,5 +194,13 @@ public class TeamViewModel extends ViewModel {
 
     public void updateMemberGoingStatus(String attendance) {
         saveData.updateMemberGoingStatus(attendance);
+        //send notification when member accept or decline proposed walk
+        String message = saveData.getName() + " has "+ attendance +" for proposed walk!";
+        this.tMessage = new TeamMessage(saveData.getEmail(), message);
+        sendTeamNotification(tMessage, true);
+    }
+
+    public void sendTeamNotification(TeamMessage message, boolean isMyProposedWalk){
+        saveData.sendTeamNotification(message, isMyProposedWalk);
     }
 }
