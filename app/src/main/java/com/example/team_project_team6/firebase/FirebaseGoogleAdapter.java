@@ -13,7 +13,11 @@ import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.TeamInvite;
 import com.example.team_project_team6.model.TeamMember;
+import com.example.team_project_team6.model.TeamMessage;
+import com.example.team_project_team6.notification.INotification;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -43,6 +48,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
     private String TIMESTAMP_KEY = "timestamp";
     private MutableLiveData<String> teamUUID;
+    private INotification notificationAdapter;
 
     public FirebaseGoogleAdapter() {
         db = FirebaseFirestore.getInstance();
@@ -50,6 +56,11 @@ public class FirebaseGoogleAdapter implements IFirebase {
         user = null;
         teamUUID = new MutableLiveData<>();
         gson = new Gson();
+
+    }
+    @Override
+    public void setNotificationAdapter(INotification notificationAdapter){
+        this.notificationAdapter = notificationAdapter;
     }
 
     @Override
@@ -80,6 +91,7 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                 userInfo.put("team", uuid);
                                 userInfo.put("firstName", name[0]);
                                 userInfo.put("lastName", name[1]);
+                                userInfo.put("token_id", FirebaseInstanceId.getInstance().getToken());
 
                                 Log.d(TAG, "No team found, assuming new user. Creating team " + uuid + " for user " + getEmail());
 
@@ -103,6 +115,10 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                 db.collection("teams")
                                         .document(uuid)
                                         .set(uuidTeam);
+
+                                //register a team notification
+                                notificationAdapter.subscribeToTeamTopic(uuid);
+
                             } else {
                                 Log.d(TAG, "Found user " + getEmail());
                             }
@@ -112,6 +128,23 @@ public class FirebaseGoogleAdapter implements IFirebase {
                     Log.e(TAG, "Failed to sign in to Firebase");
                     Toast.makeText(activity, "ERROR: Failed to sign into Firebase", Toast.LENGTH_LONG).show();
                 }
+
+                //update token ID when user logout or uninstall the app
+                Map<String, Object> token_id = new HashMap<>();
+                token_id.put("token_id", FirebaseInstanceId.getInstance().getToken());
+                db.collection("users").document(user.getEmail()).update(token_id)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "Token ID successfully updated!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error updating Token ID", e);
+                            }
+                        });
             });
     }
 
@@ -282,6 +315,9 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                                         .addOnSuccessListener(d -> Log.d(TAG, "Updated user's team."))
                                                         .addOnFailureListener(e -> Log.e(TAG, "Error updating user's team", e));
 
+                                                //add member to subscribe team notification
+                                                notificationAdapter.subscribeToTeamTopic(newTeam);
+
                                                 // delete the sender's invitation receipt
                                                 db.collection("users")
                                                         .document(senderEmail)
@@ -365,9 +401,17 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
         Map<String, Object> requestFrom = new HashMap<>();
         TeamInvite from = new TeamInvite();
+
+        String message = "You received an invitation from ";
+        if(getName() != null) {
+            message += getName();
+        }else{
+            message += email;
+        }
+
         from.setEmail(getEmail());
         from.setName(getName());
-        from.setMessage("fix later");
+        from.setMessage(message);
         from.setToOrFrom("from");
         from.setTeamUUID("do we need this?");
 
@@ -727,4 +771,47 @@ public class FirebaseGoogleAdapter implements IFirebase {
 
         return data;
     }
+
+    public void sendTeamNotification(TeamMessage message, boolean isMessageForProposeWalk){
+        if (user == null) {
+            Log.d(TAG, "Could not send message data without signing in");
+            return;
+        }
+
+
+        db.collection("users").document(getEmail()).get().addOnCompleteListener(getSenderEmail -> {
+            if(getSenderEmail.isSuccessful()){
+                DocumentSnapshot snapshot = getSenderEmail.getResult();
+
+                //get team ID as a topic_key base on email
+                if(isMessageForProposeWalk){
+                    //if user is already in team, just get team ID base on that user
+                    String teamID = snapshot.getString("team");
+                    Log.i(TAG, "get team ID as topic key: " + teamID);
+                    notificationAdapter.sendTeamNotification(teamID, message);
+                }else {
+                    //if user is going to accept, get teamID from sender email
+                    String senderEmail = snapshot.getString("invitation.email");
+
+                    db.collection("users").document(senderEmail).get().addOnCompleteListener(getSenderTeamID -> {
+                        if(getSenderTeamID.isSuccessful()){
+                            String topic_key = getSenderTeamID.getResult().getString("team");
+                            Log.i(TAG, "get sender team ID as topic key: " + topic_key);
+
+                            //send topic id and notification to FirebaseMessagingAdapter
+                            notificationAdapter.sendTeamNotification(topic_key, message);
+
+                        }else {
+                            Log.e(TAG, "Failed to retrieve sender's team UUID!");
+                        }
+
+                    });
+
+                }
+            } else {
+                Log.e(TAG, "Failed to retrieve sender email!");
+            }
+        });
+    }
+
 }

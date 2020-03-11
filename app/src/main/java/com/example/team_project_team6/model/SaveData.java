@@ -108,10 +108,19 @@ public class SaveData {
 
     public void updateMemberGoingStatus(String attendance) {
         firebaseAdapter.uploadMemberGoingStatus(attendance);
+
     }
 
     public String getEmail() {
         return firebaseAdapter.getEmail();
+    }
+
+    public String getName() {
+        return firebaseAdapter.getName();
+    }
+
+    public void sendTeamNotification(TeamMessage message, boolean isMessageForProposeWalk){
+        firebaseAdapter.sendTeamNotification(message, isMessageForProposeWalk);
     }
 
 }

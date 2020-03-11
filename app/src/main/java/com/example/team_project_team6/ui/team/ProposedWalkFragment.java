@@ -86,6 +86,7 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "schedule walk clicked");
                 setInvisibleScheduleWithdraw();
                 setInvisibleAcceptDecline();
+
             }
         });
 
