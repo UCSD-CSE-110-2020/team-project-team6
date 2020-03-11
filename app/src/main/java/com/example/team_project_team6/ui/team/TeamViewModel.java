@@ -179,12 +179,4 @@ public class TeamViewModel extends ViewModel {
     public void updateMemberGoingStatus(String attendance) {
         saveData.updateMemberGoingStatus(attendance);
     }
-
-    public boolean getHasScheduledWalk() {
-        return hasScheduledWalk;
-    }
-
-    public void setHasScheduledWalk(boolean hasScheduledWalk) {
-        this.hasScheduledWalk = hasScheduledWalk;
-    }
 }
