@@ -74,7 +74,7 @@ public class TeamViewModel extends ViewModel {
     public void sendProposedWalk(ProposedWalk proposedWalk) {
             saveData.addProposedWalk(proposedWalk);
             //send notification to team
-            String message = saveData.getName() + " has updated proposed walk!";
+            String message = saveData.getName() + " has proposed the walk!";
             tMessage = new TeamMessage(saveData.getEmail(), message);
             sendTeamNotification(tMessage, true);
     }

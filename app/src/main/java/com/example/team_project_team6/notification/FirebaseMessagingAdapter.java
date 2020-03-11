@@ -34,7 +34,7 @@ public class FirebaseMessagingAdapter implements INotification {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Subscribed to team notifications with topic";
+                        String msg = "Subscribed to team notifications with topic, successfully";
                         if (!task.isSuccessful()) {
                             msg = "Subscribe to notifications failed";
                         }
@@ -70,4 +70,20 @@ public class FirebaseMessagingAdapter implements INotification {
                 });
     }
 
+    @Override
+    public void unsubscribeFromTeamTopic(String topic_id){
+        Log.i(TAG, "Subcribing a topic with team ID: " + topic_id );
+        //subscribe a topic
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(topic_id)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Unsubscribed to team notifications with topic, successfully!";
+                        if (!task.isSuccessful()) {
+                            msg = "Unsubscribe to notifications failed";
+                        }
+                        Log.i(TAG, msg);
+                    }
+                });
+    }
 }
