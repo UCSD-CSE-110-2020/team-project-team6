@@ -59,6 +59,7 @@ public class MemberFragment extends Fragment {
         resetInviteSection();
         bind_views();
 
+        NavController controller = NavHostFragment.findNavController(this);
         final FloatingActionButton btNewInvite = root.findViewById(R.id.bt_invite_member);
 
         // navigate to send_tem_request when '+' button is pressed
@@ -66,7 +67,6 @@ public class MemberFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("send_team_request", "Clicked on '+' button");
-                NavController controller = NavHostFragment.findNavController(requireParentFragment());
                 if (controller.getCurrentDestination().getId() == R.id.navigation_team) {
                     Log.i("member","we are in the member fragment");
                     controller.navigate(R.id.action_teamFragment_to_SendTeamRequestFragment);

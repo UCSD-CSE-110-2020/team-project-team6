@@ -10,6 +10,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.InputType;
@@ -105,6 +106,7 @@ public class SetProposedDateFragment extends Fragment {
             public void onClick(View view) {
                 Log.i(TAG, "Clicked done button in SetProposedDataFragment");
 
+
                 if(dateEdit.getText().toString().isEmpty()) {
                     dateEdit.requestFocus();
                     Toast alert =  Toast.makeText(root.getContext(), getString(R.string.alert_set_date), Toast.LENGTH_SHORT);
@@ -131,7 +133,7 @@ public class SetProposedDateFragment extends Fragment {
                     proposedWalk.setpHourSecondTime(timeEdit.getText().toString());
                     teamViewModel.sendProposedWalk(proposedWalk);
 
-                    final NavController controller = NavHostFragment.findNavController(requireParentFragment());
+                    NavController controller = Navigation.findNavController(requireView());
                     // navigate to proposed walk fragment
                     if (controller.getCurrentDestination().getId() == R.id.setProposedDate) {
                         Log.i(TAG, "Navigating from setProposedDateFragment to ProposeWalkFragment");
