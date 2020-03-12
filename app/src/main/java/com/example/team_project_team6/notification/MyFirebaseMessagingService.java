@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.example.team_project_team6.MainActivity;
 import com.example.team_project_team6.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -19,14 +20,26 @@ import androidx.core.app.NotificationCompat;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         //need to implement this if you want to do something when you receive a notification while app is in the foreground.
         // Check if message contains a notification payload.
+
         if (remoteMessage.getNotification() != null) {
-            Log.d("Notification", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getTitle());
+
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            String title = remoteMessage.getNotification().getTitle();
+            Log.d("MyFirebaseMessagingService", "Message Notification Body: " + remoteMessage.getNotification().getBody()
+            + " title: " + title);
+            //just push for other members and skip the notification from current user.
+            if(auth.getCurrentUser() != null && !auth.getCurrentUser().getEmail().equalsIgnoreCase(title)) {
+                String title_email = "Notification from: " + title;
+                sendNotification(remoteMessage.getNotification().getBody(), title_email);
+            }else{
+                Log.i("MyFirebaseMessagingService", "Need to sign in to get current user email!!!");
+            }
         }
     }
 

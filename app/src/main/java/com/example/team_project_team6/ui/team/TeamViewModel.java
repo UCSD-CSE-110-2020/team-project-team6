@@ -2,6 +2,7 @@ package com.example.team_project_team6.ui.team;
 
 import android.util.Log;
 
+import com.example.team_project_team6.firebase.IFirebase;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,6 +10,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
+import com.example.team_project_team6.model.TeamMessage;
+import com.example.team_project_team6.notification.INotification;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +33,7 @@ public class TeamViewModel extends ViewModel {
 
     private boolean inviteIsAccepted; // records whether or not user has accepted or decline the invite
     private boolean isMyProposedWalk; //record if i proposed walk
-
+    private TeamMessage tMessage;
 
     public TeamViewModel() {
         ArrayList<TeamMember> data = new ArrayList<TeamMember>();
@@ -48,6 +51,7 @@ public class TeamViewModel extends ViewModel {
         hasPendingTeamInvite = false;
         hasProposedWalk = false;
     }
+
 
     public boolean isMyProposedWalk() {
         return isMyProposedWalk;
@@ -71,6 +75,10 @@ public class TeamViewModel extends ViewModel {
 
     public void sendProposedWalk(ProposedWalk proposedWalk) {
             saveData.addProposedWalk(proposedWalk);
+            //send notification to team
+            String message = saveData.getName() + " has proposed the walk!";
+            tMessage = new TeamMessage(saveData.getEmail(), message);
+            sendTeamNotification(tMessage, true);
     }
 
     public LiveData<ProposedWalk> getProposedWalkData() {
@@ -147,6 +155,11 @@ public class TeamViewModel extends ViewModel {
 
         if (inviteIsAccepted) {
             saveData.acceptTeamRequest();
+
+            //send notification to team
+            String message = saveData.getName() + " has joined the team!";
+            tMessage = new TeamMessage(saveData.getEmail(), message);
+            sendTeamNotification(tMessage, false);
         } else {
             saveData.declineTeamRequest();
         }
@@ -178,5 +191,13 @@ public class TeamViewModel extends ViewModel {
 
     public void updateMemberGoingStatus(String attendance) {
         saveData.updateMemberGoingStatus(attendance);
+        //send notification when member accept or decline proposed walk
+        String message = saveData.getName() + " has "+ attendance +" for proposed walk!";
+        this.tMessage = new TeamMessage(saveData.getEmail(), message);
+        sendTeamNotification(tMessage, true);
+    }
+
+    public void sendTeamNotification(TeamMessage message, boolean isMyProposedWalk){
+        saveData.sendTeamNotification(message, isMyProposedWalk);
     }
 }
