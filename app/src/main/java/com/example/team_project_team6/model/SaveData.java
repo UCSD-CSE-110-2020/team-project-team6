@@ -123,4 +123,7 @@ public class SaveData {
         firebaseAdapter.sendTeamNotification(message, isMessageForProposeWalk);
     }
 
+    public void deleteProposedWalk() {
+        firebaseAdapter.deleteProposedWalk();
+    }
 }
