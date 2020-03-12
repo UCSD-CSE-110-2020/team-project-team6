@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="44dp"
             android:layout_marginTop="30dp"
-            android:text="Proposed Walk Information"
+            android:text="@string/proposed_walk_information"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,6 +38,8 @@
 
         <TextView
             android:id="@+id/txt_proposed_startingPoint"
+            style="@style/Hyperlink"
+            android:clickable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="44dp"

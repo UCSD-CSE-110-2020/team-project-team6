@@ -5,9 +5,11 @@ public class ProposedWalk{
     private String pHourSecondTime;
     private Route pRoute;
     private String proposer;
+    private boolean scheduled;
 
     public ProposedWalk() {
         this.proposer = "";
+        scheduled = false;
     }
 
     public ProposedWalk(Route route, String dayMonthYearDate, String hourSecondTime) {
@@ -15,6 +17,7 @@ public class ProposedWalk{
         this.pDayMonthYearDate = dayMonthYearDate;
         this.pHourSecondTime = hourSecondTime;
         proposer = "";
+        scheduled = false;
     }
 
     public String getpDayMonthYearDate() {
@@ -47,5 +50,13 @@ public class ProposedWalk{
 
     public void setProposer(String proposer) {
         this.proposer = proposer;
+    }
+
+    public Boolean isScheduled() {
+        return scheduled;
+    }
+
+    public void setScheduled(Boolean scheduled) {
+        this.scheduled = scheduled;
     }
 }

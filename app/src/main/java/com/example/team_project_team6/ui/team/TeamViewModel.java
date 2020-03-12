@@ -3,6 +3,10 @@ package com.example.team_project_team6.ui.team;
 import android.util.Log;
 
 import com.example.team_project_team6.firebase.IFirebase;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
@@ -14,10 +18,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class TeamViewModel extends ViewModel {
@@ -28,7 +28,9 @@ public class TeamViewModel extends ViewModel {
     private MutableLiveData<Map<String, String>> allMemberGoingStatuses;
     private boolean hasPendingTeamInvite; // records if another user has sent this user a team invite
     private boolean hasProposedWalk; // records if user has proposedWalk
+    private boolean hasScheduledWalk;
     private SaveData saveData;
+
     private boolean inviteIsAccepted; // records whether or not user has accepted or decline the invite
     private boolean isMyProposedWalk; //record if i proposed walk
     private TeamMessage tMessage;
@@ -146,11 +148,6 @@ public class TeamViewModel extends ViewModel {
 
     public boolean getHasPendingTeamInvite() {
         return hasPendingTeamInvite;
-    }
-
-
-    public boolean getInviteIsAccepted() {
-        return inviteIsAccepted;
     }
 
     public void setInviteIsAccepted(boolean inviteIsAccepted) {
