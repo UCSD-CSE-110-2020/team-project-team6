@@ -98,6 +98,7 @@ public class ProposedWalkFragment extends Fragment {
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "withdraw walk clicked");
                 setInvisibleScheduleWithdraw();
+                teamViewModel.deleteProposedWalk();
             }
         });
 

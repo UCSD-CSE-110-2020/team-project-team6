@@ -231,4 +231,8 @@ public class TeamViewModel extends ViewModel {
     public void sendTeamNotification(TeamMessage message, boolean isMyProposedWalk){
         saveData.sendTeamNotification(message, isMyProposedWalk);
     }
+
+    public void deleteProposedWalk() {
+        saveData.deleteProposedWalk();
+    }
 }
