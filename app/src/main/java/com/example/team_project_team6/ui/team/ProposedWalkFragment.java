@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.ProposedWalk;
+import com.example.team_project_team6.model.TeamMessage;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -90,6 +91,10 @@ public class ProposedWalkFragment extends Fragment {
                 setInvisibleScheduleWithdraw();
                 setInvisibleAcceptDecline();
                 switchToScheduledWalk();
+                //send notification to team
+                String message = teamViewModel.getName() + " has scheduled the walk!";
+                TeamMessage tMessage = new TeamMessage(teamViewModel.getEmail(), message);
+                teamViewModel.sendTeamNotification(tMessage, true);
             }
         });
 
