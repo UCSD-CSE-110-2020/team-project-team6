@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.TeamMember;
+import com.example.team_project_team6.model.TeamMessage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -82,6 +83,7 @@ public class MemberFragment extends Fragment {
                 Log.i("member fragment", "accepted invite");
                 resetInviteSection();
                 teamViewModel.setInviteIsAccepted(true);
+
             }
         });
 

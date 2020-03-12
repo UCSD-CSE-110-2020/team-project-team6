@@ -2,18 +2,21 @@ package com.example.team_project_team6.ui.team;
 
 import android.util.Log;
 
+import com.example.team_project_team6.firebase.IFirebase;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.SaveData;
 import com.example.team_project_team6.model.TeamMember;
+import com.example.team_project_team6.model.TeamMessage;
+import com.example.team_project_team6.notification.INotification;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -25,10 +28,12 @@ public class TeamViewModel extends ViewModel {
     private MutableLiveData<Map<String, String>> allMemberGoingStatuses;
     private boolean hasPendingTeamInvite; // records if another user has sent this user a team invite
     private boolean hasProposedWalk; // records if user has proposedWalk
+    private boolean hasScheduledWalk;
     private SaveData saveData;
+
     private boolean inviteIsAccepted; // records whether or not user has accepted or decline the invite
     private boolean isMyProposedWalk; //record if i proposed walk
-
+    private TeamMessage tMessage;
 
     public TeamViewModel() {
         Log.i(TAG, "Creating TeamViewModel");
@@ -47,6 +52,7 @@ public class TeamViewModel extends ViewModel {
         hasPendingTeamInvite = false;
         hasProposedWalk = false;
     }
+
 
     public boolean isMyProposedWalk() {
         Log.i(TAG, "isMyProposedWalk is: " + isMyProposedWalk);
@@ -74,8 +80,14 @@ public class TeamViewModel extends ViewModel {
     }
 
     public void sendProposedWalk(ProposedWalk proposedWalk) {
+
         Log.i(TAG, "Adding a proposed walk to SaveData");
         saveData.addProposedWalk(proposedWalk);
+        //send notification to team
+        String message = saveData.getName() + " has proposed the walk!";
+        tMessage = new TeamMessage(saveData.getEmail(), message);
+        sendTeamNotification(tMessage, true);
+
     }
 
     public LiveData<ProposedWalk> getProposedWalkData() {
@@ -159,7 +171,6 @@ public class TeamViewModel extends ViewModel {
         return hasPendingTeamInvite;
     }
 
-
     public boolean getInviteIsAccepted() {
         Log.i(TAG, "Getting invite is accepted to: " + inviteIsAccepted);
         return inviteIsAccepted;
@@ -171,6 +182,11 @@ public class TeamViewModel extends ViewModel {
 
         if (inviteIsAccepted) {
             saveData.acceptTeamRequest();
+
+            //send notification to team
+            String message = saveData.getName() + " has joined the team!";
+            tMessage = new TeamMessage(saveData.getEmail(), message);
+            sendTeamNotification(tMessage, false);
         } else {
             saveData.declineTeamRequest();
         }
@@ -206,5 +222,13 @@ public class TeamViewModel extends ViewModel {
     public void updateMemberGoingStatus(String attendance) {
         Log.i(TAG, "Updating member going status for self");
         saveData.updateMemberGoingStatus(attendance);
+        //send notification when member accept or decline proposed walk
+        String message = saveData.getName() + " has "+ attendance +" for proposed walk!";
+        this.tMessage = new TeamMessage(saveData.getEmail(), message);
+        sendTeamNotification(tMessage, true);
+    }
+
+    public void sendTeamNotification(TeamMessage message, boolean isMyProposedWalk){
+        saveData.sendTeamNotification(message, isMyProposedWalk);
     }
 }

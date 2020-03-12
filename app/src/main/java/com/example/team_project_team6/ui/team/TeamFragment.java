@@ -2,6 +2,9 @@ package com.example.team_project_team6.ui.team;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
@@ -11,9 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.team_project_team6.R;
 import com.google.android.material.tabs.TabLayout;
@@ -38,7 +38,7 @@ public class TeamFragment extends Fragment {
         tabLayout = root.findViewById(R.id.tabLayout);
         viewPager = root.findViewById(R.id.viewPager);
         tabLayout.addTab(tabLayout.newTab().setText("Members"));
-        tabLayout.addTab(tabLayout.newTab().setText("Proposed Walk"));
+        tabLayout.addTab(tabLayout.newTab().setText("Walk Planning"));
 
         if (teamViewModel == null) {
             teamViewModel = new ViewModelProvider(requireActivity()).get(TeamViewModel.class);

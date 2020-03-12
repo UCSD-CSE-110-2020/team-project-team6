@@ -1,14 +1,10 @@
 package com.example.team_project_team6.ui.team;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.VisibleForTesting;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,12 +14,16 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.VisibleForTesting;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.ProposedWalk;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -46,7 +46,9 @@ public class ProposedWalkFragment extends Fragment {
     private TextView txt_date;
     private TextView txt_time;
     private TextView txt_startPoint;
+    private TextView txt_title;
     private ListView listView;
+    private ProposedWalk currentWalk;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +77,7 @@ public class ProposedWalkFragment extends Fragment {
         txt_miles = root.findViewById(R.id.txt_proposed_mile);
         txt_steps = root.findViewById(R.id.txt_proposed_steps);
         txt_startPoint = root.findViewById(R.id.txt_proposed_startingPoint);
+        txt_title = root.findViewById(R.id.textView15);
 
         setAllButtonsInvisible();
         setAllChangeableTextInvisible();
@@ -86,6 +89,7 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "schedule walk clicked");
                 setInvisibleScheduleWithdraw();
                 setInvisibleAcceptDecline();
+                switchToScheduledWalk();
             }
         });
 
@@ -153,6 +157,19 @@ public class ProposedWalkFragment extends Fragment {
         return root;
     }
 
+    private void switchToScheduledWalk() {
+        if (currentWalk != null) {
+            txt_title.setText(R.string.scheduled_walk_information);
+            currentWalk.setScheduled(true);
+            teamViewModel.sendProposedWalk(currentWalk);
+        }
+    }
+
+    // Put everything that requires updating the UI based on the view model in here.
+    // Required so that when we swap out the view model in the test code we can update
+    // anything that depends on the view model. I actually found a different way that doesn't
+    // require this by overwriting the fragment Factory class in the test code but this is OK
+    // for a school project.
     public void bind_views() {
         teamViewModel.getProposedWalkData().observe(getViewLifecycleOwner(), new Observer<ProposedWalk>() {
            @Override
@@ -163,7 +180,13 @@ public class ProposedWalkFragment extends Fragment {
                Log.i(TAG, "teamViewModel has proposed walk: " + teamViewModel.getHasProposedWalk());
                toggleButtonVisibility();
                populateProposedWalkElements(proposedWalk);
+               currentWalk = proposedWalk;
 
+               if (proposedWalk != null && proposedWalk.isScheduled()) {
+                   txt_title.setText(R.string.scheduled_walk_information);
+                   currentWalk.setScheduled(true);
+                   setInvisibleScheduleWithdraw();
+               }
            }
         });
 
@@ -223,6 +246,11 @@ public class ProposedWalkFragment extends Fragment {
         txt_miles.setText(Double.toString(proposedWalk.getpRoute().getWalk().getDist()) + " mi");
         txt_steps.setText(Long.toString(proposedWalk.getpRoute().getWalk().getStep()) + " steps");
         txt_startPoint.setText(proposedWalk.getpRoute().getStartPoint());
+        txt_startPoint.setOnClickListener(v -> {
+            String url = String.format("https://www.google.com/maps/search/%s/", proposedWalk.getpRoute().getStartPoint());
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+        });
     }
 
     public void toggleButtonVisibility() {

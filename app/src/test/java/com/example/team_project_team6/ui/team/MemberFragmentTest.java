@@ -3,6 +3,14 @@ package com.example.team_project_team6.ui.team;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentFactory;
+import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.Navigation;
+import androidx.navigation.testing.TestNavHostController;
+import androidx.test.core.app.ApplicationProvider;
+
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.TeamMember;
 
@@ -13,15 +21,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentFactory;
-import androidx.fragment.app.testing.FragmentScenario;
-import androidx.lifecycle.MutableLiveData;
-import androidx.navigation.Navigation;
-import androidx.navigation.testing.TestNavHostController;
-import androidx.test.core.app.ApplicationProvider;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

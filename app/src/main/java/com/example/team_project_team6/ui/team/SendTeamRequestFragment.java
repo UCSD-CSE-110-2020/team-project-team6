@@ -56,7 +56,7 @@ public class SendTeamRequestFragment extends Fragment {
                     Log.i(TAG, "Sending team request");
 
                     // send team request
-                    teamViewModel.sendTeamRequest(gmailInvitation.getText().toString());
+                    teamViewModel.sendTeamRequest(gmailInvitation.getText().toString().trim());
                     teamViewModel.setIsMyProposedWalk(true);
                     NavController controller = Navigation.findNavController(requireView());
                     if (controller.getCurrentDestination().getId() == R.id.sendTeamRequestFragment) {
