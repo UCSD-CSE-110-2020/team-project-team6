@@ -37,6 +37,7 @@ public interface IFirebase {
     void uploadMemberGoingStatus(String attendance);
 
     void uploadProposedWalk(ProposedWalk proposedWalk);
+    void deleteProposedWalk();
     LiveData<ProposedWalk> downloadProposedWalk();
 
     void setNotificationAdapter(INotification notificationAdapter);
