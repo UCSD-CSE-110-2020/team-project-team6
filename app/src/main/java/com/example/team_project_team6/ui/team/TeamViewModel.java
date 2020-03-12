@@ -81,6 +81,15 @@ public class TeamViewModel extends ViewModel {
             sendTeamNotification(tMessage, true);
     }
 
+    //get the name of user
+    public String getName(){
+        return saveData.getName();
+    }
+    //get the uer email
+    public String getEmail(){
+        return saveData.getEmail();
+    }
+
     public LiveData<ProposedWalk> getProposedWalkData() {
         if(saveData != null) {
             return saveData.getProposedWalk();
