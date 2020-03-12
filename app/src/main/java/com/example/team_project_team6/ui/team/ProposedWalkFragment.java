@@ -274,6 +274,7 @@ public class ProposedWalkFragment extends Fragment {
     }
 
     public void setAllChangeableTextInvisible() {
+        Log.i(TAG, "Setting all textviews invisible");
         txt_date.setVisibility(View.INVISIBLE);
         txt_time.setVisibility(View.INVISIBLE);
         txt_routeName.setVisibility(View.INVISIBLE);
@@ -283,6 +284,7 @@ public class ProposedWalkFragment extends Fragment {
     }
 
     public void setAllChangeableTextVisible() {
+        Log.i(TAG, "Setting all textviews visible");
         txt_date.setVisibility(View.VISIBLE);
         txt_time.setVisibility(View.VISIBLE);
         txt_routeName.setVisibility(View.VISIBLE);

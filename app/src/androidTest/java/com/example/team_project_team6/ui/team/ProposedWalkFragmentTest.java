@@ -2,15 +2,25 @@ package com.example.team_project_team6.ui.team;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
 import androidx.test.core.app.ApplicationProvider;
@@ -18,33 +28,50 @@ import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.util.HumanReadables;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.internal.util.Checks;
 
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.firebase.FirebaseGoogleAdapter;
 import com.example.team_project_team6.firebase.IFirebase;
+import com.example.team_project_team6.model.Features;
+import com.example.team_project_team6.model.ProposedWalk;
+import com.example.team_project_team6.model.Route;
 import com.example.team_project_team6.model.SaveData;
+import com.example.team_project_team6.model.TeamMember;
+import com.example.team_project_team6.model.Walk;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class ProposedWalkFragmentTest {
@@ -68,10 +95,26 @@ public class ProposedWalkFragmentTest {
     }
 
     @Test
-    public void TestIsAccepted() {
+    public void TestIsAcceptedDeclineVisibility() {
         FragmentFactory factory = new FragmentFactory();
         FragmentScenario<ProposedWalkFragment> scenario =
                 FragmentScenario.launchInContainer(ProposedWalkFragment.class, null, R.style.Theme_AppCompat, factory);
+
+        ProposedWalk proposedWalk = new ProposedWalk();
+        Walk walk = new Walk();
+        Date date = new Date();
+        Features features = new Features();
+        String startPoint = "start point";
+        String name = "Name";
+        String notes = "";
+        String initials = "NI";
+        TeamMember owner = new TeamMember("ycxing99@gmail.com", "Cora", "Xing");
+        proposedWalk.setpRoute(new Route(walk, startPoint, date, notes, features, name, initials, owner));
+        proposedWalk.setpDayMonthYearDate("03/12/2020");
+        proposedWalk.setpHourSecondTime("14:48:00");
+
+        MutableLiveData<ProposedWalk> proposedWalks = new MutableLiveData<>(new ProposedWalk());
+        when(viewModel.getProposedWalkData()).thenReturn(proposedWalks);
 
         scenario.onFragment(new FragmentScenario.FragmentAction<ProposedWalkFragment>() {
             @Override
@@ -82,15 +125,6 @@ public class ProposedWalkFragmentTest {
             }
         });
 
-
-//        onView(ViewMatchers.withId(R.id.txt_proposed_route_Name)).perform(ViewActions.replaceText("Park park"));
-//        onView(ViewMatchers.withId(R.id.txt_proposed_steps)).perform(ViewActions.replaceText("1000"), ViewActions.closeSoftKeyboard());
-//        onView(ViewMatchers.withId(R.id.txt_proposed_mile)).perform(ViewActions.replaceText("6"), ViewActions.closeSoftKeyboard());
-//        onView(ViewMatchers.withId(R.id.txt_proposed_date)).perform(ViewActions.replaceText("Park park"), ViewActions.closeSoftKeyboard());
-//        onView(ViewMatchers.withId(R.id.txt_proposed_time)).perform(ViewActions.replaceText("6:10"), ViewActions.closeSoftKeyboard());
-//        onView(ViewMatchers.withId(R.id.txt_proposed_startingPoint)).perform(ViewActions.replaceText("home"), ViewActions.closeSoftKeyboard());
-//        // onView(ViewMatchers.withId(R.id.list_is_going)).perform(ViewActions.replaceText("Park park"), ViewActions.closeSoftKeyboard());
-
         Mockito.when(viewModel.isMyProposedWalk()).thenReturn(false);
         saveData.acceptTeamRequest();
 
@@ -99,9 +133,9 @@ public class ProposedWalkFragmentTest {
         onView(withId(R.id.bt_declineRoute)).perform(setButtonVisibility(true));
 
         onView(ViewMatchers.withId(R.id.bt_acceptWalk)).perform(nestedScrollTo(), ViewActions.click());
-        //onView(ViewMatchers.withId(R.id.bt_acceptWalk)).perform(ViewActions.click());
-        assertEquals(true, viewModel.getInviteIsAccepted());
 
+        onView(withId(R.id.bt_Schedule)).check(ViewAssertions.matches(not(isDisplayed())));
+        onView(withId(R.id.bt_withdraw)).check(ViewAssertions.matches(not(isDisplayed())));
     }
 
     public static ViewAction nestedScrollTo() {

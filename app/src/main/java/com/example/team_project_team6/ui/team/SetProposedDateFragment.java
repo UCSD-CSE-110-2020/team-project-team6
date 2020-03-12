@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.InputType;
 import android.util.Log;
@@ -46,13 +45,14 @@ public class SetProposedDateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i(TAG, "Creating set proposed date fragment");
+
         if (teamViewModel == null) {
             teamViewModel = new ViewModelProvider(requireActivity()).get(TeamViewModel.class);
         }
 
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_set_proposed_date, container, false);
-
 
         dateEdit = (EditText) root.findViewById(R.id.date_edit);
         dateEdit.setInputType(InputType.TYPE_NULL);
@@ -70,6 +70,7 @@ public class SetProposedDateFragment extends Fragment {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
+                                Log.i(TAG, "Setting time inside Time Picker");
                                 String sHourStr = sHour < 10 ? ("0" + sHour) : Integer.toString(sHour);
                                 String sMinuteStr = sMinute < 10 ? ("0" + sMinute) : Integer.toString(sMinute);
                                 timeEdit.setText(sHourStr + ":" + sMinuteStr);
@@ -91,6 +92,7 @@ public class SetProposedDateFragment extends Fragment {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                Log.i(TAG, "Setting date inside Date Picker");
                                 String dayOfMonthStr = dayOfMonth < 10 ? ("0" + dayOfMonth) : Integer.toString(dayOfMonth);
                                 String monthOfYearStr = monthOfYear + 1 < 10 ? ("0" + (monthOfYear + 1)) : Integer.toString(monthOfYear + 1);
                                 dateEdit.setText(monthOfYearStr + "/" + dayOfMonthStr + "/" + year);
@@ -105,7 +107,6 @@ public class SetProposedDateFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "Clicked done button in SetProposedDataFragment");
-
 
                 if(dateEdit.getText().toString().isEmpty()) {
                     dateEdit.requestFocus();
@@ -136,8 +137,8 @@ public class SetProposedDateFragment extends Fragment {
                     NavController controller = Navigation.findNavController(requireView());
                     // navigate to proposed walk fragment
                     if (controller.getCurrentDestination().getId() == R.id.setProposedDate) {
-                        Log.i(TAG, "Navigating from setProposedDateFragment to ProposeWalkFragment");
-                        controller.navigate(R.id.navigate_SetDateFragment_to_TeamFragment);
+                        Log.i(TAG, "Navigating from setProposedDateFragment to teamFragment");
+                        controller.navigate(R.id.navigate_SetDateFragment_to_teamFragment);
                     }
                 }
             }

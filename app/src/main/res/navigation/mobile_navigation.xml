@@ -164,8 +164,8 @@
         android:label="Set Proposed Walk Date"
         tools:layout="@layout/fragment_set_proposed_date" >
         <action
-            android:id="@+id/navigate_SetDateFragment_to_proposedWalkFragment"
-            app:destination="@id/proposedWalkFragment"
+            android:id="@+id/navigate_SetDateFragment_to_teamFragment"
+            app:destination="@id/navigation_team"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"
             app:launchSingleTop="false" />
