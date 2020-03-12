@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
@@ -23,9 +24,10 @@ import com.example.team_project_team6.model.TeamMember;
 import com.example.team_project_team6.model.TeamMessage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class MemberFragment extends Fragment {
 
@@ -44,6 +46,7 @@ public class MemberFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i(TAG, "Creating Member Fragment");
         if (teamViewModel == null) {
             teamViewModel = new ViewModelProvider(requireActivity()).get(TeamViewModel.class);
         }
@@ -66,8 +69,8 @@ public class MemberFragment extends Fragment {
         btNewInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                NavController controller = Navigation.findNavController(requireView());
                 Log.i("send_team_request", "Clicked on '+' button");
-                NavController controller = NavHostFragment.findNavController(requireParentFragment());
                 if (controller.getCurrentDestination().getId() == R.id.navigation_team) {
                     Log.i("member","we are in the member fragment");
                     controller.navigate(R.id.action_teamFragment_to_SendTeamRequestFragment);
