@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
@@ -62,13 +63,13 @@ public class MemberFragment extends Fragment {
         resetInviteSection();
         bind_views();
 
-        NavController controller = NavHostFragment.findNavController(this);
         final FloatingActionButton btNewInvite = root.findViewById(R.id.bt_invite_member);
 
         // navigate to send_tem_request when '+' button is pressed
         btNewInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                NavController controller = Navigation.findNavController(requireView());
                 Log.i("send_team_request", "Clicked on '+' button");
                 if (controller.getCurrentDestination().getId() == R.id.navigation_team) {
                     Log.i("member","we are in the member fragment");
