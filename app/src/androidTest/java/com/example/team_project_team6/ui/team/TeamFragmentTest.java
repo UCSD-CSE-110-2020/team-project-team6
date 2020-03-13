@@ -88,12 +88,12 @@ public class TeamFragmentTest {
     @Test
     public void TestTransitionToInviteForm() {
         FragmentFactory factory = new FragmentFactory();
-        FragmentScenario<TeamFragment> scenario =
-                FragmentScenario.launchInContainer(TeamFragment.class, null, R.style.Theme_AppCompat, factory);
+        FragmentScenario<MemberFragment> scenario =
+                FragmentScenario.launchInContainer(MemberFragment.class, null, R.style.Theme_AppCompat, factory);
 
-        scenario.onFragment(new FragmentScenario.FragmentAction<TeamFragment>() {
+        scenario.onFragment(new FragmentScenario.FragmentAction<MemberFragment>() {
             @Override
-            public void perform(@NonNull TeamFragment fragment) {
+            public void perform(@NonNull MemberFragment fragment) {
                 Navigation.setViewNavController(fragment.requireView(), navController);
                 fragment.teamViewModel = viewModel;
             }
@@ -111,6 +111,8 @@ public class TeamFragmentTest {
         teamMembers.add(new TeamMember("Sarah", "Soap", "sarah.soap@gmail.com"));
         teamMembers.add(new TeamMember("Ellen", "Elephant", "ellen.elephant@gmail.com"));
         teamMembers.add(new TeamMember("Bob", "Builder", "bob.builder@gmail.com"));
+
+        teamMembers = new ArrayList<>();
 
         LiveData<ArrayList<TeamMember>> teamMembersData = new MutableLiveData<>(teamMembers);
         when(viewModel.getTeamMemberData()).thenReturn(teamMembersData);
@@ -138,7 +140,7 @@ public class TeamFragmentTest {
                     }
                 });
 
-        onView(withId(R.id.list_team_members)).check(ViewAssertions.matches(Matchers.withListSize(0)));
+        onView(withId(R.id.list_team_members)).check(ViewAssertions.matches(Matchers.withListSize(teamMembers.size())));
     }
 
     static class Matchers {
