@@ -230,7 +230,7 @@ public class TeamViewModel extends ViewModel {
     }
 
     public void updateMemberGoingStatus(String attendance) {
-        Log.i(TAG, "Updating member going status for self");
+        Log.i(TAG, "Updating member going status for self: " + attendance);
         saveData.updateMemberGoingStatus(attendance);
         //send notification when member accept or decline proposed walk
         String message = saveData.getName() + " has "+ attendance +" for proposed walk!";

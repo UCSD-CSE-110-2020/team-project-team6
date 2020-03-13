@@ -119,7 +119,6 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "accept walk clicked");
                 toggleAccept();
                 teamViewModel.updateMemberGoingStatus("accepted");
-                teamViewModel.setInviteIsAccepted(true);
             }
         });
 
@@ -129,7 +128,6 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "decline time clicked");
                 toggleDeclineTime();
                 teamViewModel.updateMemberGoingStatus("declined time");
-                teamViewModel.setInviteIsAccepted(false);
             }
         });
 
@@ -139,7 +137,6 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "decline route clicked");
                 toggleDeclineRoute();
                 teamViewModel.updateMemberGoingStatus("declined route");
-                teamViewModel.setInviteIsAccepted(false);
             }
         });
 
@@ -279,6 +276,9 @@ public class ProposedWalkFragment extends Fragment {
                 bt_declineTime.setVisibility(View.INVISIBLE);
                 bt_schedule.setVisibility(View.VISIBLE);
                 bt_withdraw.setVisibility(View.VISIBLE);
+                bt_acceptWalk.getBackground().setColorFilter(getResources().getColor(R.color.design_default_color_secondary_variant), PorterDuff.Mode.MULTIPLY);
+                bt_acceptWalk.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+                bt_acceptWalk.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
             } else {
                 Log.i(TAG, "Creating another user's proposed walk.");
                 setAllTextViewsVisible();

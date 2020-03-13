@@ -37,7 +37,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if(auth.getCurrentUser() != null && !auth.getCurrentUser().getEmail().equalsIgnoreCase(title)) {
                 String title_email = "Notification from: " + title;
                 sendNotification(remoteMessage.getNotification().getBody(), title_email);
-            }else{
+            } else {
                 Log.i("MyFirebaseMessagingService", "Need to sign in to get current user email!!!");
             }
         }
