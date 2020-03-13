@@ -7,7 +7,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import com.example.team_project_team6.model.ProposedWalk;
 import com.example.team_project_team6.model.Route;
@@ -30,7 +29,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -583,6 +581,44 @@ public class FirebaseGoogleAdapter implements IFirebase {
                                     .update(pwMap)
                                     .addOnCompleteListener(d -> Log.d(TAG, "Successfully stored proposed walk in team database"))
                                     .addOnFailureListener(e -> Log.e(TAG, "Failed to update proposed walk", e));
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to read data from firebase", e));
+    }
+
+    @Override
+    public void deleteProposedWalk() {
+        if(user == null) {
+            Log.d(TAG, "Could not delete proposed walk without signing in");
+            return;
+        }
+
+        // retrieve team uuid
+        db.collection("users")
+                .document(getEmail())
+                .get()
+                .addOnCompleteListener(getTeamTask -> {
+                    if (getTeamTask.isSuccessful()) {
+                        DocumentSnapshot teamDoc = getTeamTask.getResult();
+                        if (teamDoc != null) {
+                            String team = teamDoc.getString("team");
+
+                            Map<String,Object> updates = new HashMap<>();
+                            updates.put("attendance", FieldValue.delete());
+                            updates.put("proposedWalk", FieldValue.delete());
+
+                            // delete proposed walk from the team document
+                            db.collection("teams")
+                                    .document(team)
+                                    .update(updates)
+                                    .addOnSuccessListener(d -> Log.d(TAG, "Successfully deleted proposed walk in team database"))
+                                    .addOnFailureListener(e -> Log.e(TAG, "Failed to delete proposed walk", e));
 
                         } else {
                             Log.d(TAG, "No such document");

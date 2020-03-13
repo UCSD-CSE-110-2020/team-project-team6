@@ -31,7 +31,7 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
     }
 
     static class RouteViewHolder extends RecyclerView.ViewHolder {
-        TextView trailName, steps, distance, lastCompleted, textFeatures, initials;
+        TextView trailName, steps, distance, lastCompleted, textFeatures, initials, checkmark;
         ImageButton favoriteButton;
 
         RouteViewHolder(final View itemView) {
@@ -45,6 +45,7 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
             favoriteButton = itemView.findViewById(R.id.item_view_favorite);
             textFeatures = itemView.findViewById(R.id.item_view_features);
             initials = itemView.findViewById(R.id.item_view_initials);
+            checkmark = itemView.findViewById(R.id.item_view_walked_before);
 
             favoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,8 +125,10 @@ public class RouteViewAdapter extends RecyclerView.Adapter<RouteViewAdapter.Rout
             Date dateLastWalked = items.get(position).getLastStartDate();
             SimpleDateFormat format = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
             holder.lastCompleted.setText(format.format(dateLastWalked));
+            holder.checkmark.setVisibility(View.VISIBLE);
         } else {
             holder.lastCompleted.setText(R.string.never_completed);
+            holder.checkmark.setVisibility(View.INVISIBLE);
         }
 
         if (teamInitialsVisible) {
