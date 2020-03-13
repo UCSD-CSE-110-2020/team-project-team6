@@ -154,10 +154,6 @@ public class TeamFragmentTest {
             };
         }
     }
-    @Test
-    public void TestDisplayInvitedTeamList() {
-
-    }
 
     private static ViewAction setButtonVisibility(final boolean value) {
         return new ViewAction() {

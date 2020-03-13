@@ -85,7 +85,6 @@ public class MemberFragmentTest {
 
                 ListView listViewTeamMember = fragment.getView().findViewById(R.id.list_team_members);
                 ListView listViewTeamInviter = fragment.getView().findViewById(R.id.list_invited_team_members);
-                assertEquals(0, listViewTeamInviter.getChildCount());
                 assertEquals(3, data.size());
             }
         });

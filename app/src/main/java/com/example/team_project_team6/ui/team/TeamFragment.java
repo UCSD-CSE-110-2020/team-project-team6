@@ -13,8 +13,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
+
 import com.example.team_project_team6.R;
 import com.google.android.material.tabs.TabLayout;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class TeamFragment extends Fragment {
 
@@ -27,6 +31,8 @@ public class TeamFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i(TAG, "Creating team fragment");
+
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_team, container, false);
         tabLayout = root.findViewById(R.id.tabLayout);
@@ -45,6 +51,7 @@ public class TeamFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                Log.i(TAG, "Tab selected in team fragment");
                 viewPager.setCurrentItem(tab.getPosition());
             }
             @Override

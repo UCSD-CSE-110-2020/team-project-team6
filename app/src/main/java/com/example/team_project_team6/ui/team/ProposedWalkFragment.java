@@ -107,6 +107,7 @@ public class ProposedWalkFragment extends Fragment {
                 String message = teamViewModel.getName() + " has withdrawed the walk!";
                 TeamMessage tMessage = new TeamMessage(teamViewModel.getEmail(), message);
                 teamViewModel.sendTeamNotification(tMessage, true);
+                teamViewModel.deleteProposedWalk();
             }
         });
 
@@ -116,6 +117,7 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "accept walk clicked");
                 toggleAccept();
                 teamViewModel.updateMemberGoingStatus("accepted");
+                teamViewModel.setInviteIsAccepted(true);
             }
         });
 
@@ -125,6 +127,7 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "decline time clicked");
                 toggleDeclineTime();
                 teamViewModel.updateMemberGoingStatus("declined time");
+                teamViewModel.setInviteIsAccepted(false);
             }
         });
 
@@ -134,6 +137,7 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "decline route clicked");
                 toggleDeclineRoute();
                 teamViewModel.updateMemberGoingStatus("declined route");
+                teamViewModel.setInviteIsAccepted(false);
             }
         });
 
@@ -308,6 +312,7 @@ public class ProposedWalkFragment extends Fragment {
     }
 
     public void setAllChangeableTextInvisible() {
+        Log.i(TAG, "Setting all textviews invisible");
         txt_date.setVisibility(View.INVISIBLE);
         txt_time.setVisibility(View.INVISIBLE);
         txt_routeName.setVisibility(View.INVISIBLE);
@@ -317,6 +322,7 @@ public class ProposedWalkFragment extends Fragment {
     }
 
     public void setAllChangeableTextVisible() {
+        Log.i(TAG, "Setting all textviews visible");
         txt_date.setVisibility(View.VISIBLE);
         txt_time.setVisibility(View.VISIBLE);
         txt_routeName.setVisibility(View.VISIBLE);
