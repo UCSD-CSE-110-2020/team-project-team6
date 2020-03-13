@@ -135,13 +135,14 @@ public class TeamViewModel extends ViewModel {
         return this.saveData;
     }
 
-    public ArrayList<String> getTeamMemberNames(ArrayList<TeamMember> members) {
+    public ArrayList<String> getTeamMemberNamesAndInitials(ArrayList<TeamMember> members) {
         Log.i(TAG, "Getting team member names");
         ArrayList<String> names = new ArrayList<>();
         assert members != null;
         for (TeamMember m : members) {
             if (m.getEmail().equals(saveData.getEmail())) continue;
-            names.add(m.getFirstName() + " " + m.getLastName());
+            names.add(m.getFirstName() + " " + m.getLastName() +
+                    " (" + m.getFirstName().charAt(0) + m.getLastName().charAt(0) + ")");
         }
         return names;
     }
@@ -229,7 +230,7 @@ public class TeamViewModel extends ViewModel {
     }
 
     public void updateMemberGoingStatus(String attendance) {
-        Log.i(TAG, "Updating member going status for self");
+        Log.i(TAG, "Updating member going status for self: " + attendance);
         saveData.updateMemberGoingStatus(attendance);
         //send notification when member accept or decline proposed walk
         String message = saveData.getName() + " has "+ attendance +" for proposed walk!";

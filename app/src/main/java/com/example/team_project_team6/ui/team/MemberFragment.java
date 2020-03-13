@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 
 import com.example.team_project_team6.R;
 import com.example.team_project_team6.model.TeamMember;
-import com.example.team_project_team6.model.TeamMessage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -105,7 +103,7 @@ public class MemberFragment extends Fragment {
             public void onChanged(ArrayList<TeamMember> teamMembers) {
                 Log.i("MemberFragment getTeamMemberData", "getting changed team member data");
                 teamViewModel.updateMTeamMembers(teamMembers);
-                mfAdapterAccepted = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamMemberNames(teamMembers), false);
+                mfAdapterAccepted = new TeamArrayAdapter(getActivity(), teamViewModel.getTeamMemberNamesAndInitials(teamMembers), false);
                 listViewAccepted.setAdapter(mfAdapterAccepted);
                 mfAdapterAccepted.notifyDataSetChanged();
             }

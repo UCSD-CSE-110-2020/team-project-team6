@@ -81,14 +81,14 @@ public class ProposedWalkFragment extends Fragment {
         txt_title = root.findViewById(R.id.textView15);
 
         setAllButtonsInvisible();
-        setAllChangeableTextInvisible();
+        setAllTextViewsInvisible();
         bind_views();
 
         bt_schedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "schedule walk clicked");
-                setInvisibleScheduleWithdraw();
+                bt_schedule.setVisibility(View.INVISIBLE);
                 setInvisibleAcceptDecline();
                 switchToScheduledWalk();
                 //send notification to team
@@ -103,8 +103,10 @@ public class ProposedWalkFragment extends Fragment {
             public void onClick(View view) {
                 Log.i("Proposed Walk fragment", "withdraw walk clicked");
                 setInvisibleScheduleWithdraw();
+                setAllTextViewsInvisible();
+
                 //send notification to team
-                String message = teamViewModel.getName() + " has withdrawed the walk!";
+                String message = teamViewModel.getName() + " has withdrawn the walk!";
                 TeamMessage tMessage = new TeamMessage(teamViewModel.getEmail(), message);
                 teamViewModel.sendTeamNotification(tMessage, true);
                 teamViewModel.deleteProposedWalk();
@@ -117,7 +119,6 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "accept walk clicked");
                 toggleAccept();
                 teamViewModel.updateMemberGoingStatus("accepted");
-                teamViewModel.setInviteIsAccepted(true);
             }
         });
 
@@ -127,7 +128,6 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "decline time clicked");
                 toggleDeclineTime();
                 teamViewModel.updateMemberGoingStatus("declined time");
-                teamViewModel.setInviteIsAccepted(false);
             }
         });
 
@@ -137,7 +137,6 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "decline route clicked");
                 toggleDeclineRoute();
                 teamViewModel.updateMemberGoingStatus("declined route");
-                teamViewModel.setInviteIsAccepted(false);
             }
         });
 
@@ -271,15 +270,18 @@ public class ProposedWalkFragment extends Fragment {
             Log.i(TAG, "isMyProposedWalk: " + teamViewModel.isMyProposedWalk());
             if (teamViewModel.isMyProposedWalk()) {
                 Log.i(TAG, "Creating my proposed walk.");
-                setAllChangeableTextVisible();
+                setAllTextViewsVisible();
                 bt_acceptWalk.setVisibility(View.INVISIBLE);
                 bt_declineRoute.setVisibility(View.INVISIBLE);
                 bt_declineTime.setVisibility(View.INVISIBLE);
                 bt_schedule.setVisibility(View.VISIBLE);
                 bt_withdraw.setVisibility(View.VISIBLE);
+                bt_acceptWalk.getBackground().setColorFilter(getResources().getColor(R.color.design_default_color_secondary_variant), PorterDuff.Mode.MULTIPLY);
+                bt_acceptWalk.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+                bt_acceptWalk.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
             } else {
                 Log.i(TAG, "Creating another user's proposed walk.");
-                setAllChangeableTextVisible();
+                setAllTextViewsVisible();
                 bt_acceptWalk.setVisibility(View.VISIBLE);
                 bt_declineRoute.setVisibility(View.VISIBLE);
                 bt_declineTime.setVisibility(View.VISIBLE);
@@ -311,7 +313,7 @@ public class ProposedWalkFragment extends Fragment {
         bt_withdraw.setVisibility(View.INVISIBLE);
     }
 
-    public void setAllChangeableTextInvisible() {
+    public void setAllTextViewsInvisible() {
         Log.i(TAG, "Setting all textviews invisible");
         txt_date.setVisibility(View.INVISIBLE);
         txt_time.setVisibility(View.INVISIBLE);
@@ -321,7 +323,7 @@ public class ProposedWalkFragment extends Fragment {
         txt_startPoint.setVisibility(View.INVISIBLE);
     }
 
-    public void setAllChangeableTextVisible() {
+    public void setAllTextViewsVisible() {
         Log.i(TAG, "Setting all textviews visible");
         txt_date.setVisibility(View.VISIBLE);
         txt_time.setVisibility(View.VISIBLE);
