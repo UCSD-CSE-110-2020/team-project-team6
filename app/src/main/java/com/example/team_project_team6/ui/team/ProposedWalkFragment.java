@@ -104,6 +104,11 @@ public class ProposedWalkFragment extends Fragment {
                 Log.i("Proposed Walk fragment", "withdraw walk clicked");
                 setInvisibleScheduleWithdraw();
                 setAllTextViewsInvisible();
+
+                //send notification to team
+                String message = teamViewModel.getName() + " has withdrawn the walk!";
+                TeamMessage tMessage = new TeamMessage(teamViewModel.getEmail(), message);
+                teamViewModel.sendTeamNotification(tMessage, true);
                 teamViewModel.deleteProposedWalk();
             }
         });
